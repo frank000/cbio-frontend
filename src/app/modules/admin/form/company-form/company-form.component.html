@@ -1,0 +1,232 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Administração</span>
+        </li>
+    </ul>
+    <div class="panel mt-5 h-[calc(100vh-190px)]">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div>
+                    <ul class="mb-5 grid grid-cols-3 text-center">
+                        <li>
+                            <a
+                                href="javascript:;"
+                                class="block rounded-full bg-[#f3f2ee] p-2.5 dark:bg-[#1b2e4b]"
+                                [ngClass]="{'!bg-primary text-white': activeTab1 === 1}"
+                                (click)="activeTab1 = 1">Companhia</a >
+                        </li>
+                        <li>
+                            <a
+                            [attr.disabled]="companySaved.id == undefined"
+                                href="javascript:;"
+                                class="block rounded-full bg-[#f3f2ee] p-2.5 dark:bg-[#1b2e4b]"
+                                [ngClass]="{'!bg-primary text-white': activeTab1 === 2}"
+                                (click)="toogleTab(2)">Administradores</a >
+                        </li>
+                        <li>
+                            <a
+                                href="javascript:;"
+                                class="block rounded-full bg-[#f3f2ee] p-2.5 dark:bg-[#1b2e4b]"
+                                [ngClass]="{'!bg-primary text-white': activeTab1 === 3}"
+                                (click)="activeTab1 = 3">Configurações Canais</a >
+                        </li>
+                    </ul>
+                    <div>
+                        <ng-container *ngIf="activeTab1 === 1">
+                            
+                                <form class="space-y-5" [formGroup]="paramsCompany" (ngSubmit)="submit()">
+                                    <div [ngClass]="isSubmitForm ? paramsCompany.controls['nome'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridName">Nome</label>
+                                        <input
+                                            id="gridName"
+                                            type="text"
+                                            placeholder="Informe o nome da Companhia"
+                                            formControlName="nome"
+                                            class="form-input"/>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        <div class="md:col-span-2" [ngClass]="isSubmitForm ? paramsCompany.controls['email'].errors ? 'has-error' : 'has-success' : ''">
+                                            <label for="gridEmail">Email</label>
+                                            <input
+                                                id="gridEmail"
+                                                type="email"
+                                                formControlName="email"
+                                                placeholder="Informe Email"
+                                                class="form-input"/>
+                                        </div>
+                                        <div class="md:col-span-2" [ngClass]="isSubmitForm ? paramsCompany.controls['telefone'].errors ? 'has-error' : 'has-success' : ''">
+                                            <label for="gridTelefone">Telefone</label>
+                                            <input
+                                                id="gridTelefone"
+                                                type="telefone"
+                                                formControlName="telefone"
+                                                placeholder="Informe o telene"
+                                                class="form-input"/>
+                                        </div>
+                                    </div>
+                                    <div [ngClass]="isSubmitForm ? paramsCompany.controls['endereco'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridEndereco1">Endereço</label>
+                                        <input
+                                            id="gridEndereco1"
+                                            type="text"
+                                            formControlName="endereco"
+                                            placeholder="Informe o Endereco"
+                                            class="form-input"/>
+                                    </div>
+    
+                                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        <div class="md:col-span-2" [ngClass]="isSubmitForm ? paramsCompany.controls['estado'].errors ? 'has-error' : 'has-success' : ''">
+                                           
+                                            <label for="gridState">Estado</label>
+                                            <ng-select
+                                            id="gridState"
+                                            name="gridState"
+                                            bindLabel="nome"
+                                            bindValue="id"
+                                            formControlName="estado"
+                                            [items]="ufs"
+                                            [(ngModel)]="uf"
+                                            [searchable]="true"
+                                            [clearable]="false"
+                                            class="custom-multiselect"
+                                            (change)="changeUf($event)"></ng-select>
+                                            <ng-container *ngIf="isSubmitForm && paramsCompany.controls['estado'].errors">
+                                                <p class="mt-1 text-danger">Informe um estado</p>
+                                            </ng-container>
+                                        </div>
+                                        <div>
+                                            <label for="gridCity">Cidade</label>
+                                            <ng-select
+                                            [ngClass]="isSubmitForm ? paramsCompany.controls['cidade'].errors ? 'has-error' : 'has-success' : ''"
+                                            id="gridCity"
+                                            name="gridCity"
+                                            bindLabel="nome"
+                                            formControlName="cidade"
+                                            bindValue="id"
+                                            [items]="cidades"
+                                            [(ngModel)]="cidade"
+                                            [searchable]="true"
+                                            [clearable]="false"
+                                            class="custom-multiselect"></ng-select>
+                                            <ng-container *ngIf="isSubmitForm && paramsCompany.controls['cidade'].errors">
+                                                <p class="mt-1 text-danger">Informe uma cidade</p>
+                                            </ng-container>
+                                        </div>
+                                        <div  >
+                                            <label for="gridZip">Cep</label>
+                                            <input id="gridZip" 
+                                            formControlName="cep"
+                                            type="text" placeholder="Informe o Cep" class="form-input"/>
+                                        </div>
+                                    </div>
+                                
+                                    <app-btn-salva-volta location="/admin/config"></app-btn-salva-volta>
+                                </form>
+                      
+                        </ng-container>
+                        <ng-container *ngIf="activeTab1 === 2">
+                         
+                                <form  
+                                class="space-y-5" [formGroup]="paramsUser" (ngSubmit)="submitUser()">
+    
+                                    <div [ngClass]="isSubmitFormUser ? paramsUser.controls['email'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridUsername">Email</label>
+                                        <input
+                                     
+                                            id="gridUsername"
+                                            type="text"
+                                            formControlName="email"
+                                            placeholder="Informe email"
+                                            class="form-input"/>
+                                    </div>
+                                    <div [ngClass]="isSubmitFormUser ? paramsUser.controls['password'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridUsername">Senha</label>
+                                        <input
+                                   
+                                            id="gridUsername"
+                                            type="password"
+                                            formControlName="password"
+                                            placeholder="Informe a senha"
+                                            class="form-input"/>
+                                    </div>
+    
+                                    <app-btn-salva-volta location="/admin/config"></app-btn-salva-volta>
+
+                                </form>
+                        
+    
+                        </ng-container>
+                        <ng-container *ngIf="activeTab1 === 3">
+                          
+                                <form class="space-y-5">
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="gridNomeCanal">Nome do canal</label>
+    
+                                            <ng-select
+                                                id="gridNomeCanal"
+                                                name="gridNomeCanal"
+                                                [items]="options"
+                                                [(ngModel)]="input1"
+                                                [searchable]="false"
+                                                [clearable]="false"
+                                                class="custom-multiselect"></ng-select>
+    
+                                        </div>
+                                        <div>
+                                            <label for="gridNomeClient">Nome de Client **</label>
+                                            <input
+                                                id="gridNomeClient"
+                                                type="text"
+                                                placeholder="Informe o Nome Client - Telegram"
+                                                class="form-input"/>
+                                        </div>
+                                    </div>
+                                    <div  >
+                                        <label for="gridApiKey">Api Key</label>
+                                        <input
+                                            id="gridApiKey"
+                                            type="text"
+                                            placeholder="Informe a Api Key"
+                                            class="form-input"/>
+                                
+                                    </div>
+                               
+                                
+                                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        <div class="md:col-span-2">
+                                            <label for="gridIdCanal">Identificador do canal</label>
+                                            <input id="gridIdCanal" type="text" placeholder="Informe o Identificador do Canal" class="form-input"/>
+                                        </div>
+                                        <div >
+                                            <label for="gridFirstname">Primeiro nome</label>
+                                            <input id="gridFirstname" type="text" placeholder="Informe o Primeiro nome - Telegram" class="form-input"/>
+                                        </div>
+                                        <div>
+                                            <label for="gridToken">Token de validação</label>
+                                            <input id="gridToken" type="text" placeholder="Informe o token de validação webhook" class="form-input"/>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center mt-1 cursor-pointer">
+                                            <input type="checkbox" class="form-checkbox"/>
+                                            <span class="text-white-dark">Ativo</span>
+                                        </label>
+                                    </div>
+                                    <app-btn-salva-volta location="/admin/config"></app-btn-salva-volta>
+
+                                </form>
+                          
+                        </ng-container>
+                    </div>
+    
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
