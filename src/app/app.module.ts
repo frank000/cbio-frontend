@@ -39,25 +39,28 @@ import { SidebarComponent } from './layouts/sidebar';
 import { ThemeCustomizerComponent } from './layouts/theme-customizer';
 import { authInterceptor } from './interceptor/auth.interceptor';
 import { jwtInterceptor } from './interceptor/jwt.interceptor copy';
+import { ChatComponent } from './modules/apps/chat/chat';
+import { PhraseModalComponent } from "./modules/apps/chat/modal/phrase-modal/phrase-modal.component";
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
-        BrowserModule,
-        BrowserAnimationsModule,
-        CommonModule,
-        FormsModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpBackend],
-            },
-        }),
-        StoreModule.forRoot({ index: indexReducer }),
-        SharedModule.forRoot(),
-    ],
-    declarations: [AppComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout],
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+    BrowserModule,
+    BrowserAnimationsModule,
+    CommonModule,
+    FormsModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpBackend],
+        },
+    }),
+    StoreModule.forRoot({ index: indexReducer }),
+    SharedModule.forRoot(),
+    PhraseModalComponent
+],
+    declarations: [AppComponent, ChatComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout],
     providers: [
         Title,
         provideHttpClient(withInterceptors([authInterceptor, jwtInterceptor])),

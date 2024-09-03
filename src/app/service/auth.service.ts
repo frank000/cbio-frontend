@@ -48,4 +48,16 @@ export class AuthService {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
     }
+
+    getObjectUserLogged(){
+        const newLocal = this.getAccessToken();
+        if(newLocal != null){
+ 
+            let jwtData = newLocal.split('.')[1]
+            let decodedJwtJsonData = window.atob(jwtData) 
+            return JSON.parse(decodedJwtJsonData)
+        }else{
+            return null;
+        }
+    }
 }

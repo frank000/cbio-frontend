@@ -2,9 +2,10 @@
     <div class="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-[#0e1726]">
         <div class="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
             <a routerLink="/" class="main-logo flex shrink-0 items-center">
-                <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo.svg" alt="" />
+                <img class="ml-[5px] w-14 flex-none" src="/assets/images/v12-horizontal.png" alt=""/>
+
                 <span class="hidden align-middle text-2xl font-semibold transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">
-                    VRISTO
+                    BeOrbi
                 </span>
             </a>
 
@@ -205,7 +206,7 @@
                         <icon-bell-bing />
 
                         <span class="absolute top-0 flex h-3 w-3 ltr:right-0 rtl:left-0">
-                            <span
+                            <span *ngIf="notifications.length > 0"
                                 class="absolute -top-[3px] inline-flex h-full w-full animate-ping rounded-full bg-success/50 opacity-75 ltr:-left-[3px] rtl:-right-[3px]"
                             ></span>
                             <span class="relative inline-flex h-[6px] w-[6px] rounded-full bg-success"></span>
@@ -218,8 +219,8 @@
                     >
                         <li>
                             <div class="flex items-center justify-between px-4 py-2 font-semibold">
-                                <h4 class="text-lg">Notification</h4>
-                                <span *ngIf="notifications.length" class="badge bg-primary/80">{{notifications.length + 'New'}}</span>
+                                <h4 class="text-lg">Notificações</h4>
+                                <span *ngIf="notifications.length" class="badge bg-primary/80">{{notifications.length + ' Novas'}}</span>
                             </div>
                         </li>
                         <li *ngFor="let notification of notifications" class="dark:text-white-light/90">
@@ -247,7 +248,7 @@
                         </li>
                         <li *ngIf="notifications.length">
                             <div class="p-4">
-                                <button type="button" class="btn btn-primary btn-small block w-full" *hlMenuItem="let menuItem">Read All Notifications</button>
+                                <button type="button" class="btn btn-primary btn-small block w-full" *hlMenuItem="let menuItem">Ler todas notificações </button>
                             </div>
                         </li>
                         <li *ngIf="!notifications.length">
@@ -255,7 +256,7 @@
                                 <div class="mx-auto mb-4 rounded-full text-primary ring-4 ring-primary/30">
                                     <icon-info-circle [fill]="true" class="h-10 w-10" />
                                 </div>
-                                No data available.
+                                Sem notificações
                             </div>
                         </li>
                     </ul>

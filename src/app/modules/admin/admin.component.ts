@@ -7,6 +7,7 @@ import { Company } from 'src/app/shared/models/company.interface';
 
 // shared module
 import { SharedModule } from 'src/shared.module';
+import { showMessage } from '../base/showMessage';
 
 @Component({
   selector: 'app-admin',
@@ -30,14 +31,7 @@ export class AdminComponent {
     }
 
     initData(){
-        this._companyService.obtemGrid()
-        .subscribe(
-            (resp:any) =>{
-                console.log(resp);
-                
-                this.gridCompany = resp.items
-            }
-        )
+        this.loadGrid();
 
         this.cols = [
             { field: "id", title: "ID", filter: false, sort: false },
@@ -75,5 +69,26 @@ export class AdminComponent {
         //     active: true,
         //     }, 
         // ];
+    }
+
+    private loadGrid() {
+        this._companyService.obtemGrid()
+            .subscribe(
+                (resp: any) => {
+                    console.log(resp);
+
+                    this.gridCompany = resp.items;
+                }
+            );
+    }
+
+    deleteRow(value:any){
+        this._companyService.delete(value.id)
+        .subscribe(
+            (resp:any)=>{
+                showMessage('Companhia deletada com sucesso');
+                this.loadGrid();
+            }
+        )
     }
 }

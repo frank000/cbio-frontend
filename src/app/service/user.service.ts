@@ -5,24 +5,21 @@ import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Company } from '../shared/models/company.interface';
 import { User } from '../shared/models/user.interface';
+import { CrudAbstractService } from './crud.service';
 
  
 
 @Injectable({providedIn:'root'})
-export class UserService {
-    storeData: any;
-    url:string = environment.urlBackend;
-
-    private readonly _http = inject(HttpClient);
-
+export class UserService extends CrudAbstractService{
+    override getControllerName(): string {
+        return "user"
+    }
+   
     constructor( ) { 
+        super()
     }
-
-
-    save(user:User):Observable<any>{
+    
  
-        return this._http.post(`${this.url}/v1/user`, user);
-    }
 
  
 }

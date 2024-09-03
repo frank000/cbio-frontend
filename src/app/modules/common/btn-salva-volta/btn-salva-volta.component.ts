@@ -13,5 +13,13 @@ import { SharedModule } from 'src/shared.module';
 export class BtnSalvaVoltaComponent {
 
   @Input()
-  location:string = ""
+  location:string = ""  
+  
+  @Input()
+  edit:boolean = false 
+
+  @Input()
+  isDisabled:any = false
+
+  
 }

@@ -1,9 +1,14 @@
 /* animation */
 @import 'animate.css';
 
+/* modal popup */
+@import 'modal.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @layer components {
     html {

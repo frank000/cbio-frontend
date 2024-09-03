@@ -1,0 +1,62 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Formulário Atendentes</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 h-[calc(100vh-190px)]">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+            
+                        <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                            <form [formGroup]="paramsAttendant" (submit)="submit()" class="space-y-5" >
+                                <div
+                                class=" grid grid-rows-2 grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div
+                                    [ngClass]="isSubmitForm ? paramsAttendant.controls['name'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridName">Nome</label>
+                                        <input
+                                            id="gridName"
+                                            type="text"
+                                            placeholder="Informe o nome"
+                                            formControlName="name"
+                                            class="form-input"/>
+                                    </div>                     
+                                    <div
+                                        class="md:col-span-1"
+                                        [ngClass]="isSubmitForm ? paramsAttendant.controls['email'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridEmail">Email</label>
+                                        <input
+                                            id="gridEmail"
+                                            type="email"
+                                            formControlName="email"
+                                            placeholder="Informe Email"
+                                            class="form-input"/>
+                                    </div>
+                                                
+                                    <div>
+                                        
+                                        <label for="gridUsername">Senha</label>
+                                    <input
+                                        id="gridUsername"
+                                        type="password"
+                                        formControlName="password"
+                                        placeholder="Informe a senha"
+                                        class="form-input"/>
+                                </div>
+                                </div>        
+                                <app-btn-salva-volta 
+                                [edit]="this.id != null" 
+                                location="/admin/attendant"></app-btn-salva-volta>
+                            </form>
+                        </div>
+                  
+            </div>
+        </div>
+    </div>
+</div>

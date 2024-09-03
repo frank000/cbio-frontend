@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AuthService } from './auth.service';
 
  
@@ -10,6 +10,8 @@ import { AuthService } from './auth.service';
 export class LoginService {
     storeData: any;
     url:string = environment.urlBackend;
+
+    onLogging: Subject<boolean> = new Subject();
 
     private readonly _http = inject(HttpClient);
 

@@ -1,4 +1,6 @@
-export interface Company{
+import { CrudInterface } from "./crud.interface"
+
+export interface Company extends CrudInterface{
     id:number
     email:string
     nome: string 

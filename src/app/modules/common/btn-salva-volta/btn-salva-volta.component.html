@@ -1,4 +1,6 @@
 <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    <button type="submit" class="btn btn-primary !mt-6">Salvar</button>
-    <button type="button" class="btn btn-outline-primary  !mt-6" [routerLink]="['/admin/config']"  >Voltar</button>
+    <button 
+    [disabled]="isDisabled"
+    type="submit" class="btn btn-primary !mt-6">{{edit? 'Alterar' : 'Salvar'}}</button>
+    <button type="button" class="btn btn-outline-primary  !mt-6" [routerLink]="[location]"  >Voltar</button>
 </div>

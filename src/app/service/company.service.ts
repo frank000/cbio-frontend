@@ -36,5 +36,10 @@ export class CompanyService {
         return this._http.get(`${this.url}/v1/company/${id}`);
     }
 
+    delete(id:string){
+        return this._http.delete(`${this.url}/v1/company/${id}`);
+
+    }
+
  
 }

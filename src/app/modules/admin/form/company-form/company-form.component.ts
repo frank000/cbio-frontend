@@ -12,6 +12,10 @@ import Swal from 'sweetalert2';
 import { BtnSalvaVoltaComponent } from "../../../common/btn-salva-volta/btn-salva-volta.component";
 import { User } from 'src/app/shared/models/user.interface';
 import { UserService } from 'src/app/service/user.service';
+import { CanalService } from 'src/app/service/canal.service';
+import { Canal } from 'src/app/shared/models/canal.interface';
+import { HttpParams } from '@angular/common/http';
+import { colDef } from '@bhplugin/ng-datatable';
 
 @Component({
   selector: 'app-company-form',
@@ -38,46 +42,67 @@ export class CompanyFormComponent {
   _enderecoService = inject(EnderecoService);  
   _companyService = inject(CompanyService);  
   _userService = inject(UserService);
+  _canalService= inject(CanalService);
   
   _fb = inject(FormBuilder);
 
   ufs: SelectionDTO[] = [];
   uf!: string;
   paramsUser!: FormGroup;
-  paramsCompany!: FormGroup;
+  paramsCompany!: FormGroup;  
+  paramsConfig!: FormGroup;
   companySaved:Company = {} as Company;
-
+  gridRowsCanal: Canal[] = []
+  cols: Array<colDef> = [];
 
   cidades: SelectionDTO[] = [];
   cidade!: string;
   route = inject(ActivatedRoute);
-  id!: string;
+  id?: string = undefined;
   constructor() { 
     
     this.initData();
     this.initForm();
 
+  
+ 
     this.route.paramMap.subscribe((params) => {
  
-      this.id = params.get('companyid')!;
-      this._companyService.obtemCompany(this.id)
-      .subscribe(
-        (resp:any)=>{
-          this.companySaved = resp
-          this.paramsCompany.patchValue(this.companySaved)
-        }
-      )
+      if(params.get('companyid') != undefined){
+        this.id = params.get('companyid')!;
+
+        this._companyService.obtemCompany(this.id)
+        .subscribe(
+          (resp:any)=>{
+            this.companySaved = resp
+            this.paramsCompany.patchValue(this.companySaved)
+            this.carregaGridCanal();
+  
+        
+          }
+        )
+      }
+    
     });  
   }
-
+   carregaGridCanal() {
+    let query = new HttpParams();
+    query = query.append('idCompany', this.companySaved.id);
+    this._canalService.obtemGrid(query)
+      .subscribe(
+        (resp: any) => {
+          this.gridRowsCanal = resp.items;
+        }
+      );
+  }
   initForm(){
     this.paramsUser = this._fb.group({
-        id: [0],
+        id: [undefined],
         email: ['', Validators.compose([Validators.required, Validators.email])],
         password: ['', Validators.required], 
     });    
     this.paramsCompany = this._fb.group({
-        id: [0],
+        id: [undefined],
         email: ['', Validators.compose([Validators.required, Validators.email])],
         nome: ['', Validators.required], 
         telefone: ['', Validators.required], 
@@ -85,11 +110,29 @@ export class CompanyFormComponent {
         estado: ['', Validators.required], 
         cidade: ['', Validators.required], 
         cep: [''], 
+    });    
+    this.paramsConfig = this._fb.group({
+        id: [undefined],
+        cliente: ['', Validators.required], 
+        nome: ['', Validators.required], 
+        idCanal: ['', Validators.required], 
+        ativo: [true, Validators.required], 
+        token: ['', Validators.required], 
+        primeiroNome: ['', Validators.required], 
+        apiKey: ['',  Validators.required], 
     });
   }
 
   initData(){ 
-    
+
+    this.cols = [
+      { field: "id", title: "ID", filter: false, sort: false },
+      { field: "nome", title: "Nome" },
+      { field: "idCanal", title: "Identificador" },
+      { field: "acoes", title: "Ações" }
+
+  ];
+
     this._enderecoService.getUfs()
     .subscribe(
       (resp:any) =>{ 
@@ -110,7 +153,9 @@ export class CompanyFormComponent {
       }
     )
   }
-
+  loadToEdit(value:any){
+    this.paramsConfig.patchValue(value);
+  }
   isSubmitForm = false;
   submit(){
     this.isSubmitForm = true;
@@ -123,6 +168,7 @@ export class CompanyFormComponent {
         .subscribe(
           (resp:any) =>{
             this.companySaved = resp
+            this.paramsUser.controls["email"].setValue(this.companySaved.email);
             this.showMessage('Cadastro realizado com sucesso.');
           }
         )
@@ -136,8 +182,11 @@ export class CompanyFormComponent {
     if (this.paramsUser.valid) {
       let user = this.paramsUser.getRawValue() as User;
       user.company = this.companySaved;
+    
+      let action = (this.companySaved.id && user.id)? this._userService.update(user) : this._userService.save(user);
+ 
 
-      this._userService.save(user)
+      action
       .subscribe(
         (resp:any) =>{
 
@@ -145,8 +194,36 @@ export class CompanyFormComponent {
         }
       )
     }
+  }  
+  isSubmitFormConfig = false;
+  submitConfig(){
+      
+    this.isSubmitFormConfig = true;
+    if (this.paramsConfig.valid) {
+
+      let configuration = this.paramsConfig.getRawValue();
+      configuration.company = this.companySaved;
+     
+      let action = (this.companySaved.id && this.paramsConfig.controls['id'].value)?  this._canalService.update(configuration):  this._canalService.save(configuration);
+
+      action
+      .subscribe(
+        (resp:any) =>{
+          this.carregaGridCanal();
+          this.paramsConfig.reset()
+          this.showMessage('Cadastro realizado com sucesso.');
+        }
+      )
+    }
   }
 
+  deleteCanal(canal:any){
+    this._canalService.delete(canal.id).subscribe(
+      (resp:any) =>{
+        this.gridRowsCanal = this.gridRowsCanal.filter(row => row.id != canal.id);
+      }
+    )
+  }
 
   showMessage(msg = '', type = 'success') {
     const toast: any = Swal.mixin({

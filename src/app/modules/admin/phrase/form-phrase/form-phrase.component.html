@@ -1,0 +1,41 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Frases Automáticas</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 h-[calc(100vh-190px)]">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+            
+                        <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                            <form [formGroup]="paramsForm" (submit)="submit()" class="space-y-5" >
+                                <div
+                                class=" grid grid-rows-1 grid-cols-1 sm:grid-cols-1 gap-4">
+                                    <div
+                                    [ngClass]="isSubmitForm ? paramsForm.controls['description'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridName">Frase</label>
+                                        <input
+                                            id="gridName"
+                                            type="text"
+                                            placeholder="Informe a frase"
+                                            formControlName="description"
+                                            class="form-input"/>
+                                    </div>                     
+                                    
+                                </div>        
+                                <app-btn-salva-volta 
+                                [edit]="this.id != null" 
+                                location="/admin/phrase"></app-btn-salva-volta>
+                            </form>
+                        </div>
+                  
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Frases Automáticas</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 h-[calc(100vh-190px)]">
+
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 ">
+                <div
+                    class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200 grid grid-1 grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div>
+                        <form class="space-y-5" [formGroup]="paramsFiltro" (ngSubmit)="search()">
+                            <div>
+                                <label for="gridName">Frase</label>
+                                <input
+                                    id="gridName"
+                                    type="text"
+                                    placeholder="Buscar frase"
+                                    formControlName="filter"
+                                    class="form-input"/>
+                            </div>
+                            <div class="flex gap-4">
+                                <div>
+                                    <button type="submit" class="btn btn-primary !mt-6">Buscar</button>
+                                </div>
+                                <div>
+                                    <button type="button" (click)="cleanForm()" class="btn btn-outline-primary !mt-6">Limpar</button>
+                                </div>
+
+                                
+                            </div>
+                        </form>
+                    </div>
+                    <div></div>
+                 
+                </div>
+                <div class="mt-8 mb-8">
+                    <div class="flex justify-end">
+                        <button 
+                            [routerLink]="['/admin/phrase/form']"
+                             type="button" class="btn btn-outline-info !mt-6 mb-8">
+                                Adicionar
+                        </button>
+                    </div>
+                    <ng-datatable
+                        skin="whitespace-nowrap bh-table-hover"
+                        [rows]="gridRowsUser"
+                        [columns]="cols"
+                        [totalRows]="totalRowsUser"
+                        [isServerMode]="true"
+                        (changeServer)="changeServer($event)"
+                        >
+                        
+                        <ng-template slot="id" let-value="data">
+                            <strong class="text-info">#{{ value.id }}</strong>
+                        </ng-template>
+                        <ng-template slot="acoes" let-value="data">
+                            <div class="flex">
+                                <a (click)="loadToEdit(value)" class="ms-10 block w-4 lg:w-6 cursor-pointer">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#363636" stroke="#363636"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="edit"> <g> <path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path> <polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon> </g> </g> </g> </g></svg>                    
+                                </a>
+                                <a (click)="deleteRow(value)" class="ms-10 block w-4 lg:w-6 cursor-pointer">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 7H20" stroke="#303030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V7" stroke="#303030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#303030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                </a> 
+                            </div>
+                        
+                        </ng-template>
+                    </ng-datatable>
+                </div>
+
+            </div>
+
+
+            
+        </div>
+    </div>
+</div>

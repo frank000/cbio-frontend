@@ -75,7 +75,8 @@ export class BoxedSigninComponent {
             this.params.controls['password'].value
         ).subscribe(
             (resp:any) => {
-                console.log(resp)
+                this.loginService.onLogging.complete();
+ 
                 this.authService.setAccessToken(resp["access_token"]) 
                 this.authService.setRefreshToken(resp["refresh_token"]) 
                 this._router.navigate(["/"])

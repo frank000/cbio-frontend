@@ -20,6 +20,8 @@ import { MenuModule } from 'headlessui-angular';
 // select
 import { NgSelectModule } from '@ng-select/ng-select';
 
+// modal
+import { NgxCustomModalComponent } from 'ngx-custom-modal';
 
 // icons
 import { IconModule } from 'src/app/shared/icon/icon.module';
@@ -27,7 +29,7 @@ import { LoginService } from './app/service/login.service';
 import { DataTableModule } from '@bhplugin/ng-datatable';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
+    imports: [CommonModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
     declarations: [],
     exports: [
         // modules
@@ -36,6 +38,7 @@ import { DataTableModule } from '@bhplugin/ng-datatable';
         NgSelectModule,
         DataTableModule,
         TranslateModule,
+        NgxCustomModalComponent,
         NgScrollbarModule,
         MenuModule,
         IconModule,
