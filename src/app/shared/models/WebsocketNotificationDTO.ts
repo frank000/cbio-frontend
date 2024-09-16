@@ -5,6 +5,8 @@ export interface WebsocketNotificationDTO{
     channelId: string;
 
     name: string;
+    
+    nameCanal: string;
 
     path: string;
 

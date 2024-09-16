@@ -59,15 +59,18 @@ export class ChatComponent implements OnInit, OnDestroy{
     
 
     async initWebsocket(){
-        if(this.userLocal != null){
+        if(this.userLocal != null && this.userLocal.userId !=  undefined){
             if(!this.webSocketService.isActive()){
                 this.webSocketService.disconnect();
                 this.webSocketService.connect();
-            
+                
+                console.log("loca > ", this.userLocal);
+                
                 this.webSocketService.getMessages("/topic/demo."+this.userLocal.userId)
                 .subscribe((message: string) => { 
 
-               
+                    console.log("resut ", message);
+                    
                     let objCommingFromInit:WebsocketNotificationDTO = JSON.parse(message);
                     
                     this.contactList.filter(
@@ -81,9 +84,13 @@ export class ChatComponent implements OnInit, OnDestroy{
                             this.contactList.push(objCommingFromInit)
                         }
                     });
+                    console.log("resut ", objCommingFromInit);
 
+                    const isFirstTimeToSubscribe = objCommingFromInit.channelId != undefined;
                      //listen channel individually   
-                    this.subscribeIndividuallyChannel(objCommingFromInit.channelId, objCommingFromInit.userId); 
+                     if(isFirstTimeToSubscribe){
+                        this.subscribeIndividuallyChannel(objCommingFromInit.channelId, objCommingFromInit.userId); 
+                     }
 
                 });
             }
