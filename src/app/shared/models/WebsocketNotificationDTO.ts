@@ -7,6 +7,8 @@ export interface WebsocketNotificationDTO{
     name: string;
     
     nameCanal: string;
+    
+    identificadorRemetente: string;
 
     path: string;
 

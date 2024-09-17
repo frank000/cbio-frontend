@@ -13,7 +13,7 @@ export abstract class CrudAbstractService {
     storeData: any;
     url:string = environment.urlBackend;
 
-    private readonly _http = inject(HttpClient);
+    public readonly _http = inject(HttpClient);
 
     abstract getControllerName():string;
 

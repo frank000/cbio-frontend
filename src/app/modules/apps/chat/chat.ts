@@ -10,6 +10,7 @@ import { ChatSessionService } from 'src/app/service/chatsession.service';
 import { log } from 'console';
 import { colDef } from '@bhplugin/ng-datatable';
 import { PhraseService } from 'src/app/service/phrase.service';
+import { DiologService } from 'src/app/service/dialog.service';
  
 
 @Component({
@@ -22,6 +23,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     webSocketService = inject(WebSocketService);    
     authService = inject(AuthService);
     chatSessionService = inject(ChatSessionService);
+    diologService = inject(DiologService);
     userLocal:any;
     loginUser:any;
 
@@ -144,46 +146,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     isShowChatMenu = false;
 
     contactList: WebsocketNotificationDTO[] = [
-        {
-            userId: "1",
-            name: 'Nia Hillyer',
-            path: 'profile-16.jpeg',
-            time: '2:09 PM',
-            preview: 'How do you do?',
-            messages: [
-                {
-                    fromUserId: 0,
-                    toUserId: 1,
-                    text: 'Hi, I am back from vacation',
-                    time: '',
-                },
-                {
-                    fromUserId: 0,
-                    toUserId: 1,
-                    text: 'How are you?',
-                    time: '',
-                },
-                {
-                    fromUserId: 1,
-                    toUserId: 0,
-                    text: 'Welcom Back',
-                    time: '',
-                },
-                {
-                    fromUserId: 1,
-                    toUserId: 0,
-                    text: 'I am all well',
-                    time: '',
-                },
-                {
-                    fromUserId: 0,
-                    toUserId: 1,
-                    text: 'Coffee?',
-                    time: '',
-                },
-            ],
-            active: true,
-        } as WebsocketNotificationDTO
+        
     ];
     searchUser = '';
     searchPhraseField = '';
@@ -206,6 +169,19 @@ export class ChatComponent implements OnInit, OnDestroy{
         this.isShowUserChat = true;
         this.scrollToBottom();
         this.isShowChatMenu = false;
+        console.log("LOG ", this.selectedUser);
+        
+
+        if(this.selectedUser.identificadorRemetente != undefined){
+            this.diologService.getAllBySender(this.selectedUser.identificadorRemetente)
+            .subscribe(
+                (resp:any) =>{
+                    console.log('resposta',resp );
+                    this.selectedUser.messages = resp
+                    
+                }
+            );
+        } 
     }
 
     sendMessage(channelId:any) {
