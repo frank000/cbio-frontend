@@ -62,25 +62,28 @@
                 <div class="mx-auto w-full max-w-[440px]">
                     <div class="mb-10 flex items-center">
                         <div class="flex h-16 w-16 items-end justify-center overflow-hidden rounded-full bg-[#00AB55] ltr:mr-4 rtl:ml-4">
-                            <img src="/assets/images/auth/user.png" class="w-full object-cover" alt="images" />
+                     
+                        <span *ngIf="!userLocal.urlAvatar" class="flex justify-center items-center w-20 h-20 text-center rounded-full object-cover  bg-info  text-2xl">{{getInitialCharacters()}}</span>
+                        <img *ngIf="userLocal.urlAvatar" src="/assets/images/profile-34.jpeg" class="h-12 w-12 rounded-full object-cover" />
+
                         </div>
                         <div class="flex-1">
-                            <h4 class="text-2xl dark:text-white">Shaun Park</h4>
-                            <p class="text-white-dark">Enter your password to unlock your ID</p>
+                            <h4 class="text-2xl dark:text-white">{{userLocal.name}}</h4>
+                            <p class="text-white-dark">Informe sua senha para desbloquear</p>
                         </div>
                     </div>
                     <form class="space-y-5" (submit)="router.navigate(['/'])">
                         <div>
-                            <label for="Password" class="dark:text-white">Password</label>
+                            <label for="Password" class="dark:text-white">Senha</label>
                             <div class="relative text-white-dark">
-                                <input id="Password" type="password" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" />
+                                <input id="Password" type="password" placeholder="Informe a senha" class="form-input ps-10 placeholder:text-white-dark" />
                                 <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                     <icon-lock-dots [fill]="true" />
                                 </span>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                            UNLOCK
+                            DESBLOQUEAR
                         </button>
                     </form>
                 </div>

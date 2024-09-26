@@ -220,10 +220,18 @@
                         <li>
                             <div class="flex items-center justify-between px-4 py-2 font-semibold">
                                 <h4 class="text-lg">Notificações</h4>
+                                <label>Aviso sonoro</label>
+                                <label class="w-12 h-6 relative">
+                                    
+                                    <input type="checkbox" 
+                                    [(ngModel)]="sinalSonoro"
+                                    class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" />
+                                    <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                </label>
                                 <span *ngIf="notifications.length" class="badge bg-primary/80">{{notifications.length + ' Novas'}}</span>
                             </div>
                         </li>
-                        <li *ngFor="let notification of notifications" class="dark:text-white-light/90">
+                        <!-- <li *ngFor="let notification of notifications" class="dark:text-white-light/90">
                             <div class="group flex items-center px-4 py-2">
                                 <div class="grid place-content-center rounded">
                                     <div class="relative h-12 w-12">
@@ -245,10 +253,12 @@
                                     </button>
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
                         <li *ngIf="notifications.length">
                             <div class="p-4">
-                                <button type="button" class="btn btn-primary btn-small block w-full" *hlMenuItem="let menuItem">Ler todas notificações </button>
+                                <button 
+                                (click)="readAll()" 
+                                type="button" class="btn btn-primary btn-small block w-full" *hlMenuItem="let menuItem">Ler todas notificações </button>
                             </div>
                         </li>
                         <li *ngIf="!notifications.length">
@@ -265,8 +275,11 @@
 
             <div class="dropdown shrink-0">
                 <div hlMenu class="!block">
-                    <button type="button" hlMenuButton class="group relative block">
-                        <img class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100" src="/assets/images/user-profile.jpeg" alt="" />
+                    <button type="button" hlMenuButton class="group relative block"> 
+
+                        <span *ngIf="!userLocal.urlAvatar"  class="h-9 w-9 rounded-full object-cover  bg-success saturate-50 group-hover:saturate-100" >{{getInitialCharacters()}}</span>
+                        <img *ngIf="userLocal.urlAvatar" src="/assets/images/profile-34.jpeg" class="h-12 w-12 rounded-full object-cover" />
+
                     </button>
                     <ul
                         *hlMenuItems
@@ -276,14 +289,16 @@
                         <li>
                             <div class="flex items-center px-4 py-4">
                                 <div class="flex-none">
-                                    <img class="h-10 w-10 rounded-md object-cover" src="/assets/images/user-profile.jpeg" alt="" />
+                                    <span *ngIf="!userLocal.urlAvatar"  class="h-9 w-9 rounded-full object-cover  bg-success saturate-50 group-hover:saturate-100" >{{getInitialCharacters()}}</span>
+                                    <img *ngIf="userLocal.urlAvatar" src="/assets/images/profile-34.jpeg" class="h-10 w-10 rounded-md object-cover" />
+            
                                 </div>
                                 <div class="truncate ltr:pl-4 rtl:pr-4">
                                     <h4 class="text-base">
-                                        John Doe<span class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">Pro</span>
+                                        {{userLocal.name}}<span class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">Pro</span>
                                     </h4>
                                     <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;">
-                                        {{"johndoe@gmail.com"}}
+                                        {{userLocal.email}}
                                     </a>
                                 </div>
                             </div>
@@ -292,21 +307,21 @@
                             <a routerLink="/users/profile" *hlMenuItem="let menuItem" class="dark:hover:text-white">
                                 <icon-user class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
-                                Profile
+                                Perfil
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a routerLink="/apps/mailbox" *hlMenuItem="let menuItem" class="dark:hover:text-white">
                                 <icon-mail class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
                                 Inbox
                             </a>
-                        </li>
+                        </li> -->
                         <li>
                             <a routerLink="/auth/boxed-lockscreen" *hlMenuItem="let menuItem" class="dark:hover:text-white">
                                 <icon-lock-dots class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
-                                Lock Screen
+                                Bloqueio de tela
                             </a>
                         </li>
                         <li class="border-t border-white-light dark:border-white-light/10">

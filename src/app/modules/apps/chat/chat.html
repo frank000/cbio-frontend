@@ -17,12 +17,22 @@
 
                     </div>
                 </div>
-                <div hlMenu class="dropdown">
+                <div hlMenu class="dropdown flex gap-2">
+                    <button
+                    
+                    type="button" 
+                    (click)="refreshContacts()"
+                    class="!flex h-8 w-8 items-center justify-center rounded-full bg-[#f4f4f4] hover:bg-primary-light hover:text-primary dark:bg-[#1b2e4b]"
+                >
+        
+                    <icon-refresh class="opacity-70" />
+                </button>
                     <button
                         type="button"
                         hlMenuButton
                         class="!flex h-8 w-8 items-center justify-center rounded-full bg-[#f4f4f4] hover:bg-primary-light hover:text-primary dark:bg-[#1b2e4b]"
                     >
+            
                         <icon-horizontal-dots class="opacity-70" />
                     </button>
                     <ul *hlMenuItems @toggleAnimation class="whitespace-nowrap ltr:right-0 rtl:left-0">
@@ -78,7 +88,7 @@
                     Notification
                 </button>
             </div> -->
-            <div class="h-px w-full border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
+            <div class="h-px w-full border-b border-[#e0e6ed] dark:border-[#1b2e4b]" style="color: red;"></div>
             <div class="!mt-0 flex-grow">
                 <ng-scrollbar class="chat-users relative h-full min-h-[100px] space-y-0.5 ltr:-mr-3 rtl:-ml-3 sm:h-[calc(100vh_-_357px)]" appearance="compact">
                     <ng-container *ngFor="let person of searchUsers()">
@@ -92,11 +102,13 @@
                                 <div class="flex items-center">
                                     <div class="relative flex-shrink-0">
                                         <img *ngIf="person.path" [src]="'/assets/images/' + person.path" class="h-12 w-12 rounded-full object-cover" />
-                                        <span *ngIf="!person.path" class="flex justify-center items-center w-10 h-10 text-center rounded-full object-cover text-base bg-info text-lg">{{getInitialCharacters()}}</span>
+                                        <span *ngIf="!person.path" class="flex justify-center items-center w-10 h-10 text-center rounded-full object-cover text-base bg-info text-lg">{{getInitialCharacters(person.name)}}</span>
 
-                                        <ng-container *ngIf="person.active">
+                                        <ng-container >
                                             <div class="absolute bottom-0 ltr:right-0 rtl:left-0">
-                                                <div class="h-4 w-4 rounded-full bg-success"></div>
+                                                <div *ngIf="person.active" class="h-4 w-4 rounded-full bg-success"></div>
+                                                <div *ngIf="!person.active" class="h-4 w-4 rounded-full bg-danger"></div>
+
                                             </div>
                                         </ng-container>
                                     </div>
@@ -260,14 +272,14 @@
             </ng-container>
             <ng-container *ngIf="isShowUserChat && selectedUser">
                 <div class="relative h-full pb-[68px]">
-                    <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center justify-between p-4 " style="border-bottom: 1px solid #676767; box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;">
                         <div class="flex items-center space-x-2 rtl:space-x-reverse">
                             <button type="button" class="hover:text-primary xl:hidden" (click)="isShowChatMenu = !isShowChatMenu">
                                 <icon-menu />
                             </button>
                             <div class="relative flex-none">
                                 <img  *ngIf="selectedUser.path" [src]="'/assets/images/' + selectedUser.path" class="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12" />
-                                <span *ngIf="!selectedUser.path" class="flex justify-center items-center w-20 h-20 text-center rounded-full object-cover  bg-info  text-2xl">{{getInitialCharacters()}}</span>
+                                <span *ngIf="!selectedUser.path" class="flex justify-center items-center w-20 h-20 text-center rounded-full object-cover  bg-info  text-2xl">{{getInitialCharacters(selectedUser.name)}}</span>
                     
                                 <div class="absolute bottom-0 ltr:right-0 rtl:left-0"> 
                                     <img *ngIf="selectedUser.nameCanal == 'TELEGRAM'"
@@ -279,13 +291,20 @@
                                     
                                 </div>
                             </div>
+                       
                             <div class="mx-3">
                                 <p class="font-semibold"> {{ (selectedUser.name )? selectedUser.name  : "Novo Usuário"  }}</p>
                                 <p class="text-xs text-white-dark">{{ selectedUser.active ? 'Ativo' : 'Visto por último em ' + selectedUser.time }}</p>
                             </div>
+                       
                         </div>
                         <div class="flex gap-3 sm:gap-5">
-                      
+                            <div class="relative" *ngIf="isShowFieldSearch">
+                                <input type="text" class="peer form-input ltr:pr-9 rtl:pl-9" placeholder="Buscando..." [(ngModel)]="searchMessage" name="searchMessage" />
+                                <div class="absolute top-1/2 -translate-y-1/2 peer-focus:text-primary ltr:right-2 rtl:left-2">
+                                    <icon-search />
+                                </div>
+                            </div>
                             <div hlMenu class="dropdown">
                                 <button
                                     type="button"
@@ -296,47 +315,67 @@
                                 </button>
                                 <ul *hlMenuItems @toggleAnimation class="text-black ltr:right-0 rtl:left-0 dark:text-white-dark">
                                     <li>
-                                        <a href="javascript:;" *hlMenuItem="let menuItem">
+                                        <a href="javascript:;"   (click)="openModelEdit(modalEditUser)" *hlMenuItem="let menuItem">
+                                            <icon-edit 
+                                          
+                                            class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
+
+                                            Editar Usuário
+                                        </a>
+                                    </li>
+                                    <li *ngIf="selectedUser.active">
+                                        <a href="javascript:;"   
+                                        
+                                        (click)="disconnectAttendance(selectedUser)" *hlMenuItem="let menuItem">
+                                            <icon-disconnect 
+                                          
+                                            class="h-3 w-3  " />
+                                            
+                                            Fechar Atendimento
+                                        </a>
+                                    </li>
+                                    <li *ngIf="!selectedUser.active">
+                                        <a href="javascript:;"   
+                                        
+                                        (click)="connectAttendance(selectedUser)" *hlMenuItem="let menuItem">
+                                            <icon-disconnect 
+                                          
+                                            class="h-3 w-3  " />
+                                            
+                                            Abrir Atendimento
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="showSearchField()" href="javascript:;" *hlMenuItem="let menuItem">
                                             <icon-search class="shrink-0 ltr:mr-2 rtl:ml-2" />
                                             Busca
                                         </a>
                                     </li>
+                       
                                     <li>
-                                        <a href="javascript:;" *hlMenuItem="let menuItem">
-                                            <icon-copy class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-
-                                            Copiar
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" *hlMenuItem="let menuItem">
+                                        <a 
+                                        
+                                        href="javascript:;" *hlMenuItem="let menuItem">
                                             <icon-trash-lines class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
                                             Delete
                                         </a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="javascript:;" *hlMenuItem="let menuItem">
                                             <icon-share class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
                                             Compartilhar
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:;" *hlMenuItem="let menuItem">
-                                            <icon-settings class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-
-                                            Configurações
-                                        </a>
-                                    </li>
+                                    </li> -->
+                                
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="h-px w-full border-b border-[#e0e6ed] dark:border-[#1b2e4b]"></div>
                     <ng-scrollbar
                         #scrollable
-                        class="chat-conversation-box relative !h-[calc(100vh_-_289px)] min-h-[300px] sm:!h-[calc(100vh_-_300px)]"
+                        class="chat-conversation-box relative !h-[calc(100vh_-_389px)] min-h-[300px] sm:!h-[calc(100vh_-_300px)]"
                         visibility="native"
                     >
                         <div class="space-y-5 p-4">
@@ -345,8 +384,8 @@
                                     <span class="relative top-2 bg-white px-3 dark:bg-[#0e1726]">{{ 'Today, ' + selectedUser.time }}</span>
                                 </h4>
                             </div>
-                            <ng-container *ngIf="selectedUser.messages && selectedUser.messages.length">
-                                <div *ngFor="let message of selectedUser.messages">
+                            <ng-container *ngIf="selectedUser.messages && selectedUser.messages.length" style="margin-bottom: 5rem;">
+                                <div *ngFor="let message of searchMessages()">
                                     <div class="flex items-start gap-3" [ngClass]="{ 'justify-end': selectedUser.userId === message.fromUserId }">
                                         <div class="flex-none" [ngClass]="{ 'order-2': selectedUser.userId === message.fromUserId }">
                                             <ng-container *ngIf="selectedUser.userId === message.fromUserId">
@@ -375,8 +414,12 @@
                                                                 : 'ltr:rounded-bl-none rtl:rounded-br-none'
                                                         "
                                                 >
-                                                    {{ message.mensagem }}
-                                                </div>
+                                                <div *ngIf="message.media == null" [innerHTML]="replaceAsterisksWithStrongTags(message.text)"></div>
+                                                <img 
+                                                style="width: 20rem;"
+                                                *ngIf="message.media != null" [src]="message.body" alt="Mídia da mensagem" />
+    
+                                            </div>
                                                 <div [ngClass]="{ hidden: selectedUser.userId === message.fromUserId }">
                                                     <icon-mood-smile class="hover:text-primary" />
                                                 </div>
@@ -393,7 +436,8 @@
                             </ng-container>
                         </div>
                     </ng-scrollbar>
-                    <div class="absolute bottom-0 left-0 w-full p-4">
+                    <div class="absolute bottom-0 left-0 w-full p-4" [ngStyle]="{'pointer-events': !selectedUser.active? 'none' : '' }">
+                        <div class="overlay" *ngIf="!selectedUser.active">Atendimento fechado.</div>
                         <div class="w-full items-center space-x-3 rtl:space-x-reverse sm:flex">
                             <div class="relative flex-1">
                                 <input
@@ -415,12 +459,6 @@
                                 </button>
                             </div>
                             <div class="hidden items-center space-x-3 py-3 rtl:space-x-reverse sm:block sm:py-0">
-                                <button type="button" class="rounded-md bg-[#f4f4f4] p-2 hover:bg-primary-light hover:text-primary dark:bg-[#1b2e4b]">
-                                    <icon-microphone-off />
-                                </button>
-                                <button type="button" class="rounded-md bg-[#f4f4f4] p-2 hover:bg-primary-light hover:text-primary dark:bg-[#1b2e4b]">
-                                    <icon-download />
-                                </button>
                                 <button type="button" class="rounded-md bg-[#f4f4f4] p-2 hover:bg-primary-light hover:text-primary dark:bg-[#1b2e4b]">
                                     <icon-camera />
                                 </button>
@@ -469,6 +507,36 @@
                 </ng-datatable>
                 </div> 
             </form>
+        </ng-template>
+        
+    </ngx-custom-modal>
+    <ngx-custom-modal #modalEditUser class="modal-top auth-modal">
+        <ng-template #modalHeader> <div class="!py-5">Dados do usuário</div> </ng-template>
+        <ng-template #modalBody>
+            <form [formGroup]="paramsEditUser" (submit)="onEditUser(modalEditUser)" class="space-y-5 dark:text-white" >
+                <div>
+                <!-- [ngClass]="isSubmitForm ? paramsCompany.controls['endereco'].errors ? 'has-error' : 'has-success' : ''"> -->
+                <label for="gridEndereco1">Nome</label>
+                <input
+                    id="gridNome"
+                    type="text"
+                    formControlName="name"
+                    placeholder="Informe o Nome"
+                    class="form-input"/>
+                </div>
+                <div>
+                    <!-- [ngClass]="isSubmitForm ? paramsCompany.controls['endereco'].errors ? 'has-error' : 'has-success' : ''"> -->
+                    <label for="gridEndereco1">CPF</label>
+                    <input
+                        id="gridCpf"
+                        type="text"
+                        formControlName="cpf"
+                        placeholder="Informe o CPF"
+                        class="form-input"/>
+                    </div>
+                    <button  
+                    type="submit" class="btn btn-primary !mt-6">Salvar</button>
+           </form>     
         </ng-template>
         
     </ngx-custom-modal>

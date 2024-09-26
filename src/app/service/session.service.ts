@@ -10,9 +10,9 @@ import { CrudAbstractService } from './crud.service';
  
 
 @Injectable({providedIn:'root'})
-export class UserService extends CrudAbstractService{
+export class SessionService extends CrudAbstractService{
     override getControllerName(): string {
-        return "user"
+        return "session"
     }
    
     constructor( ) { 
@@ -20,9 +20,15 @@ export class UserService extends CrudAbstractService{
     }
     
  
-    updateSession(idSession:string ,user:any):Observable<any>{
+    disconnctAttendance(idSession:string):Observable<any>{
  
-        return this._http.put(`${this.url}/v1/${this.getControllerName()}/session/${idSession}`, user);
+        return this._http.put(`${this.url}/v1/${this.getControllerName()}/disconnect-attendance/${idSession}`, null);
+    }
+
+  
+    connectAttendance(idSession:string):Observable<any>{
+ 
+        return this._http.put(`${this.url}/v1/${this.getControllerName()}/connect-attendance/${idSession}`, null);
     }
 
  

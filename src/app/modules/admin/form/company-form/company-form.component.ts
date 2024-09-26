@@ -36,7 +36,7 @@ export class CompanyFormComponent {
   }
   activeTab1 = 1;
  
-  options = ['TELEGRAM', '  WHATASAPP', 'INSTAGRAM', 'FACEBOOK'];
+  options = ['TELEGRAM', '  WHATSAPP', 'INSTAGRAM', 'FACEBOOK'];
   input1 = 'TELEGRAM';
 
   _enderecoService = inject(EnderecoService);  

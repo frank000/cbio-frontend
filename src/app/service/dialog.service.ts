@@ -1,10 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import {environment} from "../../environments/environment";
+
+import {  Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
-import { Company } from '../shared/models/company.interface';
-import { User } from '../shared/models/user.interface';
 import { CrudAbstractService } from './crud.service';
 
  

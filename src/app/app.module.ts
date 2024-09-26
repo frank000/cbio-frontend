@@ -41,6 +41,7 @@ import { authInterceptor } from './interceptor/auth.interceptor';
 import { jwtInterceptor } from './interceptor/jwt.interceptor copy';
 import { ChatComponent } from './modules/apps/chat/chat';
 import { PhraseModalComponent } from "./modules/apps/chat/modal/phrase-modal/phrase-modal.component";
+import { loadingInterceptor } from './interceptor/loading.interceptor';
 
 @NgModule({
     imports: [
@@ -63,7 +64,7 @@ import { PhraseModalComponent } from "./modules/apps/chat/modal/phrase-modal/phr
     declarations: [AppComponent, ChatComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout],
     providers: [
         Title,
-        provideHttpClient(withInterceptors([authInterceptor, jwtInterceptor])),
+        provideHttpClient(withInterceptors([authInterceptor, jwtInterceptor, loadingInterceptor])),
         provideHttpClient(
             withFetch()
         )],

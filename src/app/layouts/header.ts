@@ -7,7 +7,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { toggleAnimation } from 'src/app/shared/animations';
 import { LoginService } from '../service/login.service';
 import { AuthService } from '../service/auth.service';
-import { log } from 'console';
+ 
+import { AvatarUtil } from '../modules/base/avatar-util';
+import { WebSocketService } from '../modules/base/websocket/websocket-service.service';
 
 @Component({
     moduleId: module.id,
@@ -19,28 +21,14 @@ export class HeaderComponent {
     store: any;
     search = false;
     loginService = inject(LoginService)
-
+    userLocal:any;
     private _authService = inject(AuthService);
-    notifications = [
-        {
-            id: 1,
-            profile: 'user-profile.jpeg',
-            message: '<strong class="text-sm mr-1">John Doe</strong>invite you to <strong>Prototyping</strong>',
-            time: '45 min ago',
-        },
-        {
-            id: 2,
-            profile: 'profile-34.jpeg',
-            message: '<strong class="text-sm mr-1">Adam Nolan</strong>mentioned you to <strong>UX Basics</strong>',
-            time: '9h Ago',
-        },
-        {
-            id: 3,
-            profile: 'profile-16.jpeg',
-            message: '<strong class="text-sm mr-1">Anna Morgan</strong>Upload a file',
-            time: '9h Ago',
-        },
-    ];
+    authService = inject(AuthService);
+
+    webSocketService = inject(WebSocketService);    
+
+
+    notifications:any = [];
     messages = [
         {
             id: 1,
@@ -80,6 +68,8 @@ export class HeaderComponent {
         },
     ];
 
+    sinalSonoro:boolean = false;
+    
     constructor(
         public translate: TranslateService,
         public storeData: Store<any>,
@@ -89,7 +79,14 @@ export class HeaderComponent {
         private auth: AuthService
     ) {
         this.initStore();
+        this.initDataAsUser();
     }
+
+    initDataAsUser(){
+        this.userLocal = this.authService.getObjectUserLogged();
+
+    }
+
     async initStore() {
         this.storeData
             .select((d) => d.index)
@@ -99,13 +96,40 @@ export class HeaderComponent {
     }
 
     ngOnInit() {
+        this.webSocketService.clearNotificationSubject
+            .subscribe((resp:any) => this.notifications = []);
         this.setActiveDropdown();
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 this.setActiveDropdown();
             }
         });
+
+
+        this.webSocketService.connectToObservable().subscribe(
+            (resp: any) => {
+              const topicAttendant = `/topic/notify.${this.userLocal.userId}`;
+              console.log("Passo 1 - listen user ID", topicAttendant);
+        
+              this.subscribeToAttendantTopic(topicAttendant);
+              console.log('Conexão estabelecida, agora vamos assinar os canais.');
+            }
+          );
     }
+
+        /**
+     * Função para garantir a inscrição no tópico individual do usuário.
+     */
+        subscribeToAttendantTopic(topicAttendant: string): void {
+            this.webSocketService.getMessages(topicAttendant).subscribe((message: any) => {
+                this.notifications.push(message)
+                if(this.sinalSonoro) this.playAudio();
+                console.log(`Mensagem recebida para o USUÁRIO ${topicAttendant}:`, message);
+         
+                 
+            });
+        }
+
 
     setActiveDropdown() {
         const selector = document.querySelector('ul.horizontal-menu a[routerLink="' + window.location.pathname + '"]');
@@ -129,7 +153,7 @@ export class HeaderComponent {
     }
 
     removeNotification(value: number) {
-        this.notifications = this.notifications.filter((d) => d.id !== value);
+        this.notifications = this.notifications.filter((d:any) => d.id !== value);
     }
 
     removeMessage(value: number) {
@@ -162,5 +186,23 @@ export class HeaderComponent {
             this.router.navigate(["/auth/boxed-signin"]);
         }
      
+    }
+
+    playAudio(){
+        let audio = new Audio();
+        audio.src = "../../../assets/notification.mp3";
+        audio.load();
+        audio.play();
+      }
+
+    getInitialCharacters(){
+    
+        return AvatarUtil.getInitialCharacters(this.userLocal.name);
+    }
+
+    readAll(){
+        this.notifications = [];
+        this.router.navigate(["/apps/chat"]);
+
     }
 }
