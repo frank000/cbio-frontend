@@ -1,0 +1,5 @@
+
+<span *ngIf="!showImage" 
+class="flex justify-center items-center w-9 h-9 text-center rounded-full object-cover bg-success" >{{getInitialCharacters(name)}}</span>
+
+<img *ngIf="showImage" src="/assets/images/profile-34.jpeg" class="h-12 w-12 rounded-full object-cover" />

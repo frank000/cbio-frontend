@@ -16,9 +16,12 @@ import { showMessage } from '../../base/showMessage';
 import { SessionService } from 'src/app/service/session.service';
 import Swal from 'sweetalert2';
 import { AvatarUtil } from '../../base/avatar-util';
-import { WhatsappService } from 'src/app/service/whatsapp.service';
-import { catchError, map, Observable, of } from 'rxjs';
-import { subscribe } from 'diagnostics_channel';
+import { MediaService } from 'src/app/service/media.service';
+import { catchError, map, Observable, of } from 'rxjs'; 
+import { PrivateChannelService } from 'src/app/service/private-channel.service';
+import { FileValidationException } from '../../base/FileValidationException';
+import { ContactService } from 'src/app/service/contact.service';
+
 
 @Component({
     templateUrl: './chat.html',
@@ -28,22 +31,35 @@ import { subscribe } from 'diagnostics_channel';
 export class ChatComponent implements OnInit, OnDestroy{
 
     loginService = inject(LoginService);
-    webSocketService = inject(WebSocketService);    
-    whatsappService = inject(WhatsappService);    
+    webSocketService = inject(WebSocketService);
+    mediaService = inject(MediaService);
     authService = inject(AuthService);
     chatSessionService = inject(ChatSessionService);
     sessionService = inject(SessionService);
     diologService = inject(DiologService);
     userService = inject(UserService);
+    privateChannelService = inject(PrivateChannelService);
+    contactService = inject(ContactService);
     userLocal:any;
     _fb = inject(FormBuilder);
+    mask12 =  ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+
+    imageTypes:string[] = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+    documentTypes:string[] = ["text/plain", "application/pdf",
+         "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/msword",
+         "application/excel", ];
 
     loginUser:any;
-    paramsEditUser!:  FormGroup;
-    listChannelsIdsListen: string[] = []
 
+    paramsEditUser!:  FormGroup;
+    paramsContact!:  FormGroup;
+    listChannelsIdsListen: string[] = []
     receivedMessages: string[] = [];
 
+    bindScreen:number = 1;    
+
+    
     constructor(public storeData: Store<any>) {
         this.userLocal = this.authService.getObjectUserLogged();
 
@@ -80,12 +96,41 @@ export class ChatComponent implements OnInit, OnDestroy{
             }
             );
         }, 2000); // 2000 milissegundos = 2 segundos
+
+
         // Depois, obtemos todos os contatos e inscrevemos nos canais necessários
         this.reloadContactList();
         this.webSocketService.clearNotificationSubject.next(true)
+  
+
+        this.initListenWebsocketReload(); 
+    }
+
+
+    private initListenWebsocketReload() {
+        this.webSocketService.connectToObservable().subscribe(
+            (resp: any) => {
+                const topicReload = `/topic/reload.${this.userLocal.userId}`;
+
+                this.subscribeToReloadTopic(topicReload);
+                console.log('Conexão estabelecida, agora vamos assinar os canais para RELOAD.');
+            }
+        );
+    }
+
+    /**
+     * Função para garantir a inscrição no tópico individual do usuário.
+     */
+    subscribeToReloadTopic(topicReload: string): void {
+        this.webSocketService.getMessages(topicReload).subscribe((message: any) => {
+            this.reloadContactList();
+            this.selectUser(this.selectedUser);
+        });
     }
     
-
+    /**
+     * Carrega os contatos
+     */ 
     private reloadContactList() {
  
         this.chatSessionService.getAll().subscribe(
@@ -117,7 +162,7 @@ export class ChatComponent implements OnInit, OnDestroy{
 
     refreshContacts(){
         this.listChannelsIdsListen = []
-        this.selectedUser = null
+        // this.selectedUser = null
         this.webSocketService.unsubscribeAllChannel();
         this.reloadContactList();
     }
@@ -167,13 +212,15 @@ export class ChatComponent implements OnInit, OnDestroy{
     async subscribeToChannel(caminho: string) {
         try {
           await this.webSocketService.connect(); // Aguarda a conexão ser estabelecida
-          console.log('Conexão estabelecida, agora vamos assinar os canais.');
+          console.log('Conexão estabelecida, agora vamos assinar os canais.xix');
       
-          this.webSocketService.getMessages(caminho).subscribe((message:any) => {
+          const subscriptio = this.webSocketService.getMessages(caminho).subscribe((message:any) => {
             console.log(`Mensagem recebida no canal ${caminho}:`, message);
             this.addMensagemReceivedToSelectedUser(message.channelId, message);
 
           });
+          this.webSocketService.subscribeListPath[caminho] = subscriptio;
+          console.log(`Inscrição bem-sucedida no canal: ${caminho}`);
         } catch (error) {
           console.error('Erro ao conectar ao WebSocket:', error);
         }
@@ -239,20 +286,27 @@ export class ChatComponent implements OnInit, OnDestroy{
         
         // Verifica se a mensagem possui um identificador único (assumindo que existe um campo 'id' na mensagem)
         const messageId = parsedMessage.id;
-    
+        channelIdListened = parsedMessage.channelId 
         // Filtra o contato correspondente ao canal
         const contact = this.contactList.find((item: any) => item.channelId === channelIdListened);
     
-        if (contact) { 
+        if (contact) {  
+            
+            let selectedUserChannel:any = localStorage.getItem("selectedUserChannel");
+ 
             // Somente adiciona se o usuário selecionado for o mesmo do contato encontrado
-            if (this.selectedUser.channelId === contact.channelId) {
+ 
+            if (selectedUserChannel === contact.channelId) {
       
                 // Inicializa a lista de mensagens se não existir
                 if (!contact.messages) {
                     contact.messages = [];
                 }
-                this.getMediaByDialog(parsedMessage)
-                .subscribe();
+                if(parsedMessage.media != null){
+                    this.getMediaByDialog(parsedMessage)
+                    .subscribe();
+                }
+ 
     
                 // Verifica se a mensagem já existe na lista
                 const exists = contact.messages.some((msg: any) => msg.id === messageId);
@@ -262,10 +316,11 @@ export class ChatComponent implements OnInit, OnDestroy{
                 } else {
                     console.log("Mensagem duplicada, não adicionada:", parsedMessage);
                 }
+                
+                this.scrollToBottom();
             }
         }
     
-        this.scrollToBottom();
     }
  
     async initStore() {
@@ -284,7 +339,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     }
 
     @ViewChild('scrollable') scrollable!: NgScrollbar;
-    isShowUserChat = false;
+    isShowUserChat:boolean[] = [];
     isShowChatMenu = false;
 
     contactList: WebsocketNotificationDTO[] = [
@@ -293,6 +348,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     searchUser = '';
     searchMessage = '';
     searchPhraseField = '';
+    searchContactField = '';
     textMessage = '';
     selectedUser: any = null;
 
@@ -325,42 +381,54 @@ export class ChatComponent implements OnInit, OnDestroy{
 
 
 
-    selectUser(user: any) {
+    selectUser(user: any) { 
+        
         this.selectedUser = user;
-        this.isShowUserChat = true;
+        this.isShowUserChat = [];
+        this.isShowUserChat[user.channelId] = true;
         this.scrollToBottom();
         this.isShowChatMenu = false; 
         
 
         this.textMessage = "";
 
-        if(this.selectedUser.identificadorRemetente != undefined){
-            this.diologService.getAllBySender(this.selectedUser.channelId)
+        if(this.selectedUser.channelId != undefined){
+            this.listAllMessagesBySender();
+        }
+        localStorage.setItem("selectedUserChannel", this.selectedUser.channelId);        
+    }
+
+    private listAllMessagesBySender() {
+        this.diologService.getAllBySender(this.selectedUser.userId, this.selectedUser.channelId)
             .subscribe(
-                (resp:any) =>{ 
-                    this.selectedUser.messages = resp
+                (resp: any) => {
+                    this.selectedUser.messages = resp;
                     this.selectedUser.messages
-                    .filter((msg:any) => msg.media != null)
-                    .map((msg: any) => {
-                        this.getMediaByDialog(msg)
-                        .subscribe();  // Certifique-se de se inscrever para que a requisição seja feita
-                      });
-                  
-                    this.scrollToBottom() 
-                    
+                        .filter((msg: any) => msg.media != null)
+                        .map((msg: any) => {
+                            this.getMediaByDialog(msg)
+                                .subscribe(); // Certifique-se de se inscrever para que a requisição seja feita
+                        });
+
+                    this.scrollToBottom();
+
                 },
                 (error: any) => {
-                  console.error('Erro ao buscar mensagens:', error);
+                    console.error('Erro ao buscar mensagens:', error);
                 }
             );
-        }  
     }
 
     private getMediaByDialog(msg: any) :Observable<any>{
         return this.getMedia(msg.id)
             .pipe(
                 map((mediaResp: any) => {
-                    msg.body = mediaResp; // Atualiza o corpo da mensagem com a mídia
+        
+                    if(mediaResp != undefined){
+                        msg.body = mediaResp; // Atualiza o corpo da mensagem com a mídia
+                    }else{
+                        msg.body = "/assets/images/naodisponivel.png" 
+                    }
                 })
             );
     }
@@ -373,13 +441,15 @@ export class ChatComponent implements OnInit, OnDestroy{
                 fromUserId:  this.selectedUser.userId,//valor é a sessao
                 toUserId: this.userLocal.userId,
                 text: this.textMessage,
+                type: "TEXT",
                 time: 'Just now',
             };
-            if(user.messages==null){    
-                user.messages = [menssage];
-            }else{
-                user.messages.push(menssage);    
-            }
+
+            // if(user.messages==null){    
+            //     user.messages = [menssage];
+            // }else{
+            //     user.messages.push(menssage);    
+            // }
             
             this.scrollToBottom();
             this.sender(channelId, menssage);
@@ -392,20 +462,29 @@ export class ChatComponent implements OnInit, OnDestroy{
             this.scrollToBottom();
         }
     }
-    replaceAsterisksWithStrongTags(text:string) {
-        return text.replace(/\*(.*?)\*/g, '<strong>$1</strong><br/>');
-      }
+
 
     scrollToBottom() {
-        if (this.isShowUserChat) {
+        if (this.isShowUserChat[this.selectedUser.channelId]) {
             setTimeout(() => {
                 this.scrollable.scrollTo({ bottom: 0 });
             });
         }
     }
+    isShowUserChatFunc(){
+        if(this.selectedUser != null && this.selectedUser.channelId != null){
+            return this.isShowUserChat[this.selectedUser.channelId]
+        }else{
+            return false;
+        }
+    }
 
     getInitialCharacters(nameParam:any = null){
-        let name = (nameParam != null)? nameParam : this.userLocal.name;
+        let name = (nameParam != null)? nameParam : this.userLocal.name; 
+        
+        if(name == null){
+            name = this.userLocal.preferred_username.split("@")[0]
+        }
         return AvatarUtil.getInitialCharacters(name);
     }
 
@@ -428,16 +507,22 @@ export class ChatComponent implements OnInit, OnDestroy{
 
     gridRowsPhrase:any[] = [];
     colsPhrase: Array<colDef> = [];
+    colsContacts: Array<colDef> = [];
     totalRowsUser!:number  
 
     _phraseService = inject(PhraseService);
     initGridPhrase(){
         this.colsPhrase = [ 
-            { field: "description", title: "Descrição" },
-      
+            { field: "description", title: "Descrição" },      
             { field: "acoes", title: "Ações" }
-      
           ];
+          
+        this.colsContacts = [ 
+            { field: "name", title: "Nome" },      
+            { field: "phone", title: "Telefone" },      
+            { field: "acoes", title: "Ações" }
+          ];
+
         this._phraseService.getAll()
         .subscribe(
             (resp:any)=>{
@@ -446,10 +531,90 @@ export class ChatComponent implements OnInit, OnDestroy{
         );
     }
 
+    files(file:any){
+        file.click();
+    }
+
+    fileName = '';
+    onFileSelected(event?:any){
+        const file:File = event.target.files[0];
+
+        if (file) {
+
+            try{
+                this.validateFileSize(file);
+
+                const menssage = {
+                    fromUserId:  this.selectedUser.userId,//valor é a sessao
+                    toUserId: this.userLocal.userId,
+                    text: null,
+                    type: this.getTipeFile(file),
+                    time: 'Just now',
+                    channelId: this.selectedUser.channelId
+                };
+                  
+                this.fileName = file.name; 
+                
+                this.privateChannelService.sendFile(file, JSON.stringify(menssage))
+                .subscribe((resp:any)=>{
+                    console.log(resp);
+                    
+                });
+
+
+            }catch (error) {
+                if (error instanceof FileValidationException) {
+                    showMessage(error.message, 'error');
+                } else {
+                  console.error('Erro inesperado:', error);
+                }
+              }
+
+            
+        }
+    }
+
+    private getTipeFile(file:File) { 
+        
+        if(this.imageTypes.includes(file.type)){
+            return "IMAGE";
+        }else if(this.documentTypes.includes(file.type)){
+            return "DOCUMENT";
+        }else{
+            return "TEXT"
+        }
+     
+    }
+
+    private validateFileSize(file:File) { 
+
+
+        if(this.imageTypes.includes(file.type)){
+            const maxSizeInMB = 16;
+            const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+            if(file.size > maxSizeInBytes){
+                    throw new FileValidationException(`O arquivo excede o tamanho máximo de ${maxSizeInMB} MB.`);
+            }
+        }else if(this.documentTypes.includes(file.type)){
+            const maxSizeInMB = 100;
+            const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+            if(file.size > maxSizeInBytes){
+                throw new FileValidationException(`O arquivo excede o tamanho máximo de ${maxSizeInMB} MB.`);
+            }
+        }
+     
+    }
+
     selectPhrase(value:any, model:any){
         this.textMessage = value
         model.close()
     }
+    selectPhraseRow(event:any, model:any){
+        this.textMessage = event.description
+        model.close()
+    }
+
     searchPhrase() {
         return this.gridRowsPhrase.filter((d: { description: string }) => {
             if(d.description != null){
@@ -460,13 +625,26 @@ export class ChatComponent implements OnInit, OnDestroy{
             
         });
     }
+
     initForm(){
         this.paramsEditUser = this._fb.group({
         
             name: [''],
             cpf: [''], 
-        });    
+            telefone1: [''],
+            telefone2: [''],
+            email: ['']
+        });
+        this.paramsContact = this._fb.group({
+            id: [null],
+            name: ['', Validators.required],
+            email: ['', Validators.compose([Validators.required, Validators.email])],
+            phone: ['', Validators.required],
+            location: [''],
+            obs: [''],
+        });
     }
+
     onEditUser(modal:any){
         this.selectedUser.name = this.paramsEditUser.controls["name"].value;
         this.selectedUser.userId;
@@ -474,7 +652,10 @@ export class ChatComponent implements OnInit, OnDestroy{
             this.selectedUser.userId,
             {
                 name:this.selectedUser.name,
-                cpf:this.paramsEditUser.controls["cpf"].value
+                cpf:this.paramsEditUser.controls["cpf"].value,
+                telefone1:this.paramsEditUser.controls["telefone1"].value,
+                telefone2:this.paramsEditUser.controls["telefone2"].value,
+                email:this.paramsEditUser.controls["email"].value,
             }
         )
         .subscribe(
@@ -545,8 +726,8 @@ export class ChatComponent implements OnInit, OnDestroy{
 
 
     getMedia(dialogId: string): Observable<any> {
-        return this.whatsappService.getMedia(dialogId,).pipe(
-            map((resp: any) => {
+        return this.mediaService.getMedia(dialogId,).pipe(
+            map((resp: any) => { 
                 // Aqui você pode formatar a resposta caso necessário
                 return resp; // Retorna a resposta em caso de sucesso
             }),
@@ -557,22 +738,96 @@ export class ChatComponent implements OnInit, OnDestroy{
         );
     }
 
-    
 
-    // getMedia(dialogId:string){
-    //     this.whatsappService.getMedia(dialogId)
-    //     .subscribe(
-    //         (resp:any)=>{
-    //             console.log(resp);
-    //             return " - "
-                
-    //         },
-    //         (error:any)=> {
-    //               console.log(error);
-    //             return " - "
-    //         }
-    //     );
-    //     return " - "
+    searchAllContacts(){
+        this.contactService.getAll()
+        .subscribe(
+            (resp:any) =>{ 
+                this.filterdContactsList = resp;
+            }
+        );        
+    }
 
-    // }
+    filterdContactsList: any = [];
+    searchContacts() {
+        return this.filterdContactsList.filter((d:any) => d.name.toLowerCase().includes(this.searchContactField.toLowerCase()));
+        
+    }
+
+    openBindContact(modalBindContact:any){
+        this.searchAllContacts();
+
+        modalBindContact.open();
+
+    }
+    addContact(){
+        this.bindScreen = 2;
+
+    }
+
+    backContact(){
+        this.searchAllContacts();
+        this.bindScreen = 1;
+        this.paramsContact.reset();
+    }
+
+    submitContact(modal:any){
+        if (this.paramsContact.controls['name'].errors) {
+            showMessage('Nome é obrigatório.', 'error');
+            return;
+        }
+        if (this.paramsContact.controls['email'].errors) {
+            showMessage('Email é obrigatório.', 'error');
+            return;
+        }
+        if (this.paramsContact.controls['phone'].errors) {
+            showMessage('Celular é obrigatório.', 'error');
+            return;
+        }
+      
+        let user = { 
+            path: 'no-profile.png',
+            name: this.paramsContact.value.name,
+            email: this.paramsContact.value.email, 
+            phone: this.paramsContact.value.phone,
+            location: this.paramsContact.value.location,
+            obs: this.paramsContact.value.obs,
+
+        };
+     
+        // this.contactList.splice(0, 0, user);
+        this.searchContacts();
+
+        this.contactService.save(user).subscribe(
+            (resp:any) =>{
+                showMessage('Contato salvo com sucesso!');
+                modal.close();
+                this.searchAllContacts()
+                this.backContact();
+            }
+        );
+    }
+
+    bindContact(value:any, modalBindContact:any){
+        this.selectedUser.contact = {
+            id:value.id,
+            name:value.name,
+            email:value.email
+        };
+        this.userService.bindContact(
+            this.selectedUser.userId,
+            this.selectedUser.contact
+        )
+        .subscribe(
+            (resp:any)=>{
+                showMessage("Contato vinculado com sucesso.");
+                modalBindContact.close();
+                this.selectedUser.name = value.name;
+                this.paramsEditUser.controls["name"].setValue(value.name);
+                this.paramsEditUser.controls["email"].setValue(value.email);
+            }
+        );
+        
+  
+    }
 }

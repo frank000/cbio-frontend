@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { slideDownUp } from '../shared/animations';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     moduleId: module.id,
@@ -19,6 +20,7 @@ export class SidebarComponent {
         public translate: TranslateService,
         public storeData: Store<any>,
         public router: Router,
+        public authService: AuthService
     ) {
         this.initStore();
     }

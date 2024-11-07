@@ -21,6 +21,9 @@ export abstract class GridAbstract {
             query = query.append('filter', this.getParamsFiltro().controls["filter"].value);
 
         }
+        if( this.getParamsFiltro().controls["company"].value != null && this.getParamsFiltro().controls["company"].value != ""){
+            query = query.append('companyId', this.getParamsFiltro().controls["company"].value );
+          }
         query = query.append('pageIndex', this.getParamsPage().current_page);
 
         query = query.append('pageSize', this.getParamsPage().pagesize);

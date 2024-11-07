@@ -8,6 +8,7 @@ import { Company } from 'src/app/shared/models/company.interface';
 // shared module
 import { SharedModule } from 'src/shared.module';
 import { showMessage } from '../base/showMessage';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-admin',
@@ -22,10 +23,17 @@ export class AdminComponent {
     gridCompany: Array<Company> = []
 
     _companyService = inject(CompanyService);
- 
+    swalWithBootstrapButtons:any;
     constructor() {
         this.initData();
-        
+        this.swalWithBootstrapButtons = Swal.mixin({
+            buttonsStyling: false,
+            customClass: {
+                popup: 'sweet-alerts',
+                confirmButton: 'btn btn-secondary',
+                cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
+            },
+          });
       
           
     }
@@ -41,34 +49,7 @@ export class AdminComponent {
 
         ];
 
-        // this.rows = [
-        //     {
-        //     id: 1,
-        //     name: "Leanne Graham",
-        //     username: "Bret",
-        //     email: "Sincere@april.biz",
-        //     address: {
-        //         street: "Kulas Light",
-        //         suite: "Apt. 556",
-        //         city: "Gwenborough",
-        //         zipcode: "92998-3874",
-        //         geo: {
-        //             lat: "-37.3159",
-        //             lng: "81.1496",
-        //         },
-        //     },
-        //     phone: "1-770-736-8031 x56442",
-        //     website: "hildegard.org",
-        //     company: {
-        //         name: "Romaguera-Crona",
-        //         catchPhrase: "Multi-layered client-server neural-net",
-        //         bs: "harness real-time e-markets",
-        //     },
-        //     date: "Tue Sep 27 2022 22:19:57",
-        //     age: 10,
-        //     active: true,
-        //     }, 
-        // ];
+     
     }
 
     private loadGrid() {
@@ -83,12 +64,29 @@ export class AdminComponent {
     }
 
     deleteRow(value:any){
-        this._companyService.delete(value.id)
-        .subscribe(
-            (resp:any)=>{
-                showMessage('Companhia deletada com sucesso');
-                this.loadGrid();
-            }
-        )
+        this.swalWithBootstrapButtons
+        .fire({
+            title: 'Tem certeza que deseja excluir?',
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Não',
+            reverseButtons: true,
+            padding: '2em',
+        })
+        .then((result:any) => {
+            if (result.value) {
+                this._companyService.delete(value.id)
+                .subscribe(
+                    (resp:any)=>{
+                        showMessage('Companhia deletada com sucesso');
+                        this.loadGrid();
+                    }
+                )
+            }  
+        });
+
+       
     }
 }

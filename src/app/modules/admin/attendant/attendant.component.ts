@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { colDef } from '@bhplugin/ng-datatable';
@@ -9,6 +9,12 @@ import { UserService } from 'src/app/service/user.service';
 import { User } from 'src/app/shared/models/user.interface';
 import { SharedModule } from 'src/shared.module';
 import { showMessage } from '../../base/showMessage';
+import { AuthService } from 'src/app/service/auth.service';
+import { CompanyService } from 'src/app/service/company.service';
+import { Store } from '@ngrx/store';
+import Swal from 'sweetalert2';
+import { MessageService } from 'src/app/service/message.service';
+
 
 @Component({
   selector: 'app-attendant',
@@ -16,11 +22,18 @@ import { showMessage } from '../../base/showMessage';
   imports: [CommonModule, SharedModule, RouterLink],
   templateUrl: './attendant.component.html'
 })
-export class AttendantComponent {
+export class AttendantComponent implements OnInit{
   _AttendantService = inject(AttendantService);
   _route = inject(Router);
   _fb = inject(FormBuilder);
+  _authService = inject(AuthService);
+  _companyService = inject(CompanyService);
+  messageService = inject(MessageService);
+
+  swalWithBootstrapButtons:any;
   paramsFiltro!: FormGroup;
+  options: Array<{ id: number, label: string }> = []; // Inicializar como array vazio
+  input1!:any;
   params = {
     current_page: 0,
     pagesize: 10,
@@ -29,20 +42,49 @@ export class AttendantComponent {
       // search: '',
       // column_filters: [],
   };
-
+ 
   cols: Array<colDef> = [];
   gridRowsUser: User[] = []
   totalRowsUser!:number;
-  constructor(){
+  store: any;
+  constructor(
+    public storeData: Store<any>
+  ){
     this.initForm();
     this.initData();
     this.carregaGridAttedant();
+    this.initStore();
+
+    this.swalWithBootstrapButtons = Swal.mixin({
+      buttonsStyling: false,
+      customClass: {
+          popup: 'sweet-alerts',
+          confirmButton: 'btn btn-secondary',
+          cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
+      },
+    });
+
+
+
+
+  }
+  ngOnInit(): void {
+    this.carregaCompanias();
+ 
   }
 
+  async initStore() {
+    this.storeData
+        .select((d) => d.index)
+        .subscribe((d) => {
+            this.store = d;
+            console.log(this.store);
+            
+        });
+}
 
 
-
-  initData(){ 
+  initData(){
 
     this.cols = [
       { field: "id", title: "ID", filter: false, sort: false },
@@ -54,8 +96,9 @@ export class AttendantComponent {
   }
   initForm(){
     this.paramsFiltro = this._fb.group({
-      name: ['']
-  });    
+      name: [''],
+      company: ['']
+  });
   }
 
   loadToEdit(value:any){
@@ -64,22 +107,65 @@ export class AttendantComponent {
   }
 
   deleteRow(value:any){
-    this._AttendantService.delete(value.id)
-    .subscribe(
-      (resp:any) =>{
-        showMessage("Atendente deletado com sucesso")
-        this.carregaGridAttedant()
+
+
+
+    this.swalWithBootstrapButtons
+    .fire({
+        title: 'Tem certeza que deseja excluir o atendente?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não',
+        reverseButtons: true,
+        padding: '2em',
+    })
+    .then((result:any) => {
+        if (result.value) {
+          this._AttendantService.delete(value.id)
+            .subscribe(
+              (resp:any) =>{
+                showMessage("Atendente deletado com sucesso")
+                this.carregaGridAttedant()
+              }
+            )
+        }  
+    });
+
+
+
+
+  }
+  carregaCompanias() {
+    this._companyService.obtemGrid().subscribe(
+      (resp: any) => {
+  
+        // Limpa o array de opções antes de preenchê-lo
+        this.options = [];
+  
+        resp.items.forEach((item: any) => {
+          this.options.push({
+            id: item.id,
+            label: item.nome
+          });
+        });
+  
+          },
+      (error) => {
+        console.error('Erro ao carregar companhias:', error);
       }
-    )
+    );
   }
 
   carregaGridAttedant() {
     let query = new HttpParams();
     if( this.paramsFiltro.controls["name"].value != null && this.paramsFiltro.controls["name"].value != ""){
       query = query.append('filter', this.paramsFiltro.controls["name"].value );
-
     }
-    query = query.append('pageIndex', this.params.current_page);    
+    if( this.paramsFiltro.controls["company"].value != null && this.paramsFiltro.controls["company"].value != ""){
+      query = query.append('companyId', this.paramsFiltro.controls["company"].value );
+    }
+    query = query.append('pageIndex', this.params.current_page);
     query = query.append('perfil', "ATTENDANT");
     query = query.append('pageSize', this.params.pagesize );
     this._AttendantService.obtemGrid(query)

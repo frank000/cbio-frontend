@@ -16,8 +16,10 @@ export class DiologService extends CrudAbstractService{
     }
     
 
-    getAllBySender(identificadorRemetente:string):Observable<any>{
-        return this._http.get(`${this.url}/v1/${this.getControllerName()}/sender/${identificadorRemetente}`);
+    getAllBySender(sessionId:string, channelId:string):Observable<any>{
+
+        
+        return this._http.get(`${this.url}/v1/${this.getControllerName()}/sender/session/${sessionId}/channel/${channelId}`);
     }
  
 

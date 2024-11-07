@@ -171,3 +171,6 @@ ngx-custom-modal .modal {
 .modal.slider-modal .modal-header .close {
     @apply ltr:right-0 rtl:left-0;
 }
+.modal-lg {
+max-width: 600px !important;
+}

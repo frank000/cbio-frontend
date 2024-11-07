@@ -1,2 +1,3 @@
 @import 'tailwind.css';
 @import '@ng-select/ng-select/themes/default.theme.css';
+@import 'flatpickr/dist/flatpickr.min.css';

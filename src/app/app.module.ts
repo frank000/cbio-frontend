@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpBackend, HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -10,6 +10,9 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app.route';
 
 import { AppComponent } from './app.component';
+
+import { DatePipe } from '@angular/common';
+
 
 // store
 import { StoreModule } from '@ngrx/store';
@@ -41,7 +44,12 @@ import { authInterceptor } from './interceptor/auth.interceptor';
 import { jwtInterceptor } from './interceptor/jwt.interceptor copy';
 import { ChatComponent } from './modules/apps/chat/chat';
 import { PhraseModalComponent } from "./modules/apps/chat/modal/phrase-modal/phrase-modal.component";
-import { loadingInterceptor } from './interceptor/loading.interceptor';
+import { loadingInterceptor } from './interceptor/loading.interceptor'; 
+import { ViewTextMediaComponent } from "./modules/base/view-text-media/view-text-media.component";
+import { AvatarComponent } from "./modules/base/avatar/avatar.component";
+import { CalendarComponent } from './modules/agendai/calendar';
+import { ContactsComponent } from './modules/apps/contacts/contacts';
+import { BtnSalvaVoltaComponent } from "./modules/common/btn-salva-volta/btn-salva-volta.component";
 
 @NgModule({
     imports: [
@@ -59,11 +67,15 @@ import { loadingInterceptor } from './interceptor/loading.interceptor';
     }),
     StoreModule.forRoot({ index: indexReducer }),
     SharedModule.forRoot(),
-    PhraseModalComponent
+    PhraseModalComponent,
+    ViewTextMediaComponent,
+    AvatarComponent,
+    BtnSalvaVoltaComponent
 ],
-    declarations: [AppComponent, ChatComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout],
+    declarations: [AppComponent, ContactsComponent, CalendarComponent,ChatComponent, HeaderComponent, FooterComponent, SidebarComponent, ThemeCustomizerComponent, IndexComponent, AppLayout, AuthLayout],
     providers: [
         Title,
+        DatePipe,
         provideHttpClient(withInterceptors([authInterceptor, jwtInterceptor, loadingInterceptor])),
         provideHttpClient(
             withFetch()

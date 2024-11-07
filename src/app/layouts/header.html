@@ -1,11 +1,11 @@
 ﻿<div class="z-40 shadow-sm" [ngClass]="{ 'dark text-white-dark': store.semidark && store.menu === 'horizontal'}">
     <div class="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-[#0e1726]">
         <div class="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
-            <a routerLink="/" class="main-logo flex shrink-0 items-center">
+            <a routerLink="/dashboard/summary" class="main-logo flex shrink-0 items-center">
                 <img class="ml-[5px] w-14 flex-none" src="/assets/images/v12-horizontal.png" alt=""/>
 
                 <span class="hidden align-middle text-2xl font-semibold transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline">
-                    BeOrbi
+                    RAYZA.bot
                 </span>
             </a>
 
@@ -21,20 +21,20 @@
             <ul class="flex items-center space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]">
                 <li>
                     <a
-                        routerLink="/apps/calendar"
+                        routerLink="/apps/agendai/calendar"
                         class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60"
                     >
                         <icon-calendar />
                     </a>
                 </li>
-                <li>
+                <!-- <li>
                     <a
                         routerLink="/apps/todolist"
                         class="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60"
                     >
                         <icon-edit />
                     </a>
-                </li>
+                </li> -->
                 <li>
                     <a
                         routerLink="/apps/chat"
@@ -231,29 +231,7 @@
                                 <span *ngIf="notifications.length" class="badge bg-primary/80">{{notifications.length + ' Novas'}}</span>
                             </div>
                         </li>
-                        <!-- <li *ngFor="let notification of notifications" class="dark:text-white-light/90">
-                            <div class="group flex items-center px-4 py-2">
-                                <div class="grid place-content-center rounded">
-                                    <div class="relative h-12 w-12">
-                                        <img class="h-12 w-12 rounded-full object-cover" [src]="'/assets/images/' + notification.profile" alt="" />
-                                        <span class="absolute bottom-0 right-[6px] block h-2 w-2 rounded-full bg-success"></span>
-                                    </div>
-                                </div>
-                                <div class="flex flex-auto ltr:pl-3 rtl:pr-3">
-                                    <div class="ltr:pr-3 rtl:pl-3">
-                                        <h6 [innerHTML]="notification.message"></h6>
-                                        <span class="block text-xs font-normal dark:text-gray-500">{{notification.time}}</span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        class="text-neutral-300 opacity-0 hover:text-danger group-hover:opacity-100 ltr:ml-auto rtl:mr-auto"
-                                        (click)="$event.stopPropagation();removeNotification(notification.id)"
-                                    >
-                                        <icon-x-circle />
-                                    </button>
-                                </div>
-                            </div>
-                        </li> -->
+
                         <li *ngIf="notifications.length">
                             <div class="p-4">
                                 <button 
@@ -276,10 +254,11 @@
             <div class="dropdown shrink-0">
                 <div hlMenu class="!block">
                     <button type="button" hlMenuButton class="group relative block"> 
-
-                        <span *ngIf="!userLocal.urlAvatar"  class="h-9 w-9 rounded-full object-cover  bg-success saturate-50 group-hover:saturate-100" >{{getInitialCharacters()}}</span>
-                        <img *ngIf="userLocal.urlAvatar" src="/assets/images/profile-34.jpeg" class="h-12 w-12 rounded-full object-cover" />
-
+                      <app-avatar 
+                        [showImage]="userLocal.urlAvatar"
+                        [name]="userLocal.name"
+                      >
+                      </app-avatar>
                     </button>
                     <ul
                         *hlMenuItems
@@ -295,7 +274,7 @@
                                 </div>
                                 <div class="truncate ltr:pl-4 rtl:pr-4">
                                     <h4 class="text-base">
-                                        {{userLocal.name}}<span class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">Pro</span>
+                                        {{userLocal.name}}<span class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">{{userLocalPerfil}}</span>
                                     </h4>
                                     <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;">
                                         {{userLocal.email}}
@@ -354,7 +333,7 @@
             </a>
             <ul class="sub-menu">
                 <li>
-                    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ 'sales' | translate }}</a>
+                    <a routerLink="/dashboard/summary" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ 'sales' | translate }}</a>
                 </li>
                 <li>
                     <a routerLink="/analytics" routerLinkActive="active">{{ 'analytics' | translate }}</a>

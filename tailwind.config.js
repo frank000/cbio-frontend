@@ -15,6 +15,11 @@ module.exports = {
             center: true,
         },
         extend: {
+            screens: {
+                'sm': '576px',
+                'md': '960px',
+                'lg': '1440px',
+              },
             colors: {
                 primary: {
                     DEFAULT: '#4361ee',
@@ -120,5 +125,17 @@ module.exports = {
         }),
         require('@tailwindcss/typography'),
         rotateX,
+        function ({ addUtilities }) {
+            // Definindo a classe .middleLogin com as propriedades desejadas
+            addUtilities(
+              {
+                '.middleLogin': {
+                  'inset-inline-end': '50%',
+                  'top': '0rem',
+                },
+              },
+              ['responsive'] // Permite que a classe use breakpoints como `md:`
+            );
+          },
     ],
 };

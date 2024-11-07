@@ -9,6 +9,9 @@ import { CrudInterface } from 'src/app/shared/models/crud.interface';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/shared.module';
 import { showMessage } from '../../base/showMessage';
+import { AuthService } from 'src/app/service/auth.service';
+import { CompanyService } from 'src/app/service/company.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-phrase',
@@ -52,9 +55,12 @@ export class PhraseComponent extends GridAbstract{
   rows: Array<any> = [];
   gridCompany: Array<any> = []
 
+  options: Array<{ id: number, label: string }> = []; // Inicializar como array vazio
 
   _phraseService = inject(PhraseService);
   _route = inject(Router);
+  _authService = inject(AuthService);
+  _companyService = inject(CompanyService);
   _fb = inject(FormBuilder);
   paramsFiltro!: FormGroup;
   params:any;
@@ -63,11 +69,41 @@ export class PhraseComponent extends GridAbstract{
     super();
     this.initData(); 
     this.paramsFiltro = this._fb.group({
-        filter: ['']
+        filter: [''],
+        company:['']
     });  
-    this.loadGrid();      
+    this.loadGrid();
+    this.carregaCompanias();
+
+    this.swalWithBootstrapButtons = Swal.mixin({
+      buttonsStyling: false,
+      customClass: {
+          popup: 'sweet-alerts',
+          confirmButton: 'btn btn-secondary',
+          cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
+      },
+    });
   }
- 
+  carregaCompanias() {
+    this._companyService.obtemGrid().subscribe(
+      (resp: any) => {
+  
+        // Limpa o array de opções antes de preenchê-lo
+        this.options = [];
+  
+        resp.items.forEach((item: any) => {
+          this.options.push({
+            id: item.id,
+            label: item.nome
+          });
+        });
+  
+          },
+      (error) => {
+        console.error('Erro ao carregar companhias:', error);
+      }
+    );
+  }
   initData(){
     this.cols = [
       { field: "id", title: "ID", filter: false, sort: false },
@@ -83,15 +119,32 @@ export class PhraseComponent extends GridAbstract{
     this._route.navigate([path])
   }
 
-
+  swalWithBootstrapButtons:any;
   deleteRow(value:any){
-    this._phraseService.delete(value.id)
-    .subscribe(
-      (resp:any) =>{
-        showMessage("Frase deletada com sucesso")
-        this.loadGrid()
-      }
-    )
+
+    this.swalWithBootstrapButtons
+    .fire({
+        title: 'Tem certeza que deseja excluir a frase?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não',
+        reverseButtons: true,
+        padding: '2em',
+    })
+    .then((result:any) => {
+        if (result.value) {
+       
+          this._phraseService.delete(value.id)
+          .subscribe(
+            (resp:any) =>{
+              showMessage("Frase deletada com sucesso")
+              this.loadGrid()
+            }
+          )
+        }  
+    });
+
   }
 
   

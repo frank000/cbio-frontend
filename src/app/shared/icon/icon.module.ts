@@ -164,6 +164,8 @@ import { IconXCircleComponent } from './icon-x-circle';
 import { IconZipFileComponent } from './icon-zip-file';
 import { IconCodeFileComponent } from 'src/app/shared/icon/icon-code-file';
 import { IconDisconnectComponent } from './icon-disconnect';
+import { IconUploadComponent } from './icon-uplaod';
+ 
 
 @NgModule({
     imports: [CommonModule],
@@ -331,7 +333,8 @@ import { IconDisconnectComponent } from './icon-disconnect';
         IconXCircleComponent,
         IconZipFileComponent,
         IconCodeFileComponent,
-        IconDisconnectComponent
+        IconDisconnectComponent,
+        IconUploadComponent
     ],
     exports: [
         IconMenuAppsComponent,
@@ -498,6 +501,7 @@ import { IconDisconnectComponent } from './icon-disconnect';
         IconZipFileComponent,
         IconCodeFileComponent,
         IconDisconnectComponent,
+        IconUploadComponent,
     ],
 })
 export class IconModule {}

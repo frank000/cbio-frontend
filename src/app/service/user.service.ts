@@ -24,6 +24,15 @@ export class UserService extends CrudAbstractService{
  
         return this._http.put(`${this.url}/v1/${this.getControllerName()}/session/${idSession}`, user);
     }
+    
+ 
+    bindContact(idSession:string, contact:any):Observable<any>{
+ 
+        return this._http.put(`${this.url}/v1/${this.getControllerName()}/session/${idSession}/bind`, contact);
+    }
 
+    obtemAdminUserByCompany(id:string):Observable<any>{
+        return this._http.get(`${this.url}/v1/${this.getControllerName()}/admin-by-company/${id}`);
+    }    
  
 }

@@ -11,6 +11,13 @@ import { AttendantComponent } from './modules/admin/attendant/attendant.componen
 import { FormAttendantComponent } from './modules/admin/attendant/form-attendant/form-attendant.component';
 import { FormPhraseComponent } from './modules/admin/phrase/form-phrase/form-phrase.component';
 import { PhraseComponent } from './modules/admin/phrase/phrase.component';
+import { SummaryComponent } from './modules/dashboard/summary/summary.component';
+import { CalendarComponent } from './modules/agendai/calendar';
+import { RecursoComponent } from './modules/agendai/recurso/recurso.component';
+import { FormRecursoComponent } from './modules/agendai/recurso/form-recurso/form-recurso.component';
+import { TemplatesComponent } from './modules/admin/templates/templates.component';
+import { FormTemplateComponent } from './modules/admin/templates/form-template/form-template.component';
+import { ContactsComponent } from './modules/apps/contacts/contacts';
 
 export const routes: Routes = [
     {
@@ -18,7 +25,7 @@ export const routes: Routes = [
         component: AppLayout,
         children: [
             // dashboard
-            { path: '', component: IndexComponent, data: { title: 'Sales Admin' } },
+            { path: '', component: SummaryComponent, data: { title: 'Home' } },
 
             { path: 'admin/config', component: AdminComponent, data: { title: 'Administração' } },
             { path: 'admin/config/form', component: CompanyFormComponent, data: { title: 'Administração' } },
@@ -29,10 +36,24 @@ export const routes: Routes = [
             { path: 'admin/attendant/form', component: FormAttendantComponent, data: { title: 'Atendente' } },
             { path: 'admin/attendant/form/:id', component: FormAttendantComponent, data: { title: 'Atendente' } },
 
-            { path: 'apps/chat', component: ChatComponent, data: { title: 'Chat' } },
+            { path: 'apps/chat', component: ChatComponent, data: { title: 'RAYZA.bot' } },
             { path: 'admin/phrase', component: PhraseComponent, data: { title: 'Frase automática' } },
             { path: 'admin/phrase/form', component: FormPhraseComponent, data: { title: 'Frase automática' } },
             { path: 'admin/phrase/form/:id', component: FormPhraseComponent, data: { title: 'Frase automática' } },
+
+            { path: 'admin/template', component: TemplatesComponent, data: { title: 'Modelos' } },
+            { path: 'admin/template/form', component: FormTemplateComponent, data: { title: 'Modelos' } },
+            { path: 'admin/template/form/:id', component: FormTemplateComponent, data: { title: 'Modelos' } },
+
+
+            { path: 'dashboard/summary', component: SummaryComponent, data: { title: 'Atendimentos' } },
+            
+            { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'AGEND.ai' } },
+            { path: 'apps/agendai/recurso', component: RecursoComponent, data: { title: 'Recursos' } },
+            { path: 'apps/agendai/recurso/form', component: FormRecursoComponent, data: { title: 'Recursos' } },
+            { path: 'apps/agendai/recurso/form/:id', component: FormRecursoComponent, data: { title: 'Recursos' } },
+
+            { path: 'apps/contacts', component: ContactsComponent, data: { title: 'Contatos' } },
         ],
     },
     

@@ -36,6 +36,24 @@ export class CompanyService {
         return this._http.get(`${this.url}/v1/company/${id}`);
     }
 
+    getFreePort():Observable<any>{
+        return this._http.get(`${this.url}/v1/company/free-port`);
+    }
+
+    getConfigByCompany():Observable<any>{
+        return this._http.get(`${this.url}/v1/company/config`);
+    }
+
+    hasCredential():Observable<any>{
+        return this._http.get(`${this.url}/v1/company/credential/has`);
+    }
+
+
+    saveConfig(config:any):Observable<any>{
+ 
+        return this._http.post(`${this.url}/v1/company/config`, config);
+    }
+
     delete(id:string){
         return this._http.delete(`${this.url}/v1/company/${id}`);
 

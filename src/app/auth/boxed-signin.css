@@ -1,0 +1,8 @@
+.background-image { 
+    background-image: url('/assets/images/Design sem nome.png'); 
+    background-size: cover; 
+    background-position: center; 
+     border-top-left-radius: 10px; /* Define o raio do canto superior esquerdo */ 
+        border-bottom-left-radius: 10px; 
+    background-repeat: no-repeat; width: 48%; height: 100%; position: fixed; /* Mantém a imagem fixa na tela */ top: 0; left: 0; z-index: -1; /* Coloca a imagem atrás dos outros elementos */ }
+    @media (max-width: 576px) { .background-image { display: none; /* Esconde a div quando a largura da tela for menor que 576px */ } }

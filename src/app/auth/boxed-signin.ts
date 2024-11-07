@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { toggleAnimation } from 'src/app/shared/animations';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -14,8 +14,9 @@ import { AuthService } from '../service/auth.service';
 @Component({
     templateUrl: './boxed-signin.html',
     animations: [toggleAnimation],
+    styleUrls:["./boxed-signin.css"]
 })
-export class BoxedSigninComponent {
+export class BoxedSigninComponent implements OnInit{
 
     store: any;
     params!: FormGroup;
@@ -33,6 +34,9 @@ export class BoxedSigninComponent {
         this.initStore();
         this.initForm();
 
+    }
+    ngOnInit(): void {
+        this.authService.flush();
     }
     async initStore() {
         this.storeData
@@ -79,7 +83,7 @@ export class BoxedSigninComponent {
  
                 this.authService.setAccessToken(resp["access_token"]) 
                 this.authService.setRefreshToken(resp["refresh_token"]) 
-                this._router.navigate(["/"])
+                this._router.navigate(["/dashboard/summary"])
             }
         )
         

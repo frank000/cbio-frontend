@@ -1,0 +1,123 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Modelos de mensagem</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Modelos</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+                    <form (submit)="onSavedModel()">
+                        <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                                <div class="md:col-span-4 bg-violet-300	 h-10 rounded-lg	p-2 font-bold flex gap-4">
+                                    <span>
+                                        <icon-info-triangle class="text-black	text-2xl font-bold"/> 
+                                    </span>
+                                   <span class="mt-1">
+                                    Para o whatsapp, o modelo deve ser previamente cadastrado e autorizado antes através do link <a target="_blank" style="color: rgb(39, 99, 0);" href="https://business.facebook.com/latest/whatsapp_manager/message_templates"> gerenciador de modelos</a>.
+
+                                   </span>
+                                </div>    
+                                <div class="md:col-span-2" >
+                                    <div>
+                                        <div class="flex gap-3">
+                                            <label for="gridName">Nome</label>
+                                            <span>
+                                                <icon-help-circle></icon-help-circle>
+                                            </span>
+                                        </div>
+                                      
+                                        <input
+                                            id="gridName"
+                                            name="gridName"
+                                            type="text"
+                                            placeholder="Entre com nome do modelo"
+                                            [(ngModel)]="model.name"
+                                            (change)="verificarValorName()"
+                                            class="form-input"/>
+                                    </div>
+                                </div>
+                            
+                                <div class="md:col-span-2" >
+                           
+                                </div>
+                                <div class="md:col-span-2" >
+                                    <label for="description">Modelo :</label>
+                                    <textarea
+                                        id="description"
+                                        name="description"
+                                        class="form-textarea min-h-[130px]"
+                                        placeholder="Entra com modelo cadastrado"
+                                        [(ngModel)]="model!.body!.label"
+                                        (input)="changeTextarea($event)" 
+                                    ></textarea>
+                                </div>
+                                <div class="md:col-span-2" ></div>
+                                <div class="md:col-span-4" *ngIf="matches != null && matches.length > 0" >
+                                    <label for="description">Parametros da mensagem :</label>
+                                    <div class="grid grid-cols-1">
+                                        <div *ngFor="let item of this.matchesCleaned; let i = index" 
+                                            class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-3">
+                                            <div class="mt-1 grid place-content-center">
+                                                <div>{{ "{{" + item + "}}" }}</div>
+                                            </div>
+                                            <div>
+                                                <ng-select
+                                                id="typeParameter-{{ i+1 }}"
+                                                name="company"
+                                                bindLabel="label"
+                                                bindValue="id"
+                                                [(ngModel)]="typies[ i+1]"
+                                                placeholder="Entre com tipo de paramentro"
+                                                [items]="optionsTypeParameter"
+                                                [searchable]="false"
+                                                [clearable]="false"
+                                                (change)="changeTypeParameter($event,  i+1 )" ></ng-select>
+                                            </div>
+                                            <div>
+                                                <input
+                                                *ngIf="typies[ i+1 ] == 'estatico'"
+                                                id="gridValues-{{ i+1 }}"
+                                                type="text"
+                                                placeholder="Entre com o valor do paramentro"
+                                                [(ngModel)]="parameters[ i+1]"
+                                                (change)="changeParameter($event,  i+1)"
+                                                class="form-input"/>
+
+                                                <ng-select
+                                                *ngIf="typies[ i+1 ] == 'dinamico'"
+                                                id="typeParameterValue-{{ i+1 }}"
+                                                name="typeParameterValue"
+                                                bindLabel="label"
+                                                bindValue="id"
+                                       
+                                                placeholder="Entre com a variável de paramentro"
+                                                [items]="optionsDynamics"
+                                                [searchable]="false"
+                                                [clearable]="false"
+                                                (change)="changeDynamicParameter($event,  i+1 )" ></ng-select>
+                                            </div>                                        
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <app-btn-salva-volta 
+                        [edit]="this.id != null && this.id != undefined" 
+                        location="/admin/template"></app-btn-salva-volta>
+                    </form>
+
+ 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

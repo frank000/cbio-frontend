@@ -16,6 +16,7 @@ import { CanalService } from 'src/app/service/canal.service';
 import { Canal } from 'src/app/shared/models/canal.interface';
 import { HttpParams } from '@angular/common/http';
 import { colDef } from '@bhplugin/ng-datatable';
+import { TierService } from 'src/app/service/tier.service';
 
 @Component({
   selector: 'app-company-form',
@@ -35,7 +36,7 @@ export class CompanyFormComponent {
   
   }
   activeTab1 = 1;
- 
+  swalWithBootstrapButtons:any;
   options = ['TELEGRAM', '  WHATSAPP', 'INSTAGRAM', 'FACEBOOK'];
   input1 = 'TELEGRAM';
 
@@ -43,6 +44,7 @@ export class CompanyFormComponent {
   _companyService = inject(CompanyService);  
   _userService = inject(UserService);
   _canalService= inject(CanalService);
+  _tierService= inject(TierService);
   
   _fb = inject(FormBuilder);
 
@@ -59,32 +61,59 @@ export class CompanyFormComponent {
   cidade!: string;
   route = inject(ActivatedRoute);
   id?: string = undefined;
-  constructor() { 
+
+  tiers:any[] = [];
+  tier:any;
+
+  constructor() {
     
     this.initData();
     this.initForm();
 
   
  
+    this.carregaValoresParaUpdate();  
+
+      
+    this.swalWithBootstrapButtons = Swal.mixin({
+      buttonsStyling: false,
+      customClass: {
+          popup: 'sweet-alerts',
+          confirmButton: 'btn btn-secondary',
+          cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
+      },
+    });
+  }
+
+  private carregaValoresParaUpdate() {
     this.route.paramMap.subscribe((params) => {
- 
-      if(params.get('companyid') != undefined){
+
+      if (params.get('companyid') != undefined) {
         this.id = params.get('companyid')!;
 
         this._companyService.obtemCompany(this.id)
-        .subscribe(
-          (resp:any)=>{
-            this.companySaved = resp
-            this.paramsCompany.patchValue(this.companySaved)
-            this.carregaGridCanal();
-  
-        
-          }
-        )
+          .subscribe(
+            (resp: any) => {
+              this.companySaved = resp;
+              this.paramsCompany.patchValue(this.companySaved);
+              this.paramsUser;
+              this.carregaGridCanal();
+
+
+            }
+          );
+
+        this._userService.obtemAdminUserByCompany(this.id)
+          .subscribe(
+            (result: any) => {
+              this.paramsUser.patchValue(result);
+            }
+          );
       }
-    
-    });  
+
+    });
   }
+
    carregaGridCanal() {
     let query = new HttpParams();
     query = query.append('idCompany', this.companySaved.id);
@@ -109,7 +138,9 @@ export class CompanyFormComponent {
         endereco: ['', Validators.required], 
         estado: ['', Validators.required], 
         cidade: ['', Validators.required], 
+        tier: ['', Validators.required], 
         cep: [''], 
+        porta:['', Validators.required], 
     });    
     this.paramsConfig = this._fb.group({
         id: [undefined],
@@ -118,7 +149,7 @@ export class CompanyFormComponent {
         idCanal: ['', Validators.required], 
         ativo: [true, Validators.required], 
         token: ['', Validators.required], 
-        primeiroNome: ['', Validators.required], 
+        primeiroNome: ['' ], 
         apiKey: ['',  Validators.required], 
     });
   }
@@ -138,6 +169,13 @@ export class CompanyFormComponent {
       (resp:any) =>{ 
         this.ufs = resp;
 
+      }
+    );
+
+    this._tierService.getAll()
+    .subscribe(
+      (resp:any)=>{
+        this.tiers = resp;
       }
     );
     
@@ -178,24 +216,48 @@ export class CompanyFormComponent {
   
   isSubmitFormUser = false;
   submitUser(){
+ 
+    this.swalWithBootstrapButtons
+    .fire({
+        title: 'Tem certeza que deseja alterar a senha ?',
+        text: "",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não',
+        reverseButtons: true,
+        padding: '2em',
+    })
+    .then((result:any) => {
+        if (result.value) {
+          this.runSubmitUserAdmin();
+        }  
+    });
+
+
+    
+  }  
+
+  isSubmitFormConfig = false;
+  private runSubmitUserAdmin() {
     this.isSubmitFormUser = true;
     if (this.paramsUser.valid) {
       let user = this.paramsUser.getRawValue() as User;
       user.company = this.companySaved;
-    
-      let action = (this.companySaved.id && user.id)? this._userService.update(user) : this._userService.save(user);
- 
+
+      let action = (this.companySaved.id && user.id) ? this._userService.update(user) : this._userService.save(user);
+
 
       action
-      .subscribe(
-        (resp:any) =>{
+        .subscribe(
+          (resp: any) => {
 
-          this.showMessage('Cadastro realizado com sucesso.');
-        }
-      )
+            this.showMessage('Cadastro realizado com sucesso.');
+          }
+        );
     }
-  }  
-  isSubmitFormConfig = false;
+  }
+
   submitConfig(){
       
     this.isSubmitFormConfig = true;
@@ -238,5 +300,15 @@ export class CompanyFormComponent {
         title: msg,
         padding: '10px 20px',
     });
+}
+
+
+getFreePort(){
+  this._companyService.getFreePort()
+  .subscribe(
+    (resp:any) =>{
+      this.paramsCompany.controls["porta"].setValue(resp);
+    }
+  )
 }
 }

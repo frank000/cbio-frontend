@@ -1,0 +1,12 @@
+.days-selector {
+    display: flex;
+    gap: 10px;
+  }
+  
+  label {
+    cursor: pointer;
+  }
+  
+  input[type='checkbox'] {
+    margin-right: 5px;
+  }

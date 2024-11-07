@@ -82,9 +82,21 @@ export class HeaderComponent {
         this.initDataAsUser();
     }
 
+    arrayRoleDefault:string[] = [         
+        "default-roles-rocketchat",
+        "offline_access",
+        "uma_authorization"
+    ];
+    userLocalPerfil:string = "visitante";
+
     initDataAsUser(){
         this.userLocal = this.authService.getObjectUserLogged();
-
+        console.log("user ", this.userLocal);
+        if(this.userLocal != null && this.userLocal.realm_access.roles != null){
+            this.userLocalPerfil = this.userLocal.realm_access.roles
+            .filter((item:any) => !this.arrayRoleDefault.includes(item))
+        }
+        
     }
 
     async initStore() {
@@ -196,8 +208,11 @@ export class HeaderComponent {
       }
 
     getInitialCharacters(){
-    
-        return AvatarUtil.getInitialCharacters(this.userLocal.name);
+        if(this.userLocal.name){
+            return AvatarUtil.getInitialCharacters(this.userLocal.name);
+        }else{
+            return "USER";
+        }
     }
 
     readAll(){

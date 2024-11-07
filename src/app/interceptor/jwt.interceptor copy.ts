@@ -31,9 +31,20 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
                 // Handle HTTP errors
                 if (err.status === 401) {
                   _authService.flush();
-                  showMessage("Acesso não permitido.", "error")
+                  console.log(err);
+                  
+                  if(err.error != null && err.error.error != undefined){
+                    showMessage(err.error.error  , "error")
+
+                  }else{
+                    showMessage("Acesso não permitido.", "error")
+                  }
                   _router.navigate(["/auth/boxed-signin"])
                 } else if(err.status === 400){
+                  console.log(err);
+                  
+                  showMessage(err.error.message, 'error')
+                }else if(err.status === 500){
                   console.log(err);
                   
                   showMessage(err.error.message, 'error')

@@ -1,0 +1,55 @@
+
+<div class="flex items-center gap-3">
+    <div
+    *ngIf="message.fromUserId == selectedUser.userId"
+    [ngClass]="{ hidden: message.media == null || imagePath == '/assets/images/naodisponivel.png' }"
+        (click)="downloadMedia(message.id)">
+        <icon-download 
+        title="Fazer downlaod"
+        class="hover:text-primary" 
+        class="cursor-pointer"/>
+    </div>
+    <div
+        class="rounded-md bg-black/10 p-4 py-2 dark:bg-gray-800"
+        [ngClass]="
+                message.fromUserId == selectedUser.userId
+                    ? 'ltr:rounded-br-none rtl:rounded-bl-none !bg-primary text-white'
+                    : 'ltr:rounded-bl-none rtl:rounded-br-none'
+            "
+    >
+        <div *ngIf="message.type == 'TEXT'" [innerHTML]="replaceAsterisksWithStrongTags(message.text)"></div>
+
+        <img  *ngIf="message.type == 'IMAGE' && message.media != null" [src]="imagePath" 
+        style="width: 20rem;"
+        [alt]="tooltipText"/>
+
+        <div *ngIf="message.type == 'DOCUMENT'">
+
+            <img src="/assets/images/document.png" 
+                style="width: 20rem;"
+                [alt]="tooltipText"/>
+        </div>
+
+        <div *ngIf="message.type == 'AUDIO'" class="flex gap-2">
+            <div><icon-x-circle></icon-x-circle></div>
+            <div [innerHTML]="replaceAsterisksWithStrongTags('*Audio enviado - não permitido para seu plano*')"></div>
+        </div>
+        <div *ngIf="message.type == 'LOCATION'" class="flex gap-2">
+            <div><icon-x-circle></icon-x-circle></div>
+            <div [innerHTML]="replaceAsterisksWithStrongTags('*Localização enviada - não permitido para seu plano*')"></div>
+        </div>
+        <div *ngIf="message.type == 'CONTACTS'" class="flex gap-2">
+            <div><icon-x-circle></icon-x-circle></div>
+            <div [innerHTML]="replaceAsterisksWithStrongTags('*Contato enviado - não permitido para seu plano*')"></div>
+        </div>
+    </div>
+    <div
+    *ngIf="message.fromUserId != selectedUser.userId"
+    [ngClass]="{ hidden: message.media == null || imagePath == '/assets/images/naodisponivel.png' }"
+        (click)="downloadMedia(message.id)">
+        <icon-download 
+        title="Fazer downlaod"
+        class="hover:text-primary" 
+        class="cursor-pointer"/>
+    </div>
+</div>

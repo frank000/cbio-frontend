@@ -21,7 +21,7 @@ const routes: Routes = [
         component: BoxedPasswordResetComponent,
         data: { title: 'Boxed Password Reset' },
     },
-    { path: 'auth/boxed-signin', component: BoxedSigninComponent, data: { title: 'Boxed Signin' } },
+    { path: 'auth/boxed-signin', component: BoxedSigninComponent, data: { title: 'Login' } },
     { path: 'auth/boxed-signup', component: BoxedSignupComponent, data: { title: 'Boxed Signup' } },
     { path: 'auth/cover-lockscreen', component: CoverLockscreenComponent, data: { title: 'Cover Lockscreen' } },
     { path: 'auth/cover-login', component: CoverLoginComponent, data: { title: 'Cover Login' } },

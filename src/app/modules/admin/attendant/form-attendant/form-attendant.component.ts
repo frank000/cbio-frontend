@@ -8,6 +8,9 @@ import { User } from 'src/app/shared/models/user.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AttendantService } from 'src/app/service/attendant.service';
 import { showMessage } from 'src/app/modules/base/showMessage';
+import Swal from 'sweetalert2';
+import { MessageService } from 'src/app/service/message.service';
+import { Message } from 'src/app/shared/models/message';
 
 @Component({
   selector: 'app-form-attendant',
@@ -23,10 +26,12 @@ export class FormAttendantComponent {
   _fb = inject(FormBuilder);
   route = inject(ActivatedRoute);  
   router = inject(Router);
+  _msgService = inject(MessageService);
   _AttendantService = inject(AttendantService);
   id?: string = undefined;
-
+  swalWithBootstrapButtons:any;
   attendantSaved!: User
+
   constructor() { 
     
     this.initForm();
@@ -39,12 +44,22 @@ export class FormAttendantComponent {
         this._AttendantService.obtem(this.id)
         .subscribe(
           (resp:any)=>{
+            this.attendantSaved = resp;
             this.paramsAttendant.patchValue(resp)
           }
         )
       }
     
-    });  
+    });
+
+    this.swalWithBootstrapButtons = Swal.mixin({
+      buttonsStyling: false,
+      customClass: {
+          popup: 'sweet-alerts',
+          confirmButton: 'btn btn-secondary',
+          cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
+      },
+    });
   }
 
   initForm(){
@@ -58,28 +73,70 @@ export class FormAttendantComponent {
 
   isSubmitForm = false;
   submit(){
+
+ 
+
     this.isSubmitForm = true;
-    if (this.id == undefined && this.paramsAttendant.controls['password'].value == "") {
+    const isUpdate = this.id != undefined;
+    const userSettedPassInScreen = this.paramsAttendant.controls['password'].value != "";
+ 
+
+    if (!isUpdate && !userSettedPassInScreen) {
+
         showMessage('Senha é obrigatório.', 'error');
         return;
-    } 
-    if (this.paramsAttendant.valid) {
-        //form validated success
-        const attendant = this.paramsAttendant.getRawValue() as User;
 
-        let action = (this.id)? this._AttendantService.update(attendant) : this._AttendantService.save(attendant)
-        action
-        .subscribe(
-          (resp:any) =>{
-            this.attendantSaved = resp
-            this.paramsAttendant.controls["email"].setValue(this.attendantSaved.email);
-            showMessage('Cadastro realizado com sucesso.');
-            this.router.navigate(['/admin/attendant'])
-          }
-        )
-        
+    }else if(isUpdate && userSettedPassInScreen){
+
+      this.swalWithBootstrapButtons
+      .fire({
+          title: 'Tem certeza que deseja alterar a senha?',
+          text: "",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sim',
+          cancelButtonText: 'Não',
+          reverseButtons: true,
+          padding: '2em',
+      })
+      .then((result:any) => {
+          if (result.value) {
+            this.runSubmit();
+          }  
+      });
+    }else{
+      this.runSubmit();
     }
+
+  
+
+
+    
   } 
   
   
+
+
+  private runSubmit() {
+    if (this.paramsAttendant.valid) {
+      //form validated success
+      const attendant = this.paramsAttendant.getRawValue() as User;
+
+      let action = (this.id) ? this._AttendantService.update(attendant) : this._AttendantService.save(attendant);
+      let typeAction = (this.id)? "Cadastro": "Alteração"  
+      action
+        .subscribe(
+          (resp: any) => {
+            this.attendantSaved = resp;
+            this.paramsAttendant.controls["email"].setValue(this.attendantSaved.email);
+            let msgs = `${typeAction} realizado com sucesso.`;
+
+            this._msgService.sendMessage({"msg":msgs, "tipo": 'success'} as Message); 
+            this.router.navigate(['/admin/attendant']);
+
+          }
+        );
+
+    }
+  }
 }

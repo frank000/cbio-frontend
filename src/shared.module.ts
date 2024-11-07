@@ -4,6 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
+
+// apexchart
+import { NgApexchartsModule } from 'ng-apexcharts';
+
 // service
 import { AppService } from 'src/app/service/app.service';
 
@@ -12,6 +16,10 @@ import { TranslateModule } from '@ngx-translate/core';
 
 // perfect-scrollbar
 import { NgScrollbarModule, provideScrollbarOptions } from 'ngx-scrollbar';
+
+
+// fullcalendar
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 // headlessui
 import { MenuModule } from 'headlessui-angular';
@@ -22,24 +30,33 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 // modal
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
-
+// flatpicker
+import { FlatpickrModule } from 'angularx-flatpickr';
 // icons
 import { IconModule } from 'src/app/shared/icon/icon.module';
 import { LoginService } from './app/service/login.service';
 import { DataTableModule } from '@bhplugin/ng-datatable';
 
+
+// input mask
+import { TextMaskModule } from '@matheo/text-mask';
+
 @NgModule({
-    imports: [CommonModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
+    imports: [CommonModule, TextMaskModule, FlatpickrModule.forRoot(), FullCalendarModule,NgApexchartsModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
     declarations: [],
     exports: [
         // modules
         FormsModule,
         ReactiveFormsModule,
         NgSelectModule,
+        NgApexchartsModule, 
         DataTableModule,
+        TextMaskModule,
         TranslateModule,
         NgxCustomModalComponent,
+        FullCalendarModule,
         NgScrollbarModule,
+        FlatpickrModule,
         MenuModule,
         IconModule,
     ],

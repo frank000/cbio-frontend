@@ -1,0 +1,101 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Modelos de mensagem</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Modelos</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+                    <form [formGroup]="paramsFiltro" (submit)="search()">
+                        <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="md:col-span-2" >
+                                    <div>
+                                        <label for="gridName">Nome</label>
+                                        <input
+                                            id="gridName"
+                                            type="text"
+                                            placeholder="Buscar pelo nome"
+                                            formControlName="filter"
+                                            class="form-input"/>
+                                    </div>
+                                </div>
+                            
+                                <div class="md:col-span-2" >
+                                    <div *ngIf="_authService.hasRole(_authService.SUPERADMIN_ROLE)">
+                                        <label for="gridName">Companhia</label>
+                                        <ng-select
+                                        id="company"
+                                        name="company"
+                                        bindLabel="label"
+                                        bindValue="id"
+                                        formControlName="company"
+                                        [items]="options"
+                                        [searchable]="false"
+                                        [clearable]="false" ></ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div>
+                                    <button type="submit" class="btn btn-primary !mt-6">Buscar</button>
+                                </div>
+                                <div>
+                                    <button type="button" (click)="cleanForm()" class="btn btn-outline-primary !mt-6">Limpar</button>
+                                </div>
+                            </div>
+                        </div>
+    
+                    </form>
+
+         
+                    <div class="mt-8 mb-8">
+                        <div class="flex justify-end">
+                            <button 
+                                [routerLink]="['/admin/template/form']"
+                                 type="button" class="btn btn-outline-info !mt-6 mb-8">
+                                    Adicionar
+                            </button>
+                        </div>
+                        <ng-datatable
+                            skin="whitespace-nowrap bh-table-hover"
+                            [rows]="gridRows"
+                            [columns]="cols"
+                            [totalRows]="totalRowsUser"
+                            [isServerMode]="true"
+                            (changeServer)="changeServer($event)"
+                            >
+                            
+                            <ng-template slot="id" let-value="data">
+                                <strong class="text-info">#{{ value.id }}</strong>
+                            </ng-template>
+                            <ng-template slot="name" let-value="data">
+                                <span class="text-info">{{ value.name }}</span>
+                            </ng-template>
+                      
+                            <ng-template slot="acoes" let-value="data">
+                                 
+                                <div class="flex items-center justify-center gap-4">
+
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="loadToEdit(value)" >
+                                        <icon-edit/>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteRow(value)">
+                                        <icon-trash/>
+                                    </button>
+                                </div>
+                            
+                            </ng-template>
+                        </ng-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

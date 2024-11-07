@@ -1,0 +1,341 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Recursos</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Formulário</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+                    <div>
+                        <ul class="mb-5 grid grid-cols-3 text-center">
+                            <li>
+                                <a
+                                    href="javascript:;"
+                                    class="block rounded-full bg-[#f3f2ee] p-2.5 dark:bg-[#1b2e4b]"
+                                    [ngClass]="{'!bg-primary text-white': activeTab1 === 1}"
+                                    (click)="activeTab1 = 1">Recurso</a >
+                            </li>
+                            <li>
+                                <a
+                                     
+                                    href="javascript:;"
+                                    class="block rounded-full bg-[#f3f2ee] p-2.5 dark:bg-[#1b2e4b]"
+                                    [ngClass]="{'!bg-primary text-white': activeTab1 === 2}"
+                                    (click)="toogleTab(2)">Notificação</a >
+                            </li>
+                         
+                        </ul>
+                        <div>
+                            <ng-container *ngIf="activeTab1 === 1">
+                                <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                                    <form [formGroup]="params" (submit)="submit()" class="space-y-5" >
+                                        <div class="grid grid-rows-2 grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div
+                                            [ngClass]="isSubmitForm ? params.controls['dairyName'].errors ? 'has-error' : 'has-success' : ''">
+                                                <label for="gridName">Nome da Agenda</label>
+                                                <input
+                                                    id="gridName"
+                                                    type="text"
+                                                    placeholder="Informe o nome da agenda"
+                                                    formControlName="dairyName"
+                                                    class="form-input"/>
+                                            </div>                     
+                                            <div
+                                                class="md:col-span-1"
+                                                [ngClass]="isSubmitForm ? params.controls['email'].errors ? 'has-error' : 'has-success' : ''">
+                                                <label for="gridEmail">Email</label>
+                                                <input
+                                                    id="gridEmail"
+                                                    type="email"
+                                                    formControlName="email"
+                                                    placeholder="Informe Email"
+                                                    class="form-input"/>
+                                            </div>
+                                                        
+                                            <div [ngClass]="isSubmitForm ? params.controls['timeAttendance'].errors ? 'has-error' : 'has-success' : ''">
+                                                
+                                                <label for="gridTime">Tempo de atendimento ( em minutos )</label>
+                                                <input
+                                                    id="gridTime"
+                                                    type="number" 
+                                                    min="0"
+                                                    formControlName="timeAttendance"
+                                                    class="form-input"/>
+                                            </div> 
+                                            <div >
+                                                <label for="gridName">Cor de fundo</label>
+                                                <ng-select
+                                                    id="color"
+                                                    name="color"
+                                                    bindLabel="class"
+                                                    bindValue="color"
+                                                    formControlName="classColor"
+                                                    [items]="listColors"
+                                                    [searchable]="false"
+                                                    [clearable]="false" 
+                                                    (change)="selectColor($event)">
+                                                    <ng-template ng-label-tmp let-item="item">
+                                                        <div class="flex gap-2">
+                                                            <div  [ngStyle]="{'background-color':item.color, 'width': '1rem', 'height': '1rem'}"></div>
+                                                            <b>{{item.label}}</b>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                                                        <div class="flex gap-2">
+                                                            <div  [ngStyle]="{'background-color':item.color, 'width': '2rem', 'height': '2rem'}"></div>
+                                                            <b>{{item.label}}</b>
+                                                        </div>
+                                                    </ng-template>
+                                                </ng-select>
+                                                <ng-container *ngIf="isSubmitForm && params.controls['classColor'].errors">
+                                                    <p class="mt-1 text-danger">Informe uma cor de fundo</p>
+                                                </ng-container>
+                                            </div>
+                                              <label  >Períodos de atendimento</label>
+                                            <div></div>  
+                                            <form [formGroup]="paramsDates" class="col-span-2">
+                                                <div class="grid grid-rows-2 grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div class="p-2 rounded-lg border-2 border-slate-200">
+                                                        <label for="gridMorning">Manhã</label>
+                                                        <label class="w-12 h-6 relative">
+                                                            <input type="checkbox" 
+                                                            (change)="changeCheckMor($event, morningCheck)"
+                                                            [checked]="morningCheck"
+                                                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" />
+                                                            <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                        </label>                              
+                 
+                                                        <div *ngIf="morningCheck">
+                                                            <div class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <label for="dateStart">De:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="morningInit" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                                <div>
+                                                                    <label for="dateStart">Até:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="morningEnd" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                          
+                                                    <div class="p-2 rounded-lg border-2 border-slate-200"> 
+                                                        <label for="gridAfternoon">Tarde</label>
+                                                        <label class="w-12 h-6 relative">
+                                                            <input type="checkbox" 
+                                                            (change)="changeCheckAft($event, afternoonCheck)"
+                                                            [checked]="afternoonCheck"
+                                                            class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox2" />
+                                                            <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                        </label>                              
+                                                        <div *ngIf="afternoonCheck">
+                                                            <div class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <label for="dateStart">De:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="afternoonInit" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                                <div>
+                                                                    <label for="dateStart">Até:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="afternoonEnd" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> 
+                                                    <div  class="p-2 rounded-lg border-2 border-slate-200">
+                                                        <label for="gridNight">Noite</label>
+                                                        <label class="w-12 h-6 relative">
+                                                            <input type="checkbox"
+                                                            (change)="changeCheckNig($event, nightCheck)"
+                                                            [checked]="nightCheck"
+                                                             class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox3" />
+                                                            <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                        </label>                              
+                                                        <div *ngIf="nightCheck">
+                                                            <div class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <label for="dateStart">De:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="nightInit" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                                <div>
+                                                                    <label for="dateStart">Até:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="nightEnd" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div  class="p-2 rounded-lg border-2 border-slate-200">
+                                                        <label for="gridDawn">Madrugada</label>
+                                                        <label class="w-12 h-6 relative">
+                                                            <input type="checkbox"
+                                                            (change)="changeCheckDaw($event, dawnCheck)"
+                                                            [checked]="dawnCheck"
+                                                             class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox1" />
+                                                            <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                        </label>                              
+                                                        <div *ngIf="dawnCheck">
+                                                            <div class="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 gap-4">
+                                                                <div>
+                                                                    <label for="dateStart">De:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="dawnInit" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                                <div>
+                                                                    <label for="dateStart">Até:</label>
+                                                                    <input type="text" mwlFlatpickr formControlName="dawnEnd" [options]="preloadingTime" class="form-input" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        
+                                            </form>
+                                         
+                                            <div class="days-selector flex gap-4" >
+                                                <div>
+                                                    <label>Recorrência</label>
+                                                </div>
+                                                <label *ngFor="let day of daysOfWeek">
+                                                    <div>                    
+                                                        <input type="checkbox" 
+                                                        [checked]="day.checked"
+                                                        [value]="day.id" (change)="onDaySelection(day, $event)" />
+                                                        {{ day.label }}
+                                                    </div>
+                              
+                                                </label>
+                                            </div>
+                                            <div>
+                                            </div>
+                                            <div class="p-2 rounded-lg border-2 border-slate-200 gap-2 md:col-span-2 grid">
+                                                <div class="md:col-span-2">
+                                                    <h4>DADOS DO CARD DE EVENTO</h4>
+                                                </div>
+                                                <div 
+                                                    [ngClass]="isSubmitForm ? params.controls['title'].errors ? 'has-error' : 'has-success' : ''">
+                                                    <label for="gridTitle">Titulo</label>
+                                                    <input
+                                                        id="gridTitle"
+                                                        type="title"
+                                                        formControlName="title"
+                                                        placeholder="Informe o título"
+                                                        class="form-input"/>
+                                                </div>
+                                                <div 
+                                                [ngClass]="isSubmitForm ? params.controls['location'].errors ? 'has-error' : 'has-success' : ''">
+                                                    <label for="gridLocation">Localização</label>
+                                                    <input
+                                                            id="gridLocation"
+                                                            type="location"
+                                                            formControlName="location"
+                                                            placeholder="Informe a localização"
+                                                            class="form-input"/>
+                                                </div>
+                                                <div 
+                                                    [ngClass]="isSubmitForm ? params.controls['description'].errors ? 'has-error' : 'has-success' : ''">
+                                                        <label for="gridEmail">Descrição</label>
+                      
+                                                        <textarea
+                                                                id="description"
+                                                                name="description"
+                                                                formControlName="description"
+                                                                class="form-textarea min-h-[130px]"
+                                                                placeholder="Entra com a descrição"
+                                                                formControlName="description"
+                                                            ></textarea>
+                                                </div>
+                                            </div>
+                                     
+                                      
+                                        </div>        
+                                        <app-btn-salva-volta 
+                                        [edit]="this.id != null" 
+                                        location="/apps/agendai/recurso"></app-btn-salva-volta>
+                                    </form>
+                                </div>
+                                
+        
+                            </ng-container>
+                            <ng-container *ngIf="activeTab1 === 2">
+                                <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                                    <form [formGroup]="paramsNotification" class="h-[250px]  text-sm" (submit)="saveNotify()" ngNativeValidate>
+                                        <div class="grid grid-rows-2 grid-cols-1 sm:grid-cols-3 gap-4">
+                                            <div
+                                            [ngClass]="isSubmitForm ? params.controls['dairyName'].errors ? 'has-error' : 'has-success' : ''">
+                                                <label for="gridAfternoon">Canal :</label>
+                                                
+                                                <ng-select
+                                                    style="width: 100%;"
+                                                    id="optChannel"
+                                                    name="optChannel"
+                                                    bindLabel="label"
+                                                    formControlName="channel"
+                                                    [multiple]="false"
+                                                    bindValue="id" 
+                                                    (change)="changeCheckWhatsapp($event, whatsappCheck)"
+                                                    [items]="optionsChannel"
+                                                    [searchable]="false"
+                                                    [clearable]="false"  
+                                                ></ng-select>
+     
+                                            </div>
+                                            <div class="md:col-span-1  " *ngIf="whatsappCheck">
+                                                <label for="gridAfternoon">Antencedência do envio : </label>
+                                                <div >
+                                                    <ng-select
+                                                    style="width: 100%;"
+                                                    id="antecedence"
+                                                    name="antecedence"
+                                                    bindLabel="label"
+                                                    formControlName="antecedence"
+                                                    [multiple]="false"
+                                                    bindValue="sec" 
+                                                    [items]="optionsPeriod"
+                                                    [searchable]="false"
+                                                    [clearable]="false"  
+                                                    ></ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="md:col-span-1 " *ngIf="whatsappCheck">
+                                                <label for="gridAfternoon">Modelo a ser enviado :</label>
+                                                <div >
+                                                    <ng-select
+                                                    style="width: 100%;"
+                                                    id="model"
+                                                    name="model"
+                                                    bindLabel="nome"
+                                                    formControlName="model"
+                                                    [multiple]="false"
+                                                    bindValue="nome" 
+                                                    [items]="optionsModel"
+                                                    [searchable]="false"
+                                                    [clearable]="false"  
+                                                    ></ng-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <app-btn-salva-volta 
+                                        [edit]="this.id != null && this.id != undefined" 
+                                        location="/apps/agendai/recurso"></app-btn-salva-volta>
+                                      
+                                    </form>    
+                                </div>
+                            
+           
+                            
+        
+                            </ng-container>
+                     
+                        </div>
+                    </div>
+        
+                        
+                  
+            </div>
+        </div>
+    </div>
+</div>

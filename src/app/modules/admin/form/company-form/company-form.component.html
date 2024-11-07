@@ -40,16 +40,37 @@
                             <div class="p-8 mb-8 mt-8 rounded-lg border-2 border-slate-200">
 
                                 <form class="space-y-5" [formGroup]="paramsCompany" (ngSubmit)="submit()">
-                                    <div
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        <div class="md:col-span-2"
                                         [ngClass]="isSubmitForm ? paramsCompany.controls['nome'].errors ? 'has-error' : 'has-success' : ''">
-                                        <label for="gridName">Nome</label>
-                                        <input
-                                            id="gridName"
-                                            type="text"
-                                            placeholder="Informe o nome da Companhia"
-                                            formControlName="nome"
-                                            class="form-input"/>
+                                            <label for="gridName">Nome</label>
+                                            <input
+                                                id="gridName"
+                                                type="text"
+                                                placeholder="Informe o nome da Companhia"
+                                                formControlName="nome"
+                                                class="form-input"/>
+                                        </div>
+                                      
+                                        <div class="md:col-span-2"
+                                        [ngClass]="isSubmitForm ? paramsCompany.controls['tier'].errors ? 'has-error' : 'has-success' : ''">
+                                            <label for="gridTier">Tier</label>
+                                            <ng-select
+                                                id="gridTier"
+                                                name="gridTier"
+                                                bindLabel="name"
+                                                bindValue="name"
+                                                formControlName="tier"
+                                                [items]="tiers"
+                                                [(ngModel)]="tier"
+                                                [searchable]="true"
+                                                [clearable]="false"
+                                                class="custom-multiselect" >
+                                            </ng-select>
+                                        </div>
+                                       
                                     </div>
+                                  
                                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                         <div
                                             class="md:col-span-2"
@@ -141,7 +162,30 @@
                                                 class="form-input"/>
                                         </div>
                                     </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        <div
+                                            class="md:col-span-1"
+                                            [ngClass]="isSubmitForm ? paramsCompany.controls['porta'].errors ? 'has-error' : 'has-success' : ''">
     
+                                            <label for="gridPort">Porta do Assitente</label>
+                                            <div class="flex gap-2">
+                                                <div>
+                                                    <input
+                                                    id="gridPort"
+                                                    type="text"
+                                                    formControlName="porta"
+                                                    placeholder="Informe o porta a ser usada"
+                                                    class="form-input"/>
+                                                </div>
+                                                <div *ngIf="this.id == undefined">
+                                                    <a style="cursor: pointer; text-decoration: underline;" (click)="getFreePort()">Recuperar porta livre</a>
+                                                </div>
+
+                                            </div>
+                                   
+                                      
+                                        </div>
+                                    </div>
                                     <app-btn-salva-volta 
                                     [isDisabled]="this.id == undefined && this.companySaved.id != undefined"
                                     [edit]="this.id != undefined" 
@@ -157,13 +201,15 @@
 
                                 <div
                                     [ngClass]="isSubmitFormUser ? paramsUser.controls['email'].errors ? 'has-error' : 'has-success' : ''">
-                                    <label for="gridUsername">Email</label>
+                                    <label for="gridUsername">Username</label>
                                     <input
                                         id="gridUsername"
                                         type="text"
                                         formControlName="email"
                                         placeholder="Informe email"
-                                        class="form-input"/>
+                                        class="form-input"
+                                        [attr.readonly]="this.id != undefined"
+                                        />
                                 </div>
                                 <div
                                     [ngClass]="isSubmitFormUser ? paramsUser.controls['password'].errors ? 'has-error' : 'has-success' : ''">
@@ -176,7 +222,9 @@
                                         class="form-input"/>
                                 </div>
 
-                                <app-btn-salva-volta [edit]="this.id != undefined" location="/admin/config"></app-btn-salva-volta>
+                                <app-btn-salva-volta [edit]="this.id != undefined" location="/admin/config">
+                                    
+                                </app-btn-salva-volta>
 
                             </form>
                         </div>
@@ -295,7 +343,6 @@
                          
                         </ng-container>
                     </div>
-
                 </div>
             </div>
 

@@ -1,0 +1,103 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Atendimentos</span>
+        </li>
+    </ul>
+    <div class="panel mt-5 h-[calc(100vh-190px)]">
+        <div class="mb-6 grid gap-6 xl:grid-cols-3">
+            <div class="panel h-full xl:col-span-2">
+                <div class="mb-5 flex items-center justify-between dark:text-white-light">
+                    <h5 class="text-lg font-semibold">Quantidade por mês</h5>
+                    <div class="dropdown ltr:ml-auto rtl:mr-auto">
+                        <div hlMenu>
+                            <a hlMenuButton href="javascript:;" class="align-middle">
+                                <icon-horizontal-dots class="text-black/70 hover:!text-primary dark:text-white/70" />
+                            </a>
+                            <ul *hlMenuItems @toggleAnimation class="ltr:right-0 rtl:left-0">
+                                <li>
+                                    <a href="javascript:;" *hlMenuItem="let menuItem">Weekly</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" *hlMenuItem="let menuItem">Monthly</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" *hlMenuItem="let menuItem">Yearly</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 <div class="relative overflow-hidden">
+                    <apx-chart
+                        [series]="revenueChart.series"
+                        [chart]="revenueChart.chart"
+                        [dataLabels]="revenueChart.dataLabels"
+                        [stroke]="revenueChart.stroke"
+                        [colors]="revenueChart.colors"
+                        [markers]="revenueChart.markers"
+                        [labels]="revenueChart.labels"
+                        [xaxis]="revenueChart.xaxis"
+                        [yaxis]="revenueChart.yaxis"
+                        [grid]="revenueChart.grid"
+                        [legend]="revenueChart.legend"
+                        [tooltip]="revenueChart.tooltip"
+                        [fill]="revenueChart.fill"
+                        class="rounded-lg bg-white dark:bg-black"
+                    >
+                        <!-- loader -->
+                        <div class="grid min-h-[325px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
+                            <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                        </div>
+                    </apx-chart>
+                </div>
+            </div>
+
+            <div class="panel h-full">
+                <div class="mb-5 gap-5 flex items-center">
+                   <div>
+
+                    <h5 class="text-lg font-semibold dark:text-white-light">Atendimentos por atendente</h5>
+
+                   </div> 
+                   <div [ngStyle]="{    width: '15rem' }">
+                            <ng-select
+                            id="period"
+                            name="period"
+                            bindLabel="label"
+                            bindValue="endDate"
+                            [items]="listPeriod"
+                            [(ngModel)]="selectedPeriod"
+                            [searchable]="true"
+                            [clearable]="false"
+                            (change)="loadChartAttendanceByAttendant(selectedPeriod)"
+                            class="custom-multiselect" >
+                        </ng-select>
+                   </div>
+                </div>
+                <div class="overflow-hidden">
+                    <apx-chart
+                        [series]="attendanceByAttendants.series"
+                        [chart]="attendanceByAttendants.chart"
+                        [dataLabels]="attendanceByAttendants.dataLabels"
+                        [stroke]="attendanceByAttendants.stroke"
+                        [colors]="attendanceByAttendants.colors"
+                        [legend]="attendanceByAttendants.legend"
+                        [plotOptions]="attendanceByAttendants.plotOptions"
+                        [labels]="attendanceByAttendants.labels"
+                        [states]="attendanceByAttendants.states"
+                        class="rounded-lg bg-white dark:bg-black"
+                    >
+                        <!-- loader -->
+                        <div class="grid min-h-[460px] place-content-center bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08]">
+                            <span class="inline-flex h-5 w-5 animate-spin rounded-full border-2 border-black !border-l-transparent dark:border-white"></span>
+                        </div>
+                    </apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
