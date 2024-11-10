@@ -5,6 +5,12 @@
             <div class="flex gap-3">
                 <div>
                     <button type="button" class="btn btn-primary" (click)="editUser()">
+                        <icon-settings class="ltr:mr-2 rtl:ml-2" />
+                        Configurações
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" (click)="editUser()">
                         <icon-user-plus class="ltr:mr-2 rtl:ml-2" />
                         Adicionar Contato
                     </button>
@@ -186,4 +192,53 @@
             </form>
         </ng-template>
     </ngx-custom-modal>
+
+    <!-- Config modal -->
+    <ngx-custom-modal #configContactModal class="no-footer">
+        <ng-template #modalHeader>
+            <div class="!font-medium">Configurações</div>
+        </ng-template>
+        <ng-template #modalBody>
+            <form [formGroup]="params" class="text-sm" (ngSubmit)="saveUser()" ngNativeValidate>
+                <div class="mb-5">
+                    <label for="name">Nome</label>
+                    <input id="name" type="text" placeholder="Entre com nome" class="form-input" formControlName="name" />
+                </div>
+                <div class="mb-5">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="Entre com email" class="form-input" formControlName="email" />
+                </div>
+                <div class="mb-5">
+                    <label for="number">Celular/whatsapp</label>
+                    <input id="number" type="text"  [textMask]="{mask: mask12}"
+                    placeholder="Entre com celular" class="form-input" formControlName="phone" />
+                </div>
+ 
+                <div class="mb-5">
+                    <label for="address">Endereço</label>
+                    <textarea
+                        id="address"
+                        rows="3"
+                        placeholder="Entre com o endereço"
+                        class="form-textarea min-h-[130px] resize-none"
+                        formControlName="location"
+                    ></textarea>
+                </div>
+                <div class="mb-5">
+                    <label for="obs">Observações</label>
+                    <textarea
+                        id="obs"
+                        rows="2"
+                        class="form-textarea min-h-[130px] resize-none"
+                        formControlName="obs"
+                    ></textarea>
+                </div>
+                <div class="mt-8 flex items-center justify-end">
+                    <button type="button" class="btn btn-outline-danger" (click)="addContactModal.close()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">{{ params.controls['id'].value ? 'Alterar' : 'Salvar' }}</button>
+                </div>
+            </form>
+        </ng-template>
+    </ngx-custom-modal>
+
 </div>

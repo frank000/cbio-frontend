@@ -18,6 +18,7 @@ import { FormRecursoComponent } from './modules/agendai/recurso/form-recurso/for
 import { TemplatesComponent } from './modules/admin/templates/templates.component';
 import { FormTemplateComponent } from './modules/admin/templates/form-template/form-template.component';
 import { ContactsComponent } from './modules/apps/contacts/contacts';
+import { PreferencesComponent } from './modules/dashboard/preferences/preferences.component';
 
 export const routes: Routes = [
     {
@@ -47,6 +48,7 @@ export const routes: Routes = [
 
 
             { path: 'dashboard/summary', component: SummaryComponent, data: { title: 'Atendimentos' } },
+            { path: 'dashboard/preferences', component: PreferencesComponent, data: { title: 'Preferências' } },
             
             { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'AGEND.ai' } },
             { path: 'apps/agendai/recurso', component: RecursoComponent, data: { title: 'Recursos' } },

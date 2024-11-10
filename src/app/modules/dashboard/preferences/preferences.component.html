@@ -1,0 +1,74 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Preferências</span>
+        </li>
+    </ul>
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+            
+                        <div class="p-8 mt-8 rounded-lg border-2 border-slate-200">
+                            <form [formGroup]="params" (submit)="submit()" class="space-y-5" >
+                                <div class="grid grid-rows-2 grid-cols-1 sm:grid-cols-1 gap-4">
+                                    <div >
+                                        <label for="gridName">Manter atendimentos por atendente: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['keepSameAttendant'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+                                           
+                                            <div class="p-4 mt-8">
+                                                <label class="w-12 h-6 relative">
+                                                    <input type="checkbox" 
+                                                    
+                                                    [checked]="keepSameAttendant"
+                                                    formControlName="keepSameAttendant"
+                                                    class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" />
+                                                    <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                </label>                              
+                                            </div>
+                                            <div class="w-56 p-4 text-sm italic">
+                                                Se ativado, uma atendimento encerrado, será redirecionado para o mesmo atendente do último atendimento ao ser reaberto pelo cliente.
+                                            </div>
+                                        </div>                       
+                                    </div>
+                                    <div>
+                                        <label for="gridName">Modelo de notificação em Contatos: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['keepSameAttendant'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+                                            <div class="p-4 mt-8 w-56">
+                                                <div >
+                                                    <ng-select
+                                                    style="width: 100%;"
+                                                    id="model"
+                                                    name="model"
+                                                    bindLabel="nome"
+                                                    formControlName="model"
+                                                    [multiple]="false"
+                                                    bindValue="nome" 
+                                                    [items]="optionsModel"
+                                                    [searchable]="false"
+                                                    [clearable]="false"  
+                                                    ></ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="w-56 p-4 text-sm italic">
+                                                Se ativado, uma atendimento encerrado, será redirecionado para o mesmo atendente do último atendimento ao ser reaberto pelo cliente.
+                                            </div>
+                                        </div>
+ 
+                                    </div>                     
+                                    
+                                                
+                                
+                                </div>        
+                                <button
+                                type="submit" class="btn btn-primary !mt-4">Salvar</button>
+                            </form>
+                        </div>
+                  
+            </div>
+        </div>
+    </div>
+</div>

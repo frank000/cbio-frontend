@@ -297,6 +297,10 @@
                                 <p class="text-xs text-white-dark">{{ selectedUser.active ? 'Ativo' : 'Visto por último em ' + selectedUser.time }}</p>
                             </div>
                        
+                            <div *ngIf="this.selectedUser.contact != null">
+                                <div class="badge bg-primary"> tem contato vinculado</div>
+                       
+                            </div>
                         </div>
                         <div class="flex gap-3 sm:gap-5">
                             <div class="relative" *ngIf="isShowFieldSearch">
@@ -316,7 +320,7 @@
                                 <ul *hlMenuItems @toggleAnimation class="text-black ltr:right-0 rtl:left-0 dark:text-white-dark">
                                     <li>
                                         <a href="javascript:;"   (click)="openBindContact(modalBindContact)" *hlMenuItem="let menuItem">
-                                            <icon-edit 
+                                            <icon-at 
                                           
                                             class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
@@ -387,7 +391,7 @@
                         class="chat-conversation-box relative !h-[calc(100vh_-_389px)] min-h-[300px] sm:!h-[calc(100vh_-_300px)]"
                         visibility="native"
                     >
-                        <div class="space-y-5 p-4">
+                        <div class="space-y-5 p-8">
                             <div class="m-6 mt-0 block">
                                 <h4 class="relative border-b border-[#f4f4f4] text-center text-xs dark:border-gray-800">
                                     <span class="relative top-2 bg-white px-3 dark:bg-[#0e1726]">{{ 'Today, ' + selectedUser.time }}</span>
@@ -418,8 +422,10 @@
                                             <app-view-text-media
                                             [imagePath]="message.body"
                                             [message]="message"
-                                            [selectedUser]="selectedUser">
-
+                                            [selectedUser]="selectedUser"
+                                            [listMessages]="searchMessages()"
+                                            [modalIaTip]="modalIaTip">
+                                            
                                             </app-view-text-media>
                                             <div
                                                 class="text-xs text-white-dark"
@@ -463,8 +469,10 @@
                                     <icon-upload />
                                 </button>
                                 <button type="button" class="rounded-md  p-2 hover:bg-primary-light hover:text-primary dark:bg-[#1b2e4b]">
-                                  
                                     <button type="button" class="btn   btn-secondary " (click)="modal20.open()">frases</button>
+                                </button>
+                                <button type="button" class="rounded-md  p-2 hover:bg-primary-light hover:text-primary dark:bg-[#224ebd]">
+                                    <button type="button" class="btn btn-outline-info" (click)="modal20.open()">R.bot</button>
                                 </button>
                                 <input #file type="file" id="fileInput" style="display:none;" 
                                 accept=".jpg,.jpeg,.png,.gif,.doc,.docx,.xlx,.xlxs,.txt,.pdf"
@@ -676,4 +684,30 @@
         </ng-template>
         
     </ngx-custom-modal>
+
+    <ngx-custom-modal #modalIaTip class="modal-top auth-modal">
+        <ng-template #modalHeader> <div class="!py-5">Aqui uma sugestão do RAYZA.bot</div> </ng-template>
+        <ng-template #modalBody>
+            
+            <textarea
+            id="address"
+            rows="3"
+            readonly="true" 
+            class="form-textarea min-h-[130px] resize-none"
+            [value]="iaTipText"
+        ></textarea>
+        <div class="grid justify-items-end ">
+            <div>
+                <button  (click)="selectTip(modalIaTip)"
+                type="button" class="btn btn-primary !mt-6">Usar sugestão</button>
+            </div>
+          
+        </div>
+  
+        </ng-template>
+        
+    </ngx-custom-modal>
+
+
+
 </div>

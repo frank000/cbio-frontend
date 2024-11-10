@@ -21,6 +21,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { PrivateChannelService } from 'src/app/service/private-channel.service';
 import { FileValidationException } from '../../base/FileValidationException';
 import { ContactService } from 'src/app/service/contact.service';
+import { IaService } from 'src/app/service/ia.service';
 
 
 @Component({
@@ -40,6 +41,8 @@ export class ChatComponent implements OnInit, OnDestroy{
     userService = inject(UserService);
     privateChannelService = inject(PrivateChannelService);
     contactService = inject(ContactService);
+    iaService = inject(IaService);
+
     userLocal:any;
     _fb = inject(FormBuilder);
     mask12 =  ['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
@@ -58,7 +61,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     receivedMessages: string[] = [];
 
     bindScreen:number = 1;    
-
+    iaTipText!:string;
     
     constructor(public storeData: Store<any>) {
         this.userLocal = this.authService.getObjectUserLogged();
@@ -75,6 +78,9 @@ export class ChatComponent implements OnInit, OnDestroy{
                 confirmButton: 'btn btn-secondary',
                 cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
             },
+        });
+        this.iaService.iaTipSubscription.subscribe((resp:any)=>{
+            this.iaTipText = resp;
         });
     }
 
@@ -610,9 +616,17 @@ export class ChatComponent implements OnInit, OnDestroy{
         this.textMessage = value
         model.close()
     }
+
     selectPhraseRow(event:any, model:any){
         this.textMessage = event.description
         model.close()
+    }
+    selectTip(modal:any){
+        if(this.selectedUser.active){
+            this.textMessage = this.iaTipText;
+            modal.close()
+        }
+      
     }
 
     searchPhrase() {
@@ -660,7 +674,12 @@ export class ChatComponent implements OnInit, OnDestroy{
         )
         .subscribe(
             (resp:any)=>{
+                this.selectedUser.cpf = this.paramsEditUser.controls["cpf"].value;
+                this.selectedUser.telefone1 = this.paramsEditUser.controls["telefone1"].value;
+                this.selectedUser.telefone2 = this.paramsEditUser.controls["telefone2"].value;
+                this.selectedUser.email = this.paramsEditUser.controls["email"].value;
                 showMessage('Cadastro atualizado com sucesso.');
+                
                 modal.close()
             }
         )

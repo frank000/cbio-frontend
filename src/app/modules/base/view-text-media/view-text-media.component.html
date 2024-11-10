@@ -8,6 +8,7 @@
         title="Fazer downlaod"
         class="hover:text-primary" 
         class="cursor-pointer"/>
+       
     </div>
     <div
         class="rounded-md bg-black/10 p-4 py-2 dark:bg-gray-800"
@@ -52,4 +53,11 @@
         class="hover:text-primary" 
         class="cursor-pointer"/>
     </div>
+    <div 
+    (click)="ia(message.id, message.text)"
+     *ngIf="message.fromUserId != selectedUser.userId" class="cursor-pointer hover:scale-110  hover:text-dark">
+        <icon-rayza-ia />
+    </div>
 </div>
+
+

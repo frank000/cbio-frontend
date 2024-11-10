@@ -44,6 +44,14 @@ export class CompanyService {
         return this._http.get(`${this.url}/v1/company/config`);
     }
 
+    updateConfig(config:any):Observable<any>{
+        return this._http.put(`${this.url}/v1/company/config`, config);
+    }
+
+    getPreferences():Observable<any>{
+        return this._http.get(`${this.url}/v1/company/config-preferences`);
+    }
+
     hasCredential():Observable<any>{
         return this._http.get(`${this.url}/v1/company/credential/has`);
     }

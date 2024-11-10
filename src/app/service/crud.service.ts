@@ -2,8 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
-import { Company } from '../shared/models/company.interface';
 import { CrudInterface } from '../shared/models/crud.interface';
 
  

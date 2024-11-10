@@ -165,6 +165,7 @@ import { IconZipFileComponent } from './icon-zip-file';
 import { IconCodeFileComponent } from 'src/app/shared/icon/icon-code-file';
 import { IconDisconnectComponent } from './icon-disconnect';
 import { IconUploadComponent } from './icon-uplaod';
+import { IconRayzaIa } from './icon-rayza-ia';
  
 
 @NgModule({
@@ -334,7 +335,8 @@ import { IconUploadComponent } from './icon-uplaod';
         IconZipFileComponent,
         IconCodeFileComponent,
         IconDisconnectComponent,
-        IconUploadComponent
+        IconUploadComponent,
+        IconRayzaIa
     ],
     exports: [
         IconMenuAppsComponent,
@@ -502,6 +504,7 @@ import { IconUploadComponent } from './icon-uplaod';
         IconCodeFileComponent,
         IconDisconnectComponent,
         IconUploadComponent,
+        IconRayzaIa,
     ],
 })
 export class IconModule {}
