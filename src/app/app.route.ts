@@ -19,6 +19,7 @@ import { TemplatesComponent } from './modules/admin/templates/templates.componen
 import { FormTemplateComponent } from './modules/admin/templates/form-template/form-template.component';
 import { ContactsComponent } from './modules/apps/contacts/contacts';
 import { PreferencesComponent } from './modules/dashboard/preferences/preferences.component';
+import { AuthGuard } from './modules/base/guard/auth-guard';
 
 export const routes: Routes = [
     {
@@ -26,7 +27,7 @@ export const routes: Routes = [
         component: AppLayout,
         children: [
             // dashboard
-            { path: '', component: SummaryComponent, data: { title: 'Home' } },
+            { path: '', component: SummaryComponent, data: { title: 'Home' } ,     canActivate: [AuthGuard],},
 
             { path: 'admin/config', component: AdminComponent, data: { title: 'Administração' } },
             { path: 'admin/config/form', component: CompanyFormComponent, data: { title: 'Administração' } },

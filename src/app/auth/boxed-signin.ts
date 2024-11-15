@@ -44,6 +44,8 @@ export class BoxedSigninComponent implements OnInit{
             .subscribe((d) => {
                 this.store = d;
             });
+            this.translate.use("pt");
+            this.appSetting.toggleLanguage({ code: 'pt', name: 'Portuguese' });
     }
     
     initForm() {
