@@ -404,6 +404,20 @@ export class ChatComponent implements OnInit, OnDestroy{
         localStorage.setItem("selectedUserChannel", this.selectedUser.channelId);        
     }
 
+    isEditContactOnly = true;
+    getContactOpenModal(contactId:string, modal:any){
+        this.contactService.obtem(contactId)
+        .subscribe(
+            (resp:any)=>{
+              this.isEditContactOnly = false;  
+              this.bindScreen = 2;// edit contact screen
+              this.paramsContact.patchValue(resp);
+              modal.open();
+            }
+        );
+    }
+
+
     private listAllMessagesBySender() {
         this.diologService.getAllBySender(this.selectedUser.userId, this.selectedUser.channelId)
             .subscribe(
@@ -805,7 +819,7 @@ export class ChatComponent implements OnInit, OnDestroy{
         }
       
         let user = { 
-            path: 'no-profile.png',
+            path: null,
             name: this.paramsContact.value.name,
             email: this.paramsContact.value.email, 
             phone: this.paramsContact.value.phone,

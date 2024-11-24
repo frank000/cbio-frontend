@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 // apexchart
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -36,19 +37,20 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { IconModule } from 'src/app/shared/icon/icon.module';
 import { LoginService } from './app/service/login.service';
 import { DataTableModule } from '@bhplugin/ng-datatable';
+import { MatInputModule } from '@angular/material/input'; 
 
 
 // input mask
 import { TextMaskModule } from '@matheo/text-mask';
 
 @NgModule({
-    imports: [CommonModule, TextMaskModule, FlatpickrModule.forRoot(), FullCalendarModule,NgApexchartsModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
+    imports: [CommonModule,MatFormFieldModule,     MatInputModule, MatAutocompleteModule, TextMaskModule, FlatpickrModule.forRoot(), FullCalendarModule,NgApexchartsModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
     declarations: [],
     exports: [
         // modules
         FormsModule,
         ReactiveFormsModule,
-        NgSelectModule,
+        NgSelectModule, 
         NgApexchartsModule, 
         DataTableModule,
         TextMaskModule,
@@ -58,7 +60,11 @@ import { TextMaskModule } from '@matheo/text-mask';
         NgScrollbarModule,
         FlatpickrModule,
         MenuModule,
+        MatInputModule,
         IconModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+
     ],
 })
 export class SharedModule {

@@ -50,6 +50,7 @@ import { AvatarComponent } from "./modules/base/avatar/avatar.component";
 import { CalendarComponent } from './modules/agendai/calendar';
 import { ContactsComponent } from './modules/apps/contacts/contacts';
 import { BtnSalvaVoltaComponent } from "./modules/common/btn-salva-volta/btn-salva-volta.component";
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
     imports: [
@@ -79,7 +80,8 @@ import { BtnSalvaVoltaComponent } from "./modules/common/btn-salva-volta/btn-sal
         provideHttpClient(withInterceptors([authInterceptor, jwtInterceptor, loadingInterceptor])),
         provideHttpClient(
             withFetch()
-        )],
+        ),
+        provideAnimationsAsync()],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

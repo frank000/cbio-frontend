@@ -1,8 +1,8 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, Injectable, OnInit, ViewChild } from '@angular/core';
 import { toggleAnimation } from 'src/app/shared/animations';
 import Swal from 'sweetalert2';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -15,6 +15,10 @@ import ptBrLocale from '@fullcalendar/core/locales/pt-br'; // Importando o idiom
 import { ResourceService } from 'src/app/service/resource.service';
 import { DatePipe } from '@angular/common';
 import { showMessage } from '../base/showMessage';
+import { filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { ContactService } from 'src/app/service/contact.service';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 const FILTER_RESOURCE = "filter_resource";
 @Component({
@@ -44,12 +48,17 @@ export class CalendarComponent implements OnInit {
     minStartDate: any = '';
     minEndDate: any = '';
     selectedResourceFilter:any; 
+    myControl = new FormControl(''); 
+    filteredOptions!: Observable<any>;
+
 
     events: any = [];
     calendarOptions: any;
     companyService: CompanyService = inject(CompanyService);
     resourceService: ResourceService = inject( ResourceService);
     googleService: GoogleCalendarService = inject(GoogleCalendarService);
+    contactsService: ContactService = inject(ContactService);
+    service: Service = inject(Service);
     datePipe: DatePipe  = inject(DatePipe)
     isSynced:boolean = false;
     optionsFilter:any[] = [];
@@ -136,9 +145,32 @@ export class CalendarComponent implements OnInit {
         }
 
     }
+    
+    totalContactsSearched:null|number = null; 
+    
+    private _filterContacts(value: any) {
+        const filterValue = value.toLowerCase();
+        let query = new HttpParams();
+        query = query.append('filter', value);
 
+        return this.contactsService.obtemGrid(query)
+        .pipe(
+            filter(data => !!data),
+            map((data) => {
+              
+              this.totalContactsSearched = data.total;
+
+              return data.items.filter(
+                (option:any) => 
+                    option.name.toLowerCase().includes(value))
+            })
+          )
+ 
+      }
     ngOnInit() {
         this.getEvents();
+
+        this.initFieldContatcs();
 
         this.companyService.getConfigByCompany()
         .subscribe(
@@ -167,6 +199,27 @@ export class CalendarComponent implements OnInit {
           });
     }
 
+    private initFieldContatcs() {
+        this.filteredOptions = this.myControl.valueChanges
+            .pipe(
+                startWith(''),
+                filter((value: any) => value.length > 3 ),
+                switchMap(value => this._filterContacts(value))
+            );
+    }
+    
+    selectedContact:any;
+
+    changeContacts(option: any){
+        this.selectedContact = option;  
+        this.params.controls['name'].setValue(this.selectedContact.name);
+        this.params.controls['phone'].setValue(this.selectedContact.phone);
+        this.params.controls['email'].setValue(this.selectedContact.email);
+        this.params.controls['contactId'].setValue(this.selectedContact.id); 
+        
+    }
+
+
     initForm() {
         this.params = this.fb.group({
             id: null,
@@ -179,6 +232,7 @@ export class CalendarComponent implements OnInit {
             description: [''],
             dairyName:['' ],
             type: ['primary'],
+            contactId:[null]
         });
         this.paramsConfig = this.fb.group({
             id: null,
@@ -276,7 +330,7 @@ export class CalendarComponent implements OnInit {
         if (data) {
  
             let obj = JSON.parse(JSON.stringify(data.event));
-    
+             
             this.params.setValue({
                 id: obj.id ? obj.id : null,
                 title: obj.title ? obj.title : null,
@@ -288,7 +342,9 @@ export class CalendarComponent implements OnInit {
                 name: obj.extendedProps ? obj.extendedProps.name : '',
                 phone: obj.extendedProps ? obj.extendedProps.phone : '',
                 email: obj.extendedProps ? obj.extendedProps.email : '',
+                contactId: obj.extendedProps ? obj.extendedProps.contactId : null,
             });
+            this.myControl.setValue(this.params.value.name);
             this.isNewEvent = true
             this.minStartDate = new Date();
             this.minEndDate = this.dateFormat(obj.start); 
@@ -332,7 +388,7 @@ export class CalendarComponent implements OnInit {
 
             this.googleService.notify(event)
             .subscribe(
-                (resp:any) =>{
+                (resp:any) =>{ 
                     showMessage("Notificação enviada.");
                 }
             );
@@ -448,6 +504,13 @@ export class CalendarComponent implements OnInit {
 
 
         const formattedDateEnd = this.params.value.end + ":00" + offset; // formato ISO com fuso horário
+       
+        if(this.params.value.name == null || this.params.value.name == ''){
+            console.log(this.myControl.value);
+            
+            this.params.controls['name'].setValue(this.myControl.value);
+        }
+        
 
         if (this.params.value.id) {
             //update event
@@ -463,6 +526,7 @@ export class CalendarComponent implements OnInit {
             event.name = this.params.value.name;
             event.phone = this.params.value.phone;
             event.email = this.params.value.email;
+            event.contactId = this.params.value.contactId;
 
 
             this.googleService.updateEvent(this.params.value.id, event)
@@ -488,7 +552,8 @@ export class CalendarComponent implements OnInit {
                 dairyName: this.params.value.dairyName,
                 name: this.params.value.name,
                 phone: this.params.value.phone,
-                email: this.params.value.email
+                email: this.params.value.email,
+                contactId: this.params.value.contactId
             };
             this.events.push(event);
             this.googleService.insert(event)
@@ -549,3 +614,17 @@ export class CalendarComponent implements OnInit {
 
 
 }
+
+@Injectable({
+    providedIn: 'root'
+  })
+  export class Service {
+    constructor(private http: HttpClient) { }
+  
+    opts = [];
+  
+    getData() {
+      return of([{ companyName: "minus", cid: "524023240" },
+      { companyName: "plus sim", cid: "524023240" }])
+    }
+  }

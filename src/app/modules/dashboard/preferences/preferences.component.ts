@@ -52,6 +52,7 @@ export class PreferencesComponent implements OnInit{
     this.params = this._fb.group({
       id:[null], 
       companyId:[null], 
+      model:[null], 
       keepSameAttendant: [false, Validators.required],
     });
   }

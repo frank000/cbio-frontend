@@ -298,8 +298,7 @@
                             </div>
                        
                             <div *ngIf="this.selectedUser.contact != null">
-                                <div class="badge bg-primary"> tem contato vinculado</div>
-                       
+                                <div class="badge bg-primary cursor-pointer" (click)="getContactOpenModal(this.selectedUser.contact.id, modalBindContact)">tem contato vinculado</div>
                             </div>
                         </div>
                         <div class="flex gap-3 sm:gap-5">
@@ -533,6 +532,7 @@
                 <!-- [ngClass]="isSubmitForm ? paramsCompany.controls['endereco'].errors ? 'has-error' : 'has-success' : ''"> -->
                 <label for="gridEndereco1">Nome</label>
                 <input
+                    readonly="true"
                     id="gridNome"
                     type="text"
                     formControlName="name"
@@ -630,15 +630,15 @@
                 <form [formGroup]="paramsContact" (ngSubmit)="submitContact(modalEditUser)" class="space-y-5 dark:text-white" ngNativeValidate >
                     <div class="mb-5">
                         <label for="name">Nome</label>
-                        <input id="name" type="text" placeholder="Entre com nome" class="form-input" formControlName="name" />
+                        <input id="name" type="text" [readOnly]="!isEditContactOnly" placeholder="Entre com nome" class="form-input" formControlName="name" />
                     </div>
                     <div class="mb-5">
                         <label for="email">Email</label>
-                        <input id="email" type="email" placeholder="Entre com email" class="form-input" formControlName="email" />
+                        <input id="email" type="email" [readOnly]="!isEditContactOnly" placeholder="Entre com email" class="form-input" formControlName="email" />
                     </div>
                     <div class="mb-5">
                         <label for="number">Celular/whatsapp</label>
-                        <input id="number" type="text"  [textMask]="{mask: mask12}"
+                        <input id="number" type="text" [readOnly]="!isEditContactOnly"  [textMask]="{mask: mask12}"
                         placeholder="Entre com celular" class="form-input" formControlName="phone" />
                     </div>
         
@@ -646,6 +646,7 @@
                         <label for="address">Endereço</label>
                         <textarea
                             id="address"
+                            [readOnly]="!isEditContactOnly"
                             rows="3"
                             placeholder="Entre com o endereço"
                             class="form-textarea min-h-[130px] resize-none"
@@ -655,6 +656,7 @@
                     <div class="mb-5">
                         <label for="obs">Observações</label>
                         <textarea
+                            [readOnly]="!isEditContactOnly"
                             id="obs"
                             rows="2"
                             class="form-textarea min-h-[130px] resize-none"
@@ -663,16 +665,8 @@
                     </div>
                     <div class="mt-8 flex items-center justify-end">
                         <button type="button" class="btn btn-outline-danger" (click)="backContact()">Cancelar</button>
-                        <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Salvar</button>
-                    </div>
-
-
-
-
-
-
-
-            
+                        <button type="submit" *ngIf="isEditContactOnly" class="btn btn-primary ltr:ml-4 rtl:mr-4">Salvar</button>
+                    </div> 
                </form>     
             </div>
 

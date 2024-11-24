@@ -30,13 +30,13 @@
                                                 </label>                              
                                             </div>
                                             <div class="w-56 p-4 text-sm italic">
-                                                Se ativado, uma atendimento encerrado, será redirecionado para o mesmo atendente do último atendimento ao ser reaberto pelo cliente.
+                                                Se ativado, um atendimento encerrado, será redirecionado para o mesmo atendente do último atendimento ao ser reaberto pelo cliente.
                                             </div>
                                         </div>                       
                                     </div>
                                     <div>
-                                        <label for="gridName">Modelo de notificação em Contatos: </label>
-                                        <div [ngClass]="isSubmitForm ? params.controls['keepSameAttendant'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+                                        <label for="gridName">Modelo de mensagem em Contatos: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['model'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
                                             <div class="p-4 mt-8 w-56">
                                                 <div >
                                                     <ng-select
@@ -54,7 +54,7 @@
                                                 </div>
                                             </div>
                                             <div class="w-56 p-4 text-sm italic">
-                                                Se ativado, uma atendimento encerrado, será redirecionado para o mesmo atendente do último atendimento ao ser reaberto pelo cliente.
+                                                Selecione o modelo de mensagem usado como cartão de visitas na pagina de 'Contatos'
                                             </div>
                                         </div>
  

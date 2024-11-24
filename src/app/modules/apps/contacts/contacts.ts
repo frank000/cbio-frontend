@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { NgxCustomModalComponent } from 'ngx-custom-modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactService } from 'src/app/service/contact.service';
+import { showMessage } from '../../base/showMessage';
 
 @Component({
     templateUrl: './contacts.html',
@@ -107,7 +108,7 @@ export class ContactsComponent implements OnInit{
          
 
             user = { 
-                path: 'no-profile.png',
+                path: null,
                 name: this.params.value.name,
                 email: this.params.value.email, 
                 phone: this.params.value.phone,
@@ -123,7 +124,7 @@ export class ContactsComponent implements OnInit{
 
         action.subscribe(
             (resp:any) =>{
-                this.showMessage('Contato salvo com sucesso!');
+                showMessage('Contato salvo com sucesso!');
                 this.addContactModal.close();
                 this.search();
             }
