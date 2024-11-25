@@ -35,6 +35,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set PROFILE based on branch
+        id: set-profile
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "PROFILE=prod" >> $GITHUB_ENV
+          else
+            echo "PROFILE=dev" >> $GITHUB_ENV
+          fi
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
@@ -77,6 +86,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: PROFILE=${{ env.PROFILE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
