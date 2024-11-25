@@ -1,5 +1,5 @@
 # Etapa de build
-FROM node:20.15.0 as base
+FROM node:20.15.0 AS base
 
 WORKDIR /app
 
@@ -10,6 +10,8 @@ RUN npm install -f
 COPY . /app/
 
 ARG PROFILE
+RUN echo "Configuration Profile: ${PROFILE}"
+RUN ls -la /app
 RUN npm run build -- --output-path=./dist/out --configuration ${PROFILE}
 
 # Etapa de produção
