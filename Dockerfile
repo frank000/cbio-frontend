@@ -12,7 +12,7 @@ COPY . /app/
 ARG PROFILE
 RUN echo "Configuration Profile: ${PROFILE}"
 RUN ls -la /app
-RUN npm run build -- --output-path=/app/dist/out --configuration ${PROFILE}
+RUN npm run build -- --output-path=./dist/out --configuration ${PROFILE}
 
 # Etapa de produção
 FROM nginx:1.17.1-alpine

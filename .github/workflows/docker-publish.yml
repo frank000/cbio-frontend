@@ -33,9 +33,9 @@ jobs:
         id: set-profile
         run: |
           if [[ "${{ github.ref_name }}" == "main" ]]; then
-            echo "PROFILE=prod" >> $GITHUB_ENV
+            echo "PROFILE=production" >> $GITHUB_ENV
           else
-            echo "PROFILE=dev" >> $GITHUB_ENV
+            echo "PROFILE=development" >> $GITHUB_ENV
           fi
 
       # Install the cosign tool except on PR
