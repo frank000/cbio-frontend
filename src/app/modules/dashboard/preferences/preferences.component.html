@@ -35,8 +35,29 @@
                                         </div>                       
                                     </div>
                                     <div>
+                                        <label for="gridName">Envio automático de cartão de visitas </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['autoSend'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+                                           
+                                            <div class="p-4 mt-8">
+                                                <label class="w-12 h-6 relative">
+                                                    <input type="checkbox" 
+                                                    
+                                                    [checked]="autoSend"
+                                                    formControlName="autoSend"
+                                                    class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox5" />
+                                                    <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                </label>                              
+                                            </div>
+                                            <div class="w-56 p-4 text-sm italic">
+                                                Se ativado, sempre será enviado um cartão de visitas via whastapp para o contato adicionado.
+                                            </div>
+                                        </div>     
+                                    </div>
+                                                
+
+                                    <div>
                                         <label for="gridName">Modelo de mensagem em Contatos: </label>
-                                        <div [ngClass]="isSubmitForm ? params.controls['model'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+                                        <div [ngClass]="isSubmitForm ? params.controls['model'].errors || params.controls['autoSend'].value === true ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
                                             <div class="p-4 mt-8 w-56">
                                                 <div >
                                                     <ng-select
@@ -57,10 +78,38 @@
                                                 Selecione o modelo de mensagem usado como cartão de visitas na pagina de 'Contatos'
                                             </div>
                                         </div>
- 
-                                    </div>                     
-                                    
-                                                
+                                    </div>
+                         
+                                    <div>
+                                        <label for="gridRag">Perguntas e Respostas frequentes: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['rag'].errors  ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+                                            <div class="p-4 mt-8 " style="    width: 50rem;">
+                                                <div >
+                                                    <textarea
+                                                        id="rag"
+                                                        rows="10"
+                                                        class="form-textarea min-h-[130px] resize-none"
+                                                        formControlName="rag"
+                                                    ></textarea>
+         
+                                                </div>
+                                            </div>
+                                            <div class="p-4 text-sm italic"  style="    width: 50rem;"> 
+                                                <br/><br/>
+                                                Adicione perguntas e respostas mais frequentes que serão usadas pela inteligência artificial para responder aos seus clientes. Use quebra de linha entre as perguntas e respostas.
+                                                Obs.: As perguntas e respostas passam por uma validação que pode levar alguns minutos para refletir no seu BOT.
+                                                <br/><br/>
+                                                Ex.:
+                                                <br/><br/>
+                                                <code style="color: rgb(44, 44, 44); font-weight: bold;">
+                                                    Qual é o horário de funcionamento?<br/>Nosso horário de funcionamento é de segunda a sexta, das 8h às 18h.
+                                                    <br/><br/>
+                                                    Como posso cancelar meu pedido?<br />Você pode cancelar seu pedido acessando ...
+                                                </code>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 
                                 </div>        
                                 <button

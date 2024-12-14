@@ -25,6 +25,7 @@ export class PreferencesComponent implements OnInit{
   params!: FormGroup;
   constructor(){}
   keepSameAttendant = false;
+  autoSend = false;
   optionsModel:any[] = [];
 
   ngOnInit(): void { 
@@ -54,21 +55,33 @@ export class PreferencesComponent implements OnInit{
       companyId:[null], 
       model:[null], 
       keepSameAttendant: [false, Validators.required],
+      autoSend: [false, Validators.required],
+      rag:[null], 
     });
   }
 
 
   isSubmitForm = false;
   submit(){
+    console.log(this.params.value.model);
+    
     this.isSubmitForm = true;
-    if (this.params.valid) { 
+    if (this.params.valid && (this.params.value.autoSend == false || this.params.value.autoSend == true && this.params.value.model != null )) { 
       let data = this.params.getRawValue();
       console.log(data);
+      
+      const isArrayRag = data.rag instanceof Array;
+      if(!isArrayRag){
+        data.rag = [this.params.value.rag];
+      }
+
       this.companyService.updateConfig(data)
       .subscribe(()=>{
         showMessage("Salvo com sucesso."); 
       });
       
+    }else if(this.params.value.autoSend == true && this.params.value.model == null ){
+      showMessage("Informe qual modelo do cartão de visitas.", 'warning');
     }
   }  
 }

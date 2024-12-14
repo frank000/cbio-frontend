@@ -40,6 +40,7 @@
                                             placeholder="Entre com nome do modelo"
                                             [(ngModel)]="model.name"
                                             (change)="verificarValorName()"
+                                            [readOnly]="id != null"
                                             class="form-input"/>
                                     </div>
                                 </div>

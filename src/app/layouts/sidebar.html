@@ -56,6 +56,13 @@
                                         [routerLinkActiveOptions]="{exact: true}"
                                         (click)="toggleMobileMenu()">{{ 'preference' | translate }}</a >
                                 </li>
+                                <li  *ngIf="authService.hasRole(authService.ADMIN_ROLE)">
+                                    <a
+                                        routerLink="/dashboard/tickets"
+                                        routerLinkActive="active"
+                                        [routerLinkActiveOptions]="{exact: true}"
+                                        (click)="toggleMobileMenu()">{{ 'ticket' | translate }}</a >
+                                </li>
                                 <!-- <li>
                                     <a
                                         routerLink="/analytics"

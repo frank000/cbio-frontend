@@ -1,7 +1,8 @@
 {
     "dashboard": "Painel",
     "summary": "Atendimentos",
-    "preference": "Preferencias",
+    "preference": "Preferências",
+    "ticket": "Tickets",
     "sales": "Vendas",
     "config": "configurações",
     "attendant": "atendentes",    

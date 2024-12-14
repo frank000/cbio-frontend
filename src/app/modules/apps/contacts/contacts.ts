@@ -5,6 +5,7 @@ import { NgxCustomModalComponent } from 'ngx-custom-modal';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ContactService } from 'src/app/service/contact.service';
 import { showMessage } from '../../base/showMessage';
+import { text } from 'stream/consumers';
 
 @Component({
     templateUrl: './contacts.html',
@@ -61,7 +62,12 @@ export class ContactsComponent implements OnInit{
     }
 
     searchContacts() {
-        this.filterdContactsList = this.contactList.filter((d) => d.name.toLowerCase().includes(this.searchUser.toLowerCase()));
+        this.filterdContactsList = this.contactList
+        .filter((d) => 
+            d.name.toLowerCase().includes(this.searchUser.toLowerCase()) ||
+            d.phone.toLowerCase().includes(this.searchUser.toLowerCase()) ||
+            d.email.toLowerCase().includes(this.searchUser.toLowerCase())
+    );
     }
 
     editUser(user: any = null) {
@@ -92,8 +98,42 @@ export class ContactsComponent implements OnInit{
             this.showMessage('Phone é obrigatório.', 'error');
             return;
         }
-     
-        let user:any;
+
+        let phone:string = this.params.controls['phone'].value;
+        let rawPhone = phone.trim().replace("(","").replace(")","").replace("-","").replace(" ","");
+
+        let findedContact = this.contactList.find((d) => d.phone === rawPhone);
+
+        if(findedContact != undefined){
+            this.swalWithBootstrapButtons
+            .fire({
+                title: 'Telefone duplicado',
+                text:"Já existe um contato com esse celular/whatsapp cadastrado. Recomendamos pesquisar pelo numero antes para validar se trata-se do mesmo usuário. Deseja continuar?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                reverseButtons: true,
+                padding: '2em',
+            })
+            .then((result:any) => {
+                if (result.value) {
+                    let user: any = this.processSaveUser();
+                }  
+            });
+        }else{
+            let user: any = this.processSaveUser();
+        }
+ 
+
+
+
+    }
+
+
+  swalWithBootstrapButtons:any;
+    private processSaveUser() {
+        let user: any;
 
         if (this.params.value.id) {
             //update user
@@ -105,35 +145,30 @@ export class ContactsComponent implements OnInit{
             user.obs = this.params.value.obs;
         } else {
             //add user
-         
-
-            user = { 
+            user = {
                 path: null,
                 name: this.params.value.name,
-                email: this.params.value.email, 
+                email: this.params.value.email,
                 phone: this.params.value.phone,
                 location: this.params.value.location,
                 obs: this.params.value.obs,
- 
             };
-         
+
             // this.contactList.splice(0, 0, user);
             this.searchContacts();
         }
         let action = user.id ? this.contactService.update(user) : this.contactService.save(user);
 
         action.subscribe(
-            (resp:any) =>{
+            (resp: any) => {
                 showMessage('Contato salvo com sucesso!');
                 this.addContactModal.close();
                 this.search();
             }
         );
-
+        return user;
     }
 
-
-  swalWithBootstrapButtons:any;
     deleteUser(user: any = null) {
 
         this.swalWithBootstrapButtons
