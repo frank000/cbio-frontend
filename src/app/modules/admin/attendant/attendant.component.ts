@@ -107,9 +107,7 @@ export class AttendantComponent implements OnInit{
   }
 
   deleteRow(value:any){
-
-
-
+ 
     this.swalWithBootstrapButtons
     .fire({
         title: 'Tem certeza que deseja excluir o atendente?',
@@ -130,12 +128,9 @@ export class AttendantComponent implements OnInit{
               }
             )
         }  
-    });
-
-
-
-
+    }); 
   }
+
   carregaCompanias() {
     this._companyService.obtemGrid().subscribe(
       (resp: any) => {

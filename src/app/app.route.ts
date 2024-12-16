@@ -21,6 +21,7 @@ import { ContactsComponent } from './modules/apps/contacts/contacts';
 import { PreferencesComponent } from './modules/dashboard/preferences/preferences.component';
 import { AuthGuard } from './modules/base/guard/auth-guard';
 import { TicketComponent } from './modules/dashboard/ticket/ticket.component';
+import { FormTicketComponent } from './modules/dashboard/ticket/form-ticket/form-ticket.component';
 
 export const routes: Routes = [
     {
@@ -52,6 +53,8 @@ export const routes: Routes = [
             { path: 'dashboard/summary', component: SummaryComponent, data: { title: 'Atendimentos' } },
             { path: 'dashboard/preferences', component: PreferencesComponent, data: { title: 'Preferências' } },
             { path: 'dashboard/tickets', component: TicketComponent, data: { title: 'Tickets' } },
+            { path: 'dashboard/tickets/form', component: FormTicketComponent, data: { title: 'Tickets' } },
+            { path: 'dashboard/tickets/form/:id', component: FormTicketComponent, data: { title: 'Tickets' } },
             
             { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'AGEND.ai' } },
             { path: 'apps/agendai/recurso', component: RecursoComponent, data: { title: 'Recursos' } },

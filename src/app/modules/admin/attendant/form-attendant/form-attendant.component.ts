@@ -68,7 +68,7 @@ export class FormAttendantComponent {
       email: ['', Validators.compose([Validators.required, Validators.email])],
       name: ['', Validators.required],
       password: [''],
-  });    
+    });
   }
 
   isSubmitForm = false;

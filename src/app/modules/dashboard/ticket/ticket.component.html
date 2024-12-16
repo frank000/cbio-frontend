@@ -1,1 +1,108 @@
-<p>ticket works!</p>
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Painel</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Tickets</span>
+        </li>
+    </ul>
+
+
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div>
+                    <div  class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200  gap-4">
+
+                        <form class="space-y-5" [formGroup]="paramsFiltro" (ngSubmit)="search()">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <div class="md:col-span-2" >
+                                    <div>
+                                        <label for="gridName">Título</label>
+                                        <input
+                                            id="gridName"
+                                            type="text"
+                                            placeholder="Buscar pelo título do ticket"
+                                            formControlName="name"
+                                            class="form-input"/>
+                                    </div>
+                                </div>
+                            
+                                <div class="md:col-span-2" >
+                                    <div *ngIf="_authService.hasRole(_authService.SUPERADMIN_ROLE)">
+                                        <label for="gridName">Companhia</label>
+                                        <ng-select
+                                        id="company"
+                                        name="company"
+                                        bindLabel="label"
+                                        bindValue="id"
+                                        formControlName="company"
+                                        [items]="options"
+                                        [searchable]="false"
+                                        [clearable]="false" ></ng-select>
+                                    </div>
+                                </div>
+                            
+                            </div>
+           
+                            <div class="flex gap-4">
+                                <div>
+                                    <button type="submit" class="btn btn-primary !mt-6">Buscar</button>
+                                </div>
+                                <div>
+                                    <button type="button" (click)="cleanForm()" class="btn btn-outline-primary !mt-6">Limpar</button>
+                                </div>
+                            </div>
+            
+                        </form>
+                    </div>
+                    <div class="mt-8 mb-8">
+                        <div class="flex justify-end">
+                            <button 
+                                [routerLink]="['/dashboard/tickets/form']"
+                                 type="button" class="btn btn-outline-info !mt-6 mb-8">
+                                    Adicionar
+                            </button>
+                        </div>
+                        <ng-datatable
+                            skin="whitespace-nowrap bh-table-hover"
+                            [rows]="gridRowsUser"
+                            [columns]="cols"
+                            [totalRows]="totalRowsUser"
+                            [isServerMode]="true"
+                            (changeServer)="changeServer($event)"
+                            >
+                            
+                            <ng-template slot="id" let-value="data">
+                                <strong class="text-info">#{{ value.protocolNumber }}</strong>
+                            </ng-template>
+                            <ng-template slot="name" let-value="data">
+                                <span class="text-info">{{ value.title }}</span>
+                            </ng-template>
+                            <ng-template slot="perfil" let-value="data">
+                                <span class="text-info">{{ value.type }}</span>
+                            </ng-template> 
+                            <ng-template slot="acoes" let-value="data">
+                                <div class="flex items-center justify-center gap-4">
+
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="loadToEdit(value)" >
+                                        <icon-edit/>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteRow(value)">
+                                        <icon-trash/>
+                                    </button>
+                                </div>
+                                
+                            
+                            </ng-template>
+                        </ng-datatable>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Formulário Ticket</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 ">
+            
+                        <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200">
+                            <form [formGroup]="paramsTicket" (submit)="submit()" class="space-y-5" >
+                                <div 
+                                class=" grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="md:col-span-2" *ngIf="paramsTicket.value.protocolNumber != null">
+                                        <label for="protocol">Protocolo</label>
+                                        <input
+                                            id="protocol"
+                                            type="text" 
+                                            readonly="true"
+                                            formControlName="protocolNumber"
+                                            class="form-input"/>
+                                    </div>
+                                    <div class="md:col-span-2"
+                                    [ngClass]="isSubmitForm ? paramsTicket.controls['title'].errors ? 'has-error' : 'has-success' : ''">
+                                        <label for="gridtitle">Título</label>
+                                        <input
+                                            id="gridtitle"
+                                            type="text"
+                                            placeholder="Informe o título"
+                                            formControlName="title"
+                                            class="form-input"/>
+                                    </div>
+                                    <div class="md:col-span-2" >
+                                        <label for="gridtype">Tipo</label>
+                        
+                                        <ng-select
+                                        [ngClass]="isSubmitForm ? paramsTicket.controls['title'].errors ? 'has-error' : 'has-success' : ''"
+                                        id="gridtype"
+                                        name="gridtype"
+                                        formControlName="type"
+                                        [items]="options" 
+                                        [searchable]="false"
+                                        [clearable]="false"
+                                        class="custom-multiselect"></ng-select>
+                                    </div>
+                                    <div >
+                                        <label for="address">Mensagem</label>
+                                        <textarea
+                                            id="address"
+                                            rows="3"
+                                            formControlName="ticketMessage"
+                                            placeholder="Entre com a mensagem"
+                                            class="form-textarea min-h-[130px] resize-none" 
+                                        ></textarea>
+                                    </div> 
+                                    <div class="md:col-span-2" *ngIf=" this.id != null && this.ticketSaved.ticketMessages != null &&  this.ticketSaved.ticketMessages.length > 0">
+                   
+                                        <div class="panel">
+                                            <div class="mb-5 flex items-center justify-between">
+                                                <h5 class="text-lg font-semibold dark:text-white-light">Histórico</h5>
+                                            </div>
+                                            <div class="mb-5">
+                                                <div class="mx-auto max-w-[900px]">
+                                                    <app-item-timeline
+                                                    *ngFor="let item of this.ticketSaved.ticketMessages"
+                                                        [createdAt]="item.createdAt"
+                                                        [message]="item.message"
+                                                        [fromCompany]="item.fromCompany"
+                                                    ></app-item-timeline>
+                                         
+                                                </div>
+                                            </div>
+                                 
+                                        </div>
+                                       
+                                    </div>
+                                                
+                                  
+                                </div>        
+                                <app-btn-salva-volta 
+                                [edit]="this.id != null" 
+                                location="/dashboard/tickets"></app-btn-salva-volta>
+                            </form>
+                        </div>
+                  
+            </div>
+        </div>
+    </div>
+</div>
