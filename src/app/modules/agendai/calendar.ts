@@ -86,6 +86,7 @@ export class CalendarComponent implements OnInit {
             }
         )
     }
+
     async initStore() {
         this.storeData
             .select((d: any) => d.index)
@@ -227,6 +228,8 @@ export class CalendarComponent implements OnInit {
             start: ['', Validators.required],
             end: ['', Validators.required],
             name: [''],
+            startFormated: [''],
+            endFormated: [''],
             phone: [''],
             email: [''],
             description: [''],
@@ -313,10 +316,57 @@ export class CalendarComponent implements OnInit {
         )
     }
  
+    hoursList!:any[];
+    changedDate(event:any){
+        console.log(event);
+        console.log(this.dateScheduleList[event]); 
+        this.hoursList = this.dateScheduleList[event];
+    }
+    changedHour(event:any){
+        console.log(event);
+        console.log(this.dateScheduleList[event]); 
+        this.hoursList = this.dateScheduleList[event];
+        this.params.controls['end'].setValue(event.strEndDateTime);
+    }
+
+ 
+      getOrdenedScheduleList(dateScheduleList:any) {
+        // Ordena as chaves do objeto convertendo para objetos Date
+        const chavesOrdenadas = Object.keys(dateScheduleList).sort((a, b) => {
+          // Convertendo as chaves de data para o formato Date
+          const dataA:any = new Date(a.split('/').reverse().join('-'));  // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
+          const dataB:any = new Date(b.split('/').reverse().join('-'));  // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
+      
+          return dataA - dataB;  // Compara as datas
+        });
+        this.dateKeys = chavesOrdenadas;
+      
+ 
+        return dateScheduleList;
+      }
+
+
+    dateScheduleList!:any[] ;
+    dateKeys!:string[] ;
+    key!:string;
+
     changeDairyName(event:any){ 
         
         this.params.controls['description'].setValue(event.description);
         this.params.controls['title'].setValue(event.title);
+
+        this.rangeDateViewCalendar.resourceId = event.id;
+        this.googleService.getScheduleByResourceId(this.rangeDateViewCalendar)
+        .subscribe(
+            (scheduleList:any) => {
+                this.dateScheduleList = this.getOrdenedScheduleList(scheduleList) ;
+ 
+                // eventList.forEach(
+                //     (item:any)=> this.calendarOptions.events.push(item)
+                // );
+                
+            }
+        );
     }
 
     isNewEvent:boolean = false
@@ -330,12 +380,15 @@ export class CalendarComponent implements OnInit {
         if (data) {
  
             let obj = JSON.parse(JSON.stringify(data.event));
+             console.log(obj);
              
             this.params.setValue({
                 id: obj.id ? obj.id : null,
                 title: obj.title ? obj.title : null,
                 start: this.dateFormat(obj.start),
                 end: this.dateFormat(obj.end),
+                startFormated: this.dateBrazilianFormat(obj.start),
+                endFormated: this.dateBrazilianFormat(obj.end),
                 type: obj.classNames ? obj.classNames[0] : 'primary',
                 description: obj.extendedProps ? obj.extendedProps.description : '',
                 dairyName: obj.extendedProps ? obj.extendedProps.dairyName : '',
@@ -346,13 +399,18 @@ export class CalendarComponent implements OnInit {
             });
             this.myControl.setValue(this.params.value.name);
             this.isNewEvent = true
-            this.minStartDate = new Date();
-            this.minEndDate = this.dateFormat(obj.start); 
+            this.minEndDate = new Date();
+
+ 
+             this.minEndDate = this.dateFormat(obj.start); 
 
 
         } else {
-            this.minStartDate = new Date();
             this.minEndDate = new Date();
+ 
+
+
+            this.minStartDate = new Date();
 
 
         }
@@ -375,6 +433,16 @@ export class CalendarComponent implements OnInit {
         const hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours();
         const mins = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
         dt = dt.getFullYear() + '-' + month + '-' + date + 'T' + hours + ':' + mins;
+        return dt;
+    }
+
+    dateBrazilianFormat(dt: any) {
+        dt = new Date(dt);
+        const month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
+        const date = dt.getDate() < 10 ? '0' + dt.getDate() : dt.getDate();
+        const hours = dt.getHours() < 10 ? '0' + dt.getHours() : dt.getHours();
+        const mins = dt.getMinutes() < 10 ? '0' + dt.getMinutes() : dt.getMinutes();
+        dt = date + "/" + month + "/" + dt.getFullYear() +  ' ' + hours + ':' + mins;
         return dt;
     }
 
@@ -598,7 +666,7 @@ export class CalendarComponent implements OnInit {
                 this.rangeDateViewCalendar.resourceId = item.id;
                 this.googleService.getEventsByResourceId(this.rangeDateViewCalendar)
                 .subscribe(
-                    (eventList:any) => { 
+                    (eventList:any) => {
                         eventList.forEach(
                             (item:any)=> this.calendarOptions.events.push(item)
                         );

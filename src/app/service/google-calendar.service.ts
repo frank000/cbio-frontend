@@ -28,6 +28,12 @@ export class GoogleCalendarService extends CrudAbstractService{
     
     
 
+    getScheduleByResourceId(rangeDateViewCalendar : any):Observable<any>{
+        return this._http.post(`${this.url}/v1/${this.getControllerName()}/schedule-by-resource`, rangeDateViewCalendar);
+    }
+    
+    
+
     download(dialogId:string):Observable<any>{
         return this._http.get(`${this.url}/v1/${this.getControllerName()}/download-media-by-dialog/${dialogId}`, 
         { responseType: 'blob', observe: 'response' }).pipe(

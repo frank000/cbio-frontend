@@ -158,35 +158,68 @@
                     <div class="mt-2 text-danger" id="titleErr"></div>
                 </div>
 
-                <div class="mb-5" >
-                    <label for="dateStart">De : *</label>
-                    <input
-                        
-                        id="dateStart"
-                        type="datetime-local"
-                        name="start"
-                        class="form-input"
-                        placeholder="Entre com data início"
-                        formControlName="start"
-                        [min]="minStartDate" 
-                        required
-                    />
+                <div class="mb-5" *ngIf="params.value.id == null">
+                    <label for="gridDate">Datas : *</label>
+                    <ng-select
+                        id="gridDate"
+                        name="gridDate"
+      
+                        [items]="dateKeys"
+                        [searchable]="true"
+                        [clearable]="false"
+                        (change)="changedDate($event)"
+                        class="custom-multiselect" >
+                    </ng-select>
+
+
                     <div class="mt-2 text-danger" id="startDateErr"></div>
                 </div>
-                <div class="mb-5">
-                    <label for="dateEnd">Até : *</label>
-                    <input
-                        id="dateEnd"
-                        type="datetime-local"
-                        name="end"
-                        class="form-input"
-                        placeholder="Entre com data fim"
-                        formControlName="end"
-                        [min]="minEndDate"
-                        required
-                    />
-                    <div class="mt-2 text-danger" id="endDateErr"></div>
+
+                <div class="mb-5" *ngIf="params.value.id == null">
+                    <label for="gridHours">Horários : *</label>
+                    <ng-select
+                        id="gridHours"
+                        name="gridHours"
+                        bindLabel="strHour"
+                        bindValue="strStartDateTime"
+                        [items]="hoursList"
+                        [searchable]="true"
+                        formControlName="start"
+                        [clearable]="false"
+                        (change)="changedHour($event)"
+                        class="custom-multiselect" >
+                    </ng-select>
+
+
+                    <div class="mt-2 text-danger" id="startDateErr"></div>
                 </div>
+
+    
+                <div class="mb-5" *ngIf="params.value.id != null">
+                    <label for="gridDateHourStart">De: </label>
+                    <input id="gridDateHourStart" 
+                    type="text"
+                    name="start"
+                    class="form-input"
+                    readonly="true"
+                    formControlName="startFormated" />
+
+
+                    <div class="mt-2 text-danger" id="startDateErr"></div>
+                </div>
+                <div class="mb-5" *ngIf="params.value.id != null">
+                    <label for="gridDateHourEnd">Até: </label>
+                    <input id="gridDateHourEnd" 
+                    type="text"
+                    name="end"
+                    class="form-input"
+                    readonly="true"
+                    formControlName="endFormated" />
+
+
+                    <div class="mt-2 text-danger" id="startDateErr"></div>
+                </div>
+
                 <div class="mb-5">
                     <label for="description">Descrição :</label>
                     <textarea

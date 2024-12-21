@@ -16,8 +16,7 @@ import { showMessage } from '../../base/showMessage';
   selector: 'app-ticket',
   standalone: true,
   imports: [CommonModule, SharedModule, RouterLink],
-  templateUrl: './ticket.component.html',
-  styleUrl: './ticket.component.css'
+  templateUrl: './ticket.component.html'
 })
 export class TicketComponent  implements OnInit{
 
@@ -41,10 +40,26 @@ export class TicketComponent  implements OnInit{
   gridRowsUser: any[] = []
   totalRowsUser!:number;
   options: Array<{ id: number, label: string }> = []; // Inicializar como array vazio
-
+ 
+  optionsStatus: any[] = []; // Inicializar como array vazio
+  optionsType: any[] = []; // Inicializar como array vazio
   constructor(
     public storeData: Store<any>
   ){
+
+    this._ticketService.obtemTiposStatus()
+    .subscribe(
+      (resp:any)=>{
+        this.optionsStatus = resp;
+      }
+    );
+
+    this._ticketService.obtemTiposTicket()
+    .subscribe(
+      (resp:any)=>{
+        this.optionsType = resp;
+      }
+    );
 
     this.swalWithBootstrapButtons = Swal.mixin({
       buttonsStyling: false,
@@ -54,6 +69,16 @@ export class TicketComponent  implements OnInit{
           cancelButton: 'btn btn-dark ltr:mr-3 rtl:ml-3',
       },
     });
+  }
+
+  getLabelStatus(id : any){
+    let status:any = this.optionsStatus.filter(item => item.id == id);
+ 
+    if(status[0] != null){
+      return status[0].label;
+    }else{
+      return "";
+    } 
   }
   
   ngOnInit(): void {
@@ -66,7 +91,10 @@ export class TicketComponent  implements OnInit{
   initForm(){
     this.paramsFiltro = this._fb.group({
         name: [''],
-        company: ['']
+        company: [''],
+        status: [null],
+        type: [null],
+
     });
   }
   
@@ -91,6 +119,7 @@ export class TicketComponent  implements OnInit{
       { field: "protocolNumber", title: "Protocolo", filter: false, sort: false },
       { field: "title", title: "Titulo" },
       { field: "type", title: "Tipo" },
+      { field: "status", title: "Status" },
       { field: "acoes", title: "Ações" }
 
     ];
@@ -123,6 +152,12 @@ export class TicketComponent  implements OnInit{
     }
     if( this.paramsFiltro.controls["company"].value != null && this.paramsFiltro.controls["company"].value != ""){
       query = query.append('companyId', this.paramsFiltro.controls["company"].value );
+    }
+    if( this.paramsFiltro.controls["status"].value != null && this.paramsFiltro.controls["status"].value != ""){
+      query = query.append('status', this.paramsFiltro.controls["status"].value );
+    }
+    if( this.paramsFiltro.controls["type"].value != null && this.paramsFiltro.controls["type"].value != ""){
+      query = query.append('type', this.paramsFiltro.controls["type"].value );
     }
     query = query.append('pageIndex', this.params.current_page); 
     query = query.append('pageSize', this.params.pagesize );
