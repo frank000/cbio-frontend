@@ -149,25 +149,29 @@ export class CalendarComponent implements OnInit {
     
     totalContactsSearched:null|number = null; 
     
-    private _filterContacts(value: any) {
-        const filterValue = value.toLowerCase();
+    private _filterContacts(value: string) {
+        // Garantir que o valor seja uma string
+        const filterValue = value ? value.toLowerCase() : '';
         let query = new HttpParams();
-        query = query.append('filter', value);
-
+        query = query.append('filter', filterValue);
+      
         return this.contactsService.obtemGrid(query)
-        .pipe(
-            filter(data => !!data),
+          .pipe(
+            filter(data => !!data),  // Verifica se os dados existem
             map((data) => {
-              
+              // Se os dados estiverem presentes, realiza o filtro
               this.totalContactsSearched = data.total;
-
-              return data.items.filter(
-                (option:any) => 
-                    option.name.toLowerCase().includes(value))
+      
+              // Filtra os itens com base no nome
+              return data.items.filter((option: any) => {
+                // Garante que 'name' exista e seja uma string
+                return option.name && option.name.toLowerCase().includes(filterValue);
+              });
             })
-          )
- 
+          );
       }
+      
+
     ngOnInit() {
         this.getEvents();
 
@@ -204,7 +208,7 @@ export class CalendarComponent implements OnInit {
         this.filteredOptions = this.myControl.valueChanges
             .pipe(
                 startWith(''),
-                filter((value: any) => value.length > 3 ),
+                filter((value: any) => typeof value === 'string' && value.length > 3),
                 switchMap(value => this._filterContacts(value))
             );
     }

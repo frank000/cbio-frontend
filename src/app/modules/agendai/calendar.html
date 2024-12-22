@@ -126,19 +126,16 @@
                         <h4>DADOS DO CLIENTE</h4>
                     </div>
                     <div class="mb-5">
-
                         <mat-form-field style="text-align: right" class="autocomplete">
-                      
-                            <input type="text" placeholder="Entre com o nome"   class="form-input" matInput [formControl]="myControl" [matAutocomplete]="auto">
-                            <mat-autocomplete #auto="matAutocomplete"  >
-                                    <mat-option *ngFor="let option of filteredOptions | async" 
-                                    [value]="option.name" 
-                                    (onSelectionChange)="changeContacts(option)">
-                                      {{option.name}}
-                                    </mat-option>
-                                  </mat-autocomplete>
-                        </mat-form-field>
- 
+                            <input type="text" placeholder="Entre com o nome" class="form-input" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete">
+                              <mat-option *ngFor="let option of filteredOptions | async"
+                                          [value]="option.name"
+                                          (onSelectionChange)="changeContacts(option)">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
                     </div>         
                     <div class="mb-5">
                         <label for="email">Email :</label>
