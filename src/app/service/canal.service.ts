@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
@@ -21,24 +21,13 @@ export class CanalService extends CrudAbstractService{
     }
 
   
-    // update(company:Company):Observable<any>{
+    conect(canalId:any):Observable<any>{
+        let query = new HttpParams();
  
-    //     return this._http.put(`${this.url}/v1/company`, company);
-    // }
-
-
-    // save(company:Company):Observable<any>{
+        query = query.append('canalId', canalId);
+        return this._http.get(`${this.url}/v1/bot/connect-bot`, {params:query});
+    }
  
-    //     return this._http.post(`${this.url}/v1/company`, company);
-    // }
-
-    // obtemGrid():Observable<any>{
-    //     return this._http.get(`${this.url}/v1/company/grid`);
-    // }
-
-    // obtemCompany(id:string):Observable<any>{
-    //     return this._http.get(`${this.url}/v1/company/${id}`);
-    // }
 
  
 }

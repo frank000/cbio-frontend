@@ -191,9 +191,11 @@ export class CompanyFormComponent {
       }
     )
   }
+
   loadToEdit(value:any){
     this.paramsConfig.patchValue(value);
   }
+
   isSubmitForm = false;
   submit(){
     this.isSubmitForm = true;
@@ -283,6 +285,14 @@ export class CompanyFormComponent {
     this._canalService.delete(canal.id).subscribe(
       (resp:any) =>{
         this.gridRowsCanal = this.gridRowsCanal.filter(row => row.id != canal.id);
+      }
+    )
+  }
+
+  connect(canalId:any){
+    this._canalService.conect(canalId).subscribe(
+      (resp:any) =>{
+        this.showMessage("Conectado com sucesso.");
       }
     )
   }

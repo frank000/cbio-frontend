@@ -7,10 +7,10 @@
             <span>Administração</span>
         </li>
     </ul>
-    <div class="panel mt-5 h-[calc(100vh-190px)]">
+    <div class="panel mt-5">
         <div class="mb-5">
             <div class="container mx-auto px-4">
-                <div>
+                <div class="p-8 mb-4 mt-8 rounded-lg border-2 border-slate-200  gap-4">
                     <ul class="mb-5 grid grid-cols-3 text-center">
                         <li>
                             <a
@@ -326,14 +326,26 @@
                                     <ng-template slot="id" let-value="data">
                                         <strong class="text-info">#{{ value.id }}</strong>
                                     </ng-template>
+                                    
+                         
+                                    <ng-template slot="nome" let-value="data">
+                                        <strong class="dark:text-white">{{ value.nome }}</strong>
+                                    </ng-template>
+                                    <ng-template slot="idCanal" let-value="data">
+                                        <strong class="dark:text-white">{{ value.idCanal }}</strong>
+                                    </ng-template>
+                                    
                                     <ng-template slot="acoes" let-value="data">
                                         <div class="flex">
-                                            <a (click)="loadToEdit(value)" class="ms-10 block w-4 lg:w-6">
+                                            <a (click)="loadToEdit(value)" class="ms-10 block w-4 lg:w-6 cursor-pointer " title="Editar">
                                                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#363636" stroke="#363636"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g id="edit"> <g> <path d="M20,16v4a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V6A2,2,0,0,1,4,4H8" fill="none" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path> <polygon fill="none" points="12.5 15.8 22 6.2 17.8 2 8.3 11.5 8 16 12.5 15.8" stroke="#363636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></polygon> </g> </g> </g> </g></svg>                    
                                             </a>
-                                            <a (click)="deleteCanal(value)" class="ms-10 block w-4 lg:w-6">
+                                            <a (click)="deleteCanal(value)" class="ms-10 block w-4 lg:w-6 cursor-pointer" title="Deletar">
                                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 7H20" stroke="#303030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V7" stroke="#303030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#303030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-                                            </a> 
+                                            </a>
+                                            <a (click)="connect(value.id)" class="ms-10 block w-4 lg:w-6 cursor-pointer " title="Conectar">
+                                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14 10C14 9.44771 13.5523 9 13 9H12.5C9.46243 9 7 11.4624 7 14.5C7 17.5376 9.46243 20 12.5 20H17.5C20.5376 20 23 17.5376 23 14.5C23 12.0091 21.3441 9.90488 19.073 9.22823C18.5098 9.06042 18 9.52887 18 10.1166V10.1683C18 10.6659 18.3745 11.0735 18.8345 11.2634C20.1055 11.788 21 13.0395 21 14.5C21 16.433 19.433 18 17.5 18H12.5C10.567 18 9 16.433 9 14.5C9 12.567 10.567 11 12.5 11H13C13.5523 11 14 10.5523 14 10Z" fill="#303030"></path> <path d="M11.5 4C14.5376 4 17 6.46243 17 9.5C17 12.5376 14.5376 15 11.5 15H11C10.4477 15 10 14.5523 10 14C10 13.4477 10.4477 13 11 13H11.5C13.433 13 15 11.433 15 9.5C15 7.567 13.433 6 11.5 6H6.5C4.567 6 3 7.567 3 9.5C3 10.9605 3.89451 12.212 5.16553 12.7366C5.62548 12.9264 6 13.3341 6 13.8317V13.8834C6 14.4711 5.49024 14.9396 4.92699 14.7718C2.65592 14.0951 1 11.9909 1 9.5C1 6.46243 3.46243 4 6.5 4H11.5Z" fill="#303030"></path> </g></svg>
+                                            </a>
                                         </div>
                                      
                                     </ng-template>
