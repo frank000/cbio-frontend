@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
-// dashboard
-import { IndexComponent } from './index';
+// dashboard 
 import { AppLayout } from './layouts/app-layout';
 import { AuthLayout } from './layouts/auth-layout';
 import { AdminComponent } from './modules/admin/admin.component'; 
@@ -22,6 +21,7 @@ import { PreferencesComponent } from './modules/dashboard/preferences/preference
 import { AuthGuard } from './modules/base/guard/auth-guard';
 import { TicketComponent } from './modules/dashboard/ticket/ticket.component';
 import { FormTicketComponent } from './modules/dashboard/ticket/form-ticket/form-ticket.component';
+import { ProfileComponent } from './modules/admin/profile/profile.component';
 
 export const routes: Routes = [
     {
@@ -62,6 +62,8 @@ export const routes: Routes = [
             { path: 'apps/agendai/recurso/form/:id', component: FormRecursoComponent, data: { title: 'Recursos' } },
 
             { path: 'apps/contacts', component: ContactsComponent, data: { title: 'Contatos' } },
+
+            { path: 'admin/profile', component: ProfileComponent, data: { title: 'Perfil de usuário' } }
         ],
     },
     

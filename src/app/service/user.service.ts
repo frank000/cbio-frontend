@@ -19,6 +19,10 @@ export class UserService extends CrudAbstractService{
         super()
     }
     
+    updatePassword(user:any):Observable<any>{
+        return this._http.put(`${this.url}/v1/${this.getControllerName()}/password`, user);
+    }
+
  
     updateSession(idSession:string ,user:any):Observable<any>{
  

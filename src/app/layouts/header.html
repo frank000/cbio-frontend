@@ -196,7 +196,7 @@
                                 </div>
                                 <div class="truncate ltr:pl-4 rtl:pr-4">
                                     <h4 class="text-base">
-                                        {{userLocal.name}}<span class="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">{{userLocalPerfil}}</span>
+                                        {{userLocal.name}}<div class="rounded bg-success-light px-1 text-xs text-success">{{userLocalPerfil}}</div>
                                     </h4>
                                     <a class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white" href="javascript:;">
                                         {{userLocal.email}}
@@ -205,7 +205,7 @@
                             </div>
                         </li>
                         <li>
-                            <a routerLink="/users/profile" *hlMenuItem="let menuItem" class="dark:hover:text-white">
+                            <a routerLink="/admin/profile" *hlMenuItem="let menuItem" class="dark:hover:text-white">
                                 <icon-user class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
 
                                 Perfil

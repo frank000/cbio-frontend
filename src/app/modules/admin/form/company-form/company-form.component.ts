@@ -129,7 +129,7 @@ export class CompanyFormComponent {
         id: [undefined],
         email: ['', Validators.compose([Validators.required, Validators.email])],
         password: ['', Validators.required], 
-    });    
+    });
     this.paramsCompany = this._fb.group({
         id: [undefined],
         email: ['', Validators.compose([Validators.required, Validators.email])],

@@ -9,8 +9,42 @@ export class AuthService {
     public ADMIN_ROLE:string = "admin"; 
     public ATTENDANT_ROLE:string = "attendant"; 
 
-    constructor( ) { 
+    arrayRoleDefault:string[] = [         
+        "default-roles-rocketchat",
+        "offline_access",
+        "uma_authorization"
+    ];
+
+    arrayRoles:any[] = [
+        {
+            "admin": "Administrador"
+        },
+        {
+            "attendant": "Atendente"
+        },
+        {
+            "guest": "Visitante"
+        }
+    
+    ]
+    getRole(userLocal:any){
+        let userLocalPerfil:any = ["guest"];
+        if(userLocal != null && userLocal.realm_access.roles != null){
+            userLocalPerfil = userLocal.realm_access.roles
+            .filter((item:any) => !this.arrayRoleDefault.includes(item))
+        }
+   
+       
+       for (const role of this.arrayRoles) {
+            for (const key in role) {
+                if (key === userLocalPerfil[0]) {
+                    return role[key]; 
+                }
+            }
+        }
+ 
     }
+ 
 
     getAccessToken():string | null{
         if(localStorage.getItem("access_token") != undefined){
