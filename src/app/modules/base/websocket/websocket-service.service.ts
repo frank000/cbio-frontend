@@ -13,7 +13,7 @@ export class WebSocketService {
   private client: Client;
   private messageSubject = new Subject<string>();
   public clearNotificationSubject = new Subject<boolean>();
-  url:string = environment.urlBackend;
+  url:string = environment.urlBackendWS;
 
   constructor() {
  
@@ -25,7 +25,7 @@ export class WebSocketService {
       debug: (msg: string): void => {
              console.log(new Date(), msg);
           },
-      webSocketFactory: () => new SockJS(this.url+"/ws") // Use SockJS caso seja necessário
+      webSocketFactory: () => new SockJS(this.url) // Use SockJS caso seja necessário
     });
 
  
