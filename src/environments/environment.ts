@@ -4,7 +4,6 @@
 
 export const environment = {
     production: false,
-    urlBackend:"http://localhost:8081",
-    urlBackendWS:"http://localhost:8081/ws",
+    urlBackend:"http://localhost:8081"
 
 };
