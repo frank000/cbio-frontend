@@ -4,6 +4,7 @@ import { Client, Message, Stomp } from '@stomp/stompjs';
 // import * as SockJS from 'sockjs-client';
 import SockJS from 'sockjs-client';
 import { Observable, Subject } from 'rxjs';
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class WebSocketService {
   private client: Client;
   private messageSubject = new Subject<string>();
   public clearNotificationSubject = new Subject<boolean>();
+  url:string = environment.urlBackend;
 
   constructor() {
  
@@ -23,7 +25,7 @@ export class WebSocketService {
       debug: (msg: string): void => {
              console.log(new Date(), msg);
           },
-      webSocketFactory: () => new SockJS('http://localhost:8081/ws') // Use SockJS caso seja necessário
+      webSocketFactory: () => new SockJS(this.url+"/ws") // Use SockJS caso seja necessário
     });
 
  
