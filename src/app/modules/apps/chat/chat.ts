@@ -439,8 +439,14 @@ export class ChatComponent implements OnInit, OnDestroy{
             );
     }
 
-    private getMediaByDialog(msg: any) :Observable<any>{
-        return this.getMedia(msg.id)
+    private getMediaByDialog(msg: any) :any{
+
+
+        if(msg.url != null && msg.url != ""){
+            return msg.body = msg.url;//messages from IG
+        }else{
+
+            return this.getMedia(msg.id)
             .pipe(
                 map((mediaResp: any) => {
         
@@ -451,6 +457,10 @@ export class ChatComponent implements OnInit, OnDestroy{
                     }
                 })
             );
+        }
+ 
+
+
     }
 
     sendMessage(channelId:any) {
