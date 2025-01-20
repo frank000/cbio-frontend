@@ -116,6 +116,7 @@
                                         <p class="mb-1 font-semibold flex"><span style="padding-top: 0.5rem;">{{ (person.name)? person.name : "Novo Usuário"  }}</span>
                                             <img *ngIf="person.nameCanal == 'TELEGRAM'"src="/assets/images/icons/telegram.png" class="h-8 w-8"/>
                                             <img *ngIf="person.nameCanal == 'WHATSAPP'" src="/assets/images/icons/whatsapp.png" class="h-8 w-8"/>  
+                                            <img *ngIf="person.nameCanal == 'INSTAGRAM'" src="/assets/images/icons/instagram.png" class="h-7 w-7"/>  
                                         </p>
                                         <p class="max-w-[185px] truncate text-xs text-white-dark">{{ person.preview }}</p>
                                     </div>
@@ -288,6 +289,9 @@
                                     <img *ngIf="selectedUser.nameCanal == 'WHATSAPP'" 
                                     title="Cliente falando pelo WHATSAPP" 
                                     src="/assets/images/icons/whatsapp.png" class="h-8 w-8"/>
+                                    <img *ngIf="selectedUser.nameCanal == 'INSTAGRAM'" 
+                                    title="Cliente falando pelo INSTAGRAM" 
+                                    src="/assets/images/icons/instagram.png" class="h-8 w-8"/>
                                     
                                 </div>
                             </div>
