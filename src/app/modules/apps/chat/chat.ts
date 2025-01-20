@@ -425,9 +425,14 @@ export class ChatComponent implements OnInit, OnDestroy{
                     this.selectedUser.messages = resp;
                     this.selectedUser.messages
                         .filter((msg: any) => msg.media != null)
-                        .map((msg: any) => {
+                        .forEach( (msg: any) => {
                             this.getMediaByDialog(msg)
-                                .subscribe(); // Certifique-se de se inscrever para que a requisição seja feita
+                                .subscribe(
+                                    (item)=>{
+                                        msg = item;
+                                        console.log(" ** " , msg);
+                                    } 
+                                ); // Certifique-se de se inscrever para que a requisição seja feita
                         });
 
                     this.scrollToBottom();
@@ -439,11 +444,11 @@ export class ChatComponent implements OnInit, OnDestroy{
             );
     }
 
-    private getMediaByDialog(msg: any) :any{
+    private getMediaByDialog(msg: any) :Observable<any>{ 
 
-
-        if(msg.url != null && msg.url != ""){
-            return msg.body = msg.url;//messages from IG
+        if(msg.media.url != null && msg.media.url != ""){
+            msg.body = msg.media.url;//messages from IG
+            return of(msg);
         }else{
 
             return this.getMedia(msg.id)
@@ -455,12 +460,10 @@ export class ChatComponent implements OnInit, OnDestroy{
                     }else{
                         msg.body = "/assets/images/naodisponivel.png" 
                     }
+                    return msg; // Retorna msg após modificação
                 })
             );
-        }
- 
-
-
+        } 
     }
 
     sendMessage(channelId:any) {
