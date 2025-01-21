@@ -35,12 +35,14 @@ export class InstagramComponent implements OnDestroy {
   }
 
   private loadCredential() {
-    this.companyService.getStatusInstagram(this.companyId)
+    if(this.companyId != undefined){
+      this.companyService.getStatusInstagram(this.companyId)
       .subscribe(
         (result: any) => {
           this.credential = result;
         }
       );
+    }   
   }
 
   handleMessage(event: MessageEvent) { 
