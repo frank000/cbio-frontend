@@ -320,5 +320,5 @@ getFreePort(){
       this.paramsCompany.controls["porta"].setValue(resp);
     }
   )
-}
+} 
 }

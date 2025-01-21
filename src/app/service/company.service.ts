@@ -52,6 +52,10 @@ export class CompanyService {
         return this._http.get(`${this.url}/v1/company/config-preferences`);
     }
 
+    getStatusInstagram(id:string):Observable<any>{
+        return this._http.get(`${this.url}/v1/company/credential-instagram/${id}`);
+    }
+
     hasCredential():Observable<any>{
         return this._http.get(`${this.url}/v1/company/credential/has`);
     }
