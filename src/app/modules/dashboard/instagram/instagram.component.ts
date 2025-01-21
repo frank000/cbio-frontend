@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from 'src/shared.module';
 import {environment} from "../../../../environments/environment";
 import { AuthService } from 'src/app/service/auth.service';
@@ -15,13 +15,13 @@ import { CompanyService } from 'src/app/service/company.service';
   templateUrl: './instagram.component.html',
   styleUrl: './instagram.component.css'
 })
-export class InstagramComponent implements OnDestroy {
+export class InstagramComponent implements OnDestroy,OnInit {
  
 
 
   authService:AuthService = inject(AuthService);
   companyService:CompanyService = inject(CompanyService);
-  companyId:string;
+  companyId!:string;
   credential:any;
   
   private popupWindow: Window | null = null;
@@ -29,6 +29,9 @@ export class InstagramComponent implements OnDestroy {
   constructor() {
     // Escuta a mensagem do popup
     window.addEventListener('message', this.handleMessage.bind(this));
+ 
+  }
+  ngOnInit(): void {
     this.companyId = this.authService.getObjectUserLogged().companyId;
 
     this.loadCredential();
@@ -46,14 +49,14 @@ export class InstagramComponent implements OnDestroy {
   }
 
   handleMessage(event: MessageEvent) { 
-    
+    this.loadCredential();
     // Verifica se a mensagem veio da URL esperada
     if (environment.urlExternal.toString().includes(event.origin)) {
       if (event.data === 'instagram-login-success') {
         if (this.popupWindow) {
           this.popupWindow.close();
 
-          this.loadCredential();
+       
 
         }
       }
