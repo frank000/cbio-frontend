@@ -19,6 +19,7 @@ export class InstagramComponent implements OnDestroy,OnInit {
  
 
 
+
   authService:AuthService = inject(AuthService);
   companyService:CompanyService = inject(CompanyService);
   companyId!:string;
@@ -48,19 +49,27 @@ export class InstagramComponent implements OnDestroy,OnInit {
     }   
   }
 
-  handleMessage(event: MessageEvent) { 
+  handleMessage(event: MessageEvent) {
+    const allowedOrigins = [
+      'https://bot.rayzatec.com.br',
+      'https://pleasing-elf-instantly.ngrok-free.app',
+      'http://localhost:4200'
+    ];
+
+    console.log("origin", event.origin);
+    
+      // Verificação mais segura da origem
+  if (!allowedOrigins.includes(event.origin)) {
+    console.warn('Mensagem recebida de origem não permitida:', event.origin);
+    return;
+  }
+
+  if (event.data === 'instagram-login-success') {
     this.loadCredential();
-    // Verifica se a mensagem veio da URL esperada
-    if (environment.urlExternal.toString().includes(event.origin)) {
-      if (event.data === 'instagram-login-success') {
-        if (this.popupWindow) {
-          this.popupWindow.close();
-
-       
-
-        }
-      }
+    if (this.popupWindow) {
+      this.popupWindow.close();
     }
+  }
   }
 
   handleInstagramLogin() {
