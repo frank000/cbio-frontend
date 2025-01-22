@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/service/auth.service';
-import { toggleAnimation } from 'src/app/shared/animations';
-import { IconHorizontalDotsComponent } from 'src/app/shared/icon/icon-horizontal-dots';
+import { toggleAnimation } from 'src/app/shared/animations'; 
 import { SharedModule } from 'src/shared.module';
 import { AvatarUtil } from '../../base/avatar-util';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
@@ -18,7 +17,7 @@ import { showMessage } from '../../base/showMessage';
   styleUrl: './profile.component.css',
   animations: [toggleAnimation],
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit{
 
   userLocal:any;
   authService = inject(AuthService);
@@ -38,10 +37,13 @@ export class ProfileComponent {
   };
 
   constructor(){
+
+    
+  }
+  ngOnInit(): void {
     this.userLocal = this.authService.getObjectUserLogged(); 
     this.userLocalPerfil = this.authService.getRole(this.userLocal);
     this.initForm();
-    
   }
 
   initForm(){

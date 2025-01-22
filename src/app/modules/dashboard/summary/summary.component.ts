@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { SummaryService } from 'src/app/service/summary.service';
@@ -12,7 +12,7 @@ import { SharedModule } from 'src/shared.module';
   templateUrl: './summary.component.html',
   styleUrl: './summary.component.css'
 })
-export class SummaryComponent {
+export class SummaryComponent implements OnInit{
   revenueChart: any;
   attendanceByAttendants: any;
   store: any;
@@ -29,13 +29,18 @@ export class SummaryComponent {
         const today = new Date();
         return format(startOfMonth(subMonths(today, minusMonth)), 'yyyy-MM-dd');
     }
-  constructor(public storeData: Store<any>) {
     
-    this.initStore();
-    this.isLoading = false;
+    constructor(public storeData: Store<any>) {
+        
+    
+    }
 
-    this.initChartDataAttendance();
-}
+    ngOnInit(): void {
+        this.initStore();
+        this.isLoading = false;
+    
+        this.initChartDataAttendance();
+    }
 
 
 
