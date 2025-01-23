@@ -8,6 +8,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
     templateUrl: './boxed-signup.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class BoxedSignupComponent {
     store: any;

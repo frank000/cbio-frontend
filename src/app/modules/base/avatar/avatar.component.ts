@@ -3,11 +3,10 @@ import { Component, Input } from '@angular/core';
 import { AvatarUtil } from '../avatar-util';
 
 @Component({
-  selector: 'app-avatar',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './avatar.component.html',
-  styleUrl: './avatar.component.css'
+    selector: 'app-avatar',
+    imports: [CommonModule],
+    templateUrl: './avatar.component.html',
+    styleUrl: './avatar.component.css'
 })
 export class AvatarComponent {
 

@@ -6,11 +6,10 @@ import { MediaService } from 'src/app/service/media.service';
 import { IconModule } from 'src/app/shared/icon/icon.module';
 
 @Component({
-  selector: 'app-view-text-media',
-  standalone: true,
-  imports: [IconModule, CommonModule],
-  templateUrl: './view-text-media.component.html',
-  styleUrl: './view-text-media.component.css'
+    selector: 'app-view-text-media',
+    imports: [IconModule, CommonModule],
+    templateUrl: './view-text-media.component.html',
+    styleUrl: './view-text-media.component.css'
 })
 export class ViewTextMediaComponent {
 

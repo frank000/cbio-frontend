@@ -13,11 +13,10 @@ import { NotificationDTO } from 'src/app/shared/models/notification';
 import { SharedModule } from 'src/shared.module';
 
 @Component({
-  selector: 'app-form-recurso',
-  standalone: true,
-  imports: [CommonModule, SharedModule, BtnSalvaVoltaComponent],
-  templateUrl: './form-recurso.component.html',
-  styleUrl: './form-recurso.component.css'
+    selector: 'app-form-recurso',
+    imports: [CommonModule, SharedModule, BtnSalvaVoltaComponent],
+    templateUrl: './form-recurso.component.html',
+    styleUrl: './form-recurso.component.css'
 })
 export class FormRecursoComponent implements OnInit{
   _fb = inject(FormBuilder);

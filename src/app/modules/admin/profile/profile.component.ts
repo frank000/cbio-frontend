@@ -10,12 +10,11 @@ import { UserService } from 'src/app/service/user.service';
 import { showMessage } from '../../base/showMessage';
 
 @Component({
-  selector: 'app-profile',
-  standalone: true,
-  imports: [CommonModule, SharedModule],
-  templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css',
-  animations: [toggleAnimation],
+    selector: 'app-profile',
+    imports: [CommonModule, SharedModule],
+    templateUrl: './profile.component.html',
+    styleUrl: './profile.component.css',
+    animations: [toggleAnimation]
 })
 export class ProfileComponent implements OnInit{
 

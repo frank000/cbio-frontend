@@ -9,11 +9,10 @@ import { CompanyService } from 'src/app/service/company.service';
 
 
 @Component({
-  selector: 'app-instagram',
-  standalone: true,
-  imports: [CommonModule, SharedModule],
-  templateUrl: './instagram.component.html',
-  styleUrl: './instagram.component.css'
+    selector: 'app-instagram',
+    imports: [CommonModule, SharedModule],
+    templateUrl: './instagram.component.html',
+    styleUrl: './instagram.component.css'
 })
 export class InstagramComponent implements OnDestroy,OnInit {
  

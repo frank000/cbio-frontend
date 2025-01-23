@@ -19,11 +19,10 @@ import { colDef } from '@bhplugin/ng-datatable';
 import { TierService } from 'src/app/service/tier.service';
 
 @Component({
-  selector: 'app-company-form',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterLink, BtnSalvaVoltaComponent, CompanyFormComponent],
-  templateUrl: './company-form.component.html',
-  styleUrl: './company-form.component.css'
+    selector: 'app-company-form',
+    imports: [CommonModule, SharedModule, RouterLink, BtnSalvaVoltaComponent, CompanyFormComponent],
+    templateUrl: './company-form.component.html',
+    styleUrl: './company-form.component.css'
 })
 export class CompanyFormComponent {
   toogleTab(arg: number) {

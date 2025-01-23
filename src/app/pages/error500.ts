@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 @Component({
     templateUrl: './error500.html',
+    standalone: false
 })
 export class Error500Component {
     store: any;

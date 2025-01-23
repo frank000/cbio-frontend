@@ -10,6 +10,7 @@ import { AuthService } from '../service/auth.service';
 @Component({
     templateUrl: './boxed-lockscreen.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class BoxedLockscreenComponent {
     store: any;

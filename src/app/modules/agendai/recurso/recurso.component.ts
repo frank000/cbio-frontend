@@ -12,11 +12,10 @@ import { showMessage } from '../../base/showMessage';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-recurso',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule],
-  templateUrl: './recurso.component.html',
-  styleUrl: './recurso.component.css'
+    selector: 'app-recurso',
+    imports: [CommonModule, SharedModule, RouterModule],
+    templateUrl: './recurso.component.html',
+    styleUrl: './recurso.component.css'
 })
 export class RecursoComponent extends GridAbstract implements OnInit{
  

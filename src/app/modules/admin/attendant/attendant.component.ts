@@ -17,10 +17,9 @@ import { MessageService } from 'src/app/service/message.service';
 
 
 @Component({
-  selector: 'app-attendant',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterLink],
-  templateUrl: './attendant.component.html'
+    selector: 'app-attendant',
+    imports: [CommonModule, SharedModule, RouterLink],
+    templateUrl: './attendant.component.html'
 })
 export class AttendantComponent implements OnInit{
   _AttendantService = inject(AttendantService);

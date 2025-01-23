@@ -13,11 +13,10 @@ import { MessageService } from 'src/app/service/message.service';
 import { Message } from 'src/app/shared/models/message';
 
 @Component({
-  selector: 'app-form-attendant',
-  standalone: true,
-  imports: [BtnSalvaVoltaComponent, CommonModule, SharedModule],
-  templateUrl: './form-attendant.component.html',
-  styleUrl: './form-attendant.component.css'
+    selector: 'app-form-attendant',
+    imports: [BtnSalvaVoltaComponent, CommonModule, SharedModule],
+    templateUrl: './form-attendant.component.html',
+    styleUrl: './form-attendant.component.css'
 })
 export class FormAttendantComponent {
 

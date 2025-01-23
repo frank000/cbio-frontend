@@ -8,6 +8,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
     templateUrl: './contact-us-cover.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class ContactUsCoverComponent {
     store: any;

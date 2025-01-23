@@ -10,11 +10,10 @@ import { ModelDTO } from 'src/app/shared/models/modelDTO';
 import { SharedModule } from 'src/shared.module';
 
 @Component({
-  selector: 'app-form-template',
-  standalone: true,
-  imports: [CommonModule, SharedModule , RouterLink, BtnSalvaVoltaComponent],
-  templateUrl: './form-template.component.html',
-  styleUrl: './form-template.component.css'
+    selector: 'app-form-template',
+    imports: [CommonModule, SharedModule, RouterLink, BtnSalvaVoltaComponent],
+    templateUrl: './form-template.component.html',
+    styleUrl: './form-template.component.css'
 })
 export class FormTemplateComponent {
   matches:any[] | null = [];

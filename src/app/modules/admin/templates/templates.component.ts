@@ -13,11 +13,10 @@ import { showMessage } from '../../base/showMessage';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-templates',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterLink],
-  templateUrl: './templates.component.html',
-  styleUrl: './templates.component.css'
+    selector: 'app-templates',
+    imports: [CommonModule, SharedModule, RouterLink],
+    templateUrl: './templates.component.html',
+    styleUrl: './templates.component.css'
 })
 export class TemplatesComponent extends GridAbstract implements OnInit {
 

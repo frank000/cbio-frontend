@@ -24,7 +24,8 @@ const FILTER_RESOURCE = "filter_resource";
 @Component({
     templateUrl: './calendar.html',
     animations: [toggleAnimation],
-    styleUrl: './calendar.css'
+    styleUrl: './calendar.css',
+    standalone: false
 })
 export class CalendarComponent implements OnInit {
     store: any;

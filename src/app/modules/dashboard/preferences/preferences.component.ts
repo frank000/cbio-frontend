@@ -9,11 +9,10 @@ import { showMessage } from '../../base/showMessage';
 import { TemplateService } from 'src/app/service/template.service';
 
 @Component({
-  selector: 'app-preferences',
-  standalone: true,
-  imports: [CommonModule, SharedModule],
-  templateUrl: './preferences.component.html',
-  styleUrl: './preferences.component.css'
+    selector: 'app-preferences',
+    imports: [CommonModule, SharedModule],
+    templateUrl: './preferences.component.html',
+    styleUrl: './preferences.component.css'
 })
 export class PreferencesComponent implements OnInit{
   router = inject(Router);

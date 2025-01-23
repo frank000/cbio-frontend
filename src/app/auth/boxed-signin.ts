@@ -14,7 +14,8 @@ import { AuthService } from '../service/auth.service';
 @Component({
     templateUrl: './boxed-signin.html',
     animations: [toggleAnimation],
-    styleUrls:["./boxed-signin.css"]
+    styleUrls: ["./boxed-signin.css"],
+    standalone: false
 })
 export class BoxedSigninComponent implements OnInit{
 

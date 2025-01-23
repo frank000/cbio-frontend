@@ -10,6 +10,7 @@ import { text } from 'stream/consumers';
 @Component({
     templateUrl: './contacts.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class ContactsComponent implements OnInit{
     constructor(public fb: FormBuilder) {

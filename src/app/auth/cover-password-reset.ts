@@ -8,6 +8,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
     templateUrl: './cover-password-reset.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class CoverPasswordResetComponent {
     store: any;

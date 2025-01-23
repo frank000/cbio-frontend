@@ -14,11 +14,10 @@ import { CompanyService } from 'src/app/service/company.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-phrase',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule],
-  templateUrl: './phrase.component.html',
-  styleUrl: './phrase.component.css'
+    selector: 'app-phrase',
+    imports: [CommonModule, SharedModule, RouterModule],
+    templateUrl: './phrase.component.html',
+    styleUrl: './phrase.component.css'
 })
 export class PhraseComponent extends GridAbstract{
 
