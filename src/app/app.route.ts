@@ -60,7 +60,7 @@ export const routes: Routes = [
 
             { path: 'dashboard/instagram', component: InstagramComponent, data: { title: 'Instagram' } },
             
-            { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'AGEND.ai' } },
+            { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'Agenda' } },
             { path: 'apps/agendai/recurso', component: RecursoComponent, data: { title: 'Recursos' } },
             { path: 'apps/agendai/recurso/form', component: FormRecursoComponent, data: { title: 'Recursos' } },
             { path: 'apps/agendai/recurso/form/:id', component: FormRecursoComponent, data: { title: 'Recursos' } },

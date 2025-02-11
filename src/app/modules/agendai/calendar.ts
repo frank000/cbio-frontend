@@ -240,6 +240,7 @@ export class CalendarComponent implements OnInit {
             description: [''],
             dairyName:['' ],
             type: ['primary'],
+            appCreated: [false],
             contactId:[null]
         });
         this.paramsConfig = this.fb.group({
@@ -579,8 +580,6 @@ export class CalendarComponent implements OnInit {
         const formattedDateEnd = this.params.value.end + ":00" + offset; // formato ISO com fuso horário
        
         if(this.params.value.name == null || this.params.value.name == ''){
-            console.log(this.myControl.value);
-            
             this.params.controls['name'].setValue(this.myControl.value);
         }
         
@@ -599,6 +598,7 @@ export class CalendarComponent implements OnInit {
             event.name = this.params.value.name;
             event.phone = this.params.value.phone;
             event.email = this.params.value.email;
+            event.appCreated = this.params.value.appCreated;
             event.contactId = this.params.value.contactId;
 
 
@@ -626,6 +626,7 @@ export class CalendarComponent implements OnInit {
                 name: this.params.value.name,
                 phone: this.params.value.phone,
                 email: this.params.value.email,
+                appCreated: this.params.value.appCreated,
                 contactId: this.params.value.contactId
             };
             this.events.push(event);
