@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 
-// dashboard 
+// dashboard
 import { AppLayout } from './layouts/app-layout';
 import { AuthLayout } from './layouts/auth-layout';
-import { AdminComponent } from './modules/admin/admin.component'; 
+import { AdminComponent } from './modules/admin/admin.component';
 import { CompanyFormComponent } from './modules/admin/form/company-form/company-form.component';
 import { ChatComponent } from './modules/apps/chat/chat';
 import { AttendantComponent } from './modules/admin/attendant/attendant.component';
@@ -34,8 +34,8 @@ export const routes: Routes = [
 
             { path: 'admin/config', component: AdminComponent, data: { title: 'Administração' } },
             { path: 'admin/config/form', component: CompanyFormComponent, data: { title: 'Administração' } },
-            { path: 'admin/config/form/:companyid', 
-                component: CompanyFormComponent,  
+            { path: 'admin/config/form/:companyid',
+                component: CompanyFormComponent,
                 data: { title: 'Administração' } },
             { path: 'admin/attendant', component: AttendantComponent, data: { title: 'Atendente' } },
             { path: 'admin/attendant/form', component: FormAttendantComponent, data: { title: 'Atendente' } },
@@ -59,8 +59,8 @@ export const routes: Routes = [
 
 
             { path: 'dashboard/instagram', component: InstagramComponent, data: { title: 'Instagram' } },
-            
-            { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'AGEND.ai' } },
+
+            { path: 'apps/agendai/calendar', component: CalendarComponent, data: { title: 'Agenda' } },
             { path: 'apps/agendai/recurso', component: RecursoComponent, data: { title: 'Recursos' } },
             { path: 'apps/agendai/recurso/form', component: FormRecursoComponent, data: { title: 'Recursos' } },
             { path: 'apps/agendai/recurso/form/:id', component: FormRecursoComponent, data: { title: 'Recursos' } },
@@ -70,7 +70,7 @@ export const routes: Routes = [
             { path: 'admin/profile', component: ProfileComponent, data: { title: 'Perfil de usuário' } }
         ],
     },
-    
+
 
     {
         path: '',

@@ -47,8 +47,8 @@ export class CalendarComponent implements OnInit {
     paramsConfig!: FormGroup;
     minStartDate: any = '';
     minEndDate: any = '';
-    selectedResourceFilter:any; 
-    myControl = new FormControl(''); 
+    selectedResourceFilter:any;
+    myControl = new FormControl('');
     filteredOptions!: Observable<any>;
 
 
@@ -72,7 +72,7 @@ export class CalendarComponent implements OnInit {
         this.initForm();
         this.initStore();
         this.isLoading = false;
-      
+
 
     }
 
@@ -82,7 +82,7 @@ export class CalendarComponent implements OnInit {
         .subscribe(
             (list:any)=>{
                 this.optionsFilter = list;
-        
+
             }
         )
     }
@@ -135,7 +135,7 @@ export class CalendarComponent implements OnInit {
         };
     }
     onDatesSet(arg: any) {
-    
+
         this.rangeDateViewCalendar = arg;
 
         if(this.selectedResourceFilter != null){
@@ -146,22 +146,22 @@ export class CalendarComponent implements OnInit {
         }
 
     }
-    
-    totalContactsSearched:null|number = null; 
-    
+
+    totalContactsSearched:null|number = null;
+
     private _filterContacts(value: string) {
         // Garantir que o valor seja uma string
         const filterValue = value ? value.toLowerCase() : '';
         let query = new HttpParams();
         query = query.append('filter', filterValue);
-      
+
         return this.contactsService.obtemGrid(query)
           .pipe(
             filter(data => !!data),  // Verifica se os dados existem
             map((data) => {
               // Se os dados estiverem presentes, realiza o filtro
               this.totalContactsSearched = data.total;
-      
+
               // Filtra os itens com base no nome
               return data.items.filter((option: any) => {
                 // Garante que 'name' exista e seja uma string
@@ -170,7 +170,7 @@ export class CalendarComponent implements OnInit {
             })
           );
       }
-      
+
 
     ngOnInit() {
         this.getEvents();
@@ -180,7 +180,7 @@ export class CalendarComponent implements OnInit {
         this.companyService.getConfigByCompany()
         .subscribe(
             (resp:any) =>{
-                this.configCompany = resp;       
+                this.configCompany = resp;
                 this.params.patchValue(this.configCompany);
             }
         );
@@ -212,16 +212,16 @@ export class CalendarComponent implements OnInit {
                 switchMap(value => this._filterContacts(value))
             );
     }
-    
+
     selectedContact:any;
 
     changeContacts(option: any){
-        this.selectedContact = option;  
+        this.selectedContact = option;
         this.params.controls['name'].setValue(this.selectedContact.name);
         this.params.controls['phone'].setValue(this.selectedContact.phone);
         this.params.controls['email'].setValue(this.selectedContact.email);
-        this.params.controls['contactId'].setValue(this.selectedContact.id); 
-        
+        this.params.controls['contactId'].setValue(this.selectedContact.id);
+
     }
 
 
@@ -239,21 +239,22 @@ export class CalendarComponent implements OnInit {
             description: [''],
             dairyName:['' ],
             type: ['primary'],
+            appCreated:[false],
             contactId:[null]
         });
         this.paramsConfig = this.fb.group({
             id: null,
             emailCalendar: ['', Validators.required],
-            googleClientId: ['', Validators.required], 
-            googleClientSecret: ['', Validators.required], 
- 
+            googleClientId: ['', Validators.required],
+            googleClientSecret: ['', Validators.required],
+
         });
     }
 
     getEvents() {
         const now = new Date();
-        this.events = []; 
-        
+        this.events = [];
+
         this.calendarOptions.events = this.events;
     }
 
@@ -262,7 +263,7 @@ export class CalendarComponent implements OnInit {
         const str = (month < 10 ? '0' + month : month).toString();
         return str;
     }
-    
+
     modalResource(data: any = null) {
         this.isAddResourceModal.open();
     }
@@ -270,7 +271,7 @@ export class CalendarComponent implements OnInit {
         if(this.configCompany.emailCalendar != null){
             this.googleService.getAuthorize(this.configCompany.emailCalendar)
             .subscribe(
-                (resp:any)=>{ 
+                (resp:any)=>{
                     if(resp.url != null){
                         window.location = resp.url;
                     }
@@ -294,7 +295,7 @@ export class CalendarComponent implements OnInit {
 
                 this.paramsConfig.controls['googleClientId'].setValue(this.configCompany.googleCredential.clientId)
                 this.paramsConfig.controls['googleClientSecret'].setValue(this.configCompany.googleCredential.clientSecret)
- 
+
             }
         );
         this.isAddConfigModal.open();
@@ -309,7 +310,7 @@ export class CalendarComponent implements OnInit {
 
 
         data.googleCredential = credential;
-  
+
         this.companyService.saveConfig(data)
         .subscribe(
             (resp:any)=>{
@@ -319,33 +320,33 @@ export class CalendarComponent implements OnInit {
             }
         )
     }
- 
+
     hoursList!:any[];
     changedDate(event:any){
         console.log(event);
-        console.log(this.dateScheduleList[event]); 
+        console.log(this.dateScheduleList[event]);
         this.hoursList = this.dateScheduleList[event];
     }
     changedHour(event:any){
         console.log(event);
-        console.log(this.dateScheduleList[event]); 
+        console.log(this.dateScheduleList[event]);
         this.hoursList = this.dateScheduleList[event];
         this.params.controls['end'].setValue(event.strEndDateTime);
     }
 
- 
+
       getOrdenedScheduleList(dateScheduleList:any) {
         // Ordena as chaves do objeto convertendo para objetos Date
         const chavesOrdenadas = Object.keys(dateScheduleList).sort((a, b) => {
           // Convertendo as chaves de data para o formato Date
           const dataA:any = new Date(a.split('/').reverse().join('-'));  // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
           const dataB:any = new Date(b.split('/').reverse().join('-'));  // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
-      
+
           return dataA - dataB;  // Compara as datas
         });
         this.dateKeys = chavesOrdenadas;
-      
- 
+
+
         return dateScheduleList;
       }
 
@@ -354,8 +355,8 @@ export class CalendarComponent implements OnInit {
     dateKeys!:string[] ;
     key!:string;
 
-    changeDairyName(event:any){ 
-        
+    changeDairyName(event:any){
+
         this.params.controls['description'].setValue(event.description);
         this.params.controls['title'].setValue(event.title);
 
@@ -364,28 +365,28 @@ export class CalendarComponent implements OnInit {
         .subscribe(
             (scheduleList:any) => {
                 this.dateScheduleList = this.getOrdenedScheduleList(scheduleList) ;
- 
+
                 // eventList.forEach(
                 //     (item:any)=> this.calendarOptions.events.push(item)
                 // );
-                
+
             }
         );
     }
 
     isNewEvent:boolean = false
     editEvent(data: any = null) {
-         
+
         this.params = JSON.parse(JSON.stringify(this.defaultParams));
 
         this.isAddEventModal.open();
         this.initForm();
 
         if (data) {
- 
+
             let obj = JSON.parse(JSON.stringify(data.event));
              console.log(obj);
-             
+
             this.params.setValue({
                 id: obj.id ? obj.id : null,
                 title: obj.title ? obj.title : null,
@@ -405,13 +406,13 @@ export class CalendarComponent implements OnInit {
             this.isNewEvent = true
             this.minEndDate = new Date();
 
- 
-             this.minEndDate = this.dateFormat(obj.start); 
+
+             this.minEndDate = this.dateFormat(obj.start);
 
 
         } else {
             this.minEndDate = new Date();
- 
+
 
 
             this.minStartDate = new Date();
@@ -460,7 +461,7 @@ export class CalendarComponent implements OnInit {
 
             this.googleService.notify(event)
             .subscribe(
-                (resp:any) =>{ 
+                (resp:any) =>{
                     showMessage("Notificação enviada.");
                 }
             );
@@ -470,7 +471,7 @@ export class CalendarComponent implements OnInit {
 
     swalWithBootstrapButtons:any
     deleteEvent(){
- 
+
         this.swalWithBootstrapButtons
         .fire({
             title: 'Tem certeza que deseja excluir o evento?',
@@ -486,19 +487,19 @@ export class CalendarComponent implements OnInit {
             if (result.value) {
                 this.googleService.deleteEvent(this.params.value.id, {          dairyName: this.params.value.dairyName })
                 .subscribe(
-                    (resp:any)=>{ 
+                    (resp:any)=>{
                         this.isAddEventModal.close();
                         this.showMessage("Evento deletado com sucesso.")
                         this.changeFilterResource(null);
-                        
+
                     }
                 );
-            }  
+            }
         });
-    
 
-        
-        
+
+
+
     }
 
     saveEvent() {
@@ -515,14 +516,14 @@ export class CalendarComponent implements OnInit {
             return;
         }
 
-    
+
         if (!this.params.value.phone || !this.params.value.email) {
             let fileds:string[] = [];
-           
+
             if(!this.params.value.phone){
                 fileds.push("celular");
             }
-           
+
             if(!this.params.value.email){
                 fileds.push("e-mail");
             }
@@ -548,9 +549,9 @@ export class CalendarComponent implements OnInit {
             .then((result:any) => {
                 if(result.isConfirmed){
                     this.saveEventProcess();
-                } 
-                
-               
+                }
+
+
             });
         }else{
             this.saveEventProcess();
@@ -558,10 +559,10 @@ export class CalendarComponent implements OnInit {
 
 
 
-        
+
     }
-          
- 
+
+
 
     private saveEventProcess() {
         const dateStart = new Date(this.params.value.start); // exemplo de data
@@ -576,13 +577,13 @@ export class CalendarComponent implements OnInit {
 
 
         const formattedDateEnd = this.params.value.end + ":00" + offset; // formato ISO com fuso horário
-       
+
         if(this.params.value.name == null || this.params.value.name == ''){
             console.log(this.myControl.value);
-            
+
             this.params.controls['name'].setValue(this.myControl.value);
         }
-        
+
 
         if (this.params.value.id) {
             //update event
@@ -598,6 +599,7 @@ export class CalendarComponent implements OnInit {
             event.name = this.params.value.name;
             event.phone = this.params.value.phone;
             event.email = this.params.value.email;
+            event.appCreated = this.params.value.appCreated;
             event.contactId = this.params.value.contactId;
 
 
@@ -625,6 +627,7 @@ export class CalendarComponent implements OnInit {
                 name: this.params.value.name,
                 phone: this.params.value.phone,
                 email: this.params.value.email,
+                appCreated: this.params.value.appCreated,
                 contactId: this.params.value.contactId
             };
             this.events.push(event);
@@ -657,13 +660,13 @@ export class CalendarComponent implements OnInit {
     }
 
     changeFilterResource(event:any[] | null){
-        if(event!= null){            
+        if(event!= null){
           this.selectedResourceFilter = event;
           localStorage.setItem(FILTER_RESOURCE , this.selectedResourceFilter);
         }else{
             localStorage.removeItem(FILTER_RESOURCE)
         }
- 
+
         this.calendarOptions.events = [];
         this.selectedResourceFilter.forEach(
             (item:any)=>{
@@ -674,13 +677,13 @@ export class CalendarComponent implements OnInit {
                         eventList.forEach(
                             (item:any)=> this.calendarOptions.events.push(item)
                         );
-                        
+
                     }
                 );
             }
         )
- 
-        
+
+
     }
 
 
@@ -692,9 +695,9 @@ export class CalendarComponent implements OnInit {
   })
   export class Service {
     constructor(private http: HttpClient) { }
-  
+
     opts = [];
-  
+
     getData() {
       return of([{ companyName: "minus", cid: "524023240" },
       { companyName: "plus sim", cid: "524023240" }])

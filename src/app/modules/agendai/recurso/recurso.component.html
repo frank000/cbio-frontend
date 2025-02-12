@@ -1,7 +1,7 @@
 <div>
     <ul class="flex space-x-2 rtl:space-x-reverse">
         <li>
-            <a href="javascript:;" class="text-primary hover:underline">Agend.AI</a>
+            <a href="javascript:;" class="text-primary hover:underline">Agenda</a>
         </li>
         <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
             <span>Recurso</span>
@@ -13,12 +13,12 @@
         <div class="container mx-auto px-4">
             <div>
                 <form [formGroup]="paramsFiltro" class="text-sm mb-5" (submit)="search()" ngNativeValidate>
-                
+
                     <div class="p-8 mb-4  rounded-lg border-2 border-slate-200  gap-4">
                         <div class="mb-5">
                             <label for="filter">Recurso:</label>
                             <input id="filter" type="text"
-                             name="filter" 
+                             name="filter"
                              class="form-input"
                               placeholder="Busque pelos nome.." formControlName="filter"   />
                             <div class="mt-2 text-danger" id="titleErr"></div>
@@ -28,13 +28,13 @@
                             <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Buscar</button>
                         </div>
                     </div>
-                    <div class="mt-8 flex items-center justify-end"> 
+                    <div class="mt-8 flex items-center justify-end">
                         <button type="button" class="btn btn-outline"  [routerLink]="['/apps/agendai/calendar']" >Voltar</button>
                         <button type="button" [routerLink]="['/apps/agendai/recurso/form']"   class="btn btn-primary ltr:ml-4 rtl:mr-4">Adicionar</button>
                     </div>
-    
-    
-    
+
+
+
                 </form>
                 <ng-datatable
                 skin="whitespace-nowrap bh-table-hover"
@@ -44,7 +44,7 @@
                 [isServerMode]="true"
                 (changeServer)="changeServer($event)"
                 >
-                
+
                 <ng-template slot="id" let-value="data">
                     <strong class="text-info">#{{ value.id }}</strong>
                 </ng-template>
@@ -55,14 +55,14 @@
                         </button>
                         <button type="button" class="btn btn-sm btn-outline-danger"  (click)="deleteRow(value)" >
                             <icon-trash/>
-                        </button>                  
-                    </div>                
+                        </button>
+                    </div>
                 </ng-template>
                 <ng-template slot="status" let-value="data">
 
                     <span *ngIf="value.status == 'SYNC'" class="badge bg-success">configurado</span>
 
- 
+
                     <span *ngIf="value.status == 'DESYNC'" class="badge bg-danger">desconfigurado</span>
 
                 </ng-template>
@@ -71,7 +71,7 @@
 
             </ng-datatable>
             </div>
-           
+
         </div>
 
     </div>
