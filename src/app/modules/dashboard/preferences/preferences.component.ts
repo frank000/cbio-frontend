@@ -7,11 +7,12 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CompanyService } from 'src/app/service/company.service';
 import { showMessage } from '../../base/showMessage';
 import { TemplateService } from 'src/app/service/template.service';
+import { WhatsappLoginComponent } from '../../base/whatsapp-login/whatsapp-login.component';
 
 @Component({
   selector: 'app-preferences',
   standalone: true,
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, SharedModule, WhatsappLoginComponent],
   templateUrl: './preferences.component.html',
   styleUrl: './preferences.component.css'
 })
@@ -28,10 +29,10 @@ export class PreferencesComponent implements OnInit{
   autoSend = false;
   optionsModel:any[] = [];
 
-  ngOnInit(): void { 
-    
+  ngOnInit(): void {
+
     this.initForm();
-    
+
     this._templateService.getAllSelection()
     .subscribe(
       (resp:any)=>{
@@ -51,12 +52,12 @@ export class PreferencesComponent implements OnInit{
 
   initForm(){
     this.params = this._fb.group({
-      id:[null], 
-      companyId:[null], 
-      model:[null], 
+      id:[null],
+      companyId:[null],
+      model:[null],
       keepSameAttendant: [false, Validators.required],
       autoSend: [false, Validators.required],
-      rag:[null], 
+      rag:[null],
     });
   }
 
@@ -64,12 +65,12 @@ export class PreferencesComponent implements OnInit{
   isSubmitForm = false;
   submit(){
     console.log(this.params.value.model);
-    
+
     this.isSubmitForm = true;
-    if (this.params.valid && (this.params.value.autoSend == false || this.params.value.autoSend == true && this.params.value.model != null )) { 
+    if (this.params.valid && (this.params.value.autoSend == false || this.params.value.autoSend == true && this.params.value.model != null )) {
       let data = this.params.getRawValue();
       console.log(data);
-      
+
       const isArrayRag = data.rag instanceof Array;
       if(!isArrayRag){
         data.rag = [this.params.value.rag];
@@ -77,11 +78,11 @@ export class PreferencesComponent implements OnInit{
 
       this.companyService.updateConfig(data)
       .subscribe(()=>{
-        showMessage("Salvo com sucesso."); 
+        showMessage("Salvo com sucesso.");
       });
-      
+
     }else if(this.params.value.autoSend == true && this.params.value.model == null ){
       showMessage("Informe qual modelo do cartão de visitas.", 'warning');
     }
-  }  
+  }
 }
