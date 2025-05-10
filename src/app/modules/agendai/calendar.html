@@ -3,8 +3,8 @@
         <div class="mb-5">
             <div class="mb-4 flex flex-col items-center justify-center sm:flex-row sm:justify-between">
                 <div class="mb-4 sm:mb-0"  style="width: 45%;">
-                    <div class="text-center text-lg font-semibold ltr:sm:text-left rtl:sm:text-right">Agend.AI</div>
-                    <div class="mt-2 flex flex-wrap items-center justify-center sm:justify-start gap-2" 
+                    <div class="text-center text-lg font-semibold ltr:sm:text-left rtl:sm:text-right">Agenga</div>
+                    <div class="mt-2 flex flex-wrap items-center justify-center sm:justify-start gap-2"
                     style="width: 100%;" >
                         <label>Filtro por recursos:</label>
                         <div style="width: 60%;">
@@ -17,31 +17,31 @@
                             bindValue="dairyName"
                             [items]="optionsFilter"
                             [searchable]="false"
-                            [clearable]="false" 
+                            [clearable]="false"
                             (change)="changeFilterResource($event)"
                             ></ng-select>
                         </div>
- 
-                 
+
+
                     </div>
                 </div>
 
                 <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-6 md:gap-1">
                     <!-- Botão de Configurações -->
-                   
+
                         <button type="button" class="btn btn-primary w-full md:w-auto" (click)="editConfig()">
                             <icon-settings class="ltr:mr-2 rtl:ml-2" />
                             Configurações
                         </button>
-                 
-                
+
+
                     <!-- Botão de Sincronização -->
-                  
+
                         <button type="button" class="btn w-full md:w-auto" (click)="sync()" aria-label="Sincronizar">
                             <icon-play-circle class="ltr:mr-2 rtl:ml-2" />
                             Sincronizar
                         </button>
-            
+
                     <!-- Display de Email Configurado -->
                     <div class="p-2 rounded-lg border-2 border-slate-200 w-full md:w-auto">
                         <label>Email:</label>
@@ -52,7 +52,7 @@
                             não configurado
                         </strong>
                     </div>
-                
+
                     <!-- Status de Sincronização -->
                     <div class="p-2 rounded-lg border-2 border-slate-200 w-full md:w-auto" style="width: 9rem">
                         <div class="flex items-center justify-between">
@@ -61,20 +61,20 @@
                         </div>
                         <span>{{isSynced ? "ok" : "favor sincronizar"}}</span>
                     </div>
-                
+
                     <!-- Botão de Recursos -->
                     <button type="button" class="btn btn-primary w-full md:w-auto" routerLink="/apps/agendai/recurso">
                         <icon-tag class="ltr:mr-2 rtl:ml-2" />
                         Recursos
                     </button>
-                
+
                     <!-- Botão Criar Evento -->
                     <button type="button" class="btn btn-primary w-full md:w-auto" (click)="editEvent()">
                         <icon-plus class="ltr:mr-2 rtl:ml-2" />
                         Evento
                     </button>
                 </div>
-                
+
 
             </div>
             <div class="calendar-wrapper">
@@ -102,21 +102,21 @@
                     <label>Recurso: *</label>
                     <div class="mt-3">
                             <div style="width: 50%;">
-                                <ng-select 
+                                <ng-select
                                 style="width: 100%;"
                                 id="filter"
                                 name="dairyName"
                                 bindLabel="dairyName"
                                 [multiple]="false"
-                                bindValue="dairyName" 
+                                bindValue="dairyName"
                                 [items]="optionsFilter"
                                 [searchable]="false"
-                                [clearable]="false"  
+                                [clearable]="false"
                                 formControlName="dairyName"
                                 (change)="changeDairyName($event)"
                                 required
                                 ></ng-select>
-                   
+
 
                             </div>
                     </div>
@@ -136,7 +136,7 @@
                               </mat-option>
                             </mat-autocomplete>
                           </mat-form-field>
-                    </div>         
+                    </div>
                     <div class="mb-5">
                         <label for="email">Email :</label>
                         <input id="email" type="text" name="email" class="form-input" placeholder="Entre com email" formControlName="email" />
@@ -144,7 +144,7 @@
                     </div>
                     <div class="mb-5">
                         <label for="phone">Celular/whatsapp :</label>
-                        <input id="phone" type="text" name="phone" class="form-input" placeholder="Entre com whatsapp" 
+                        <input id="phone" type="text" name="phone" class="form-input" placeholder="Entre com whatsapp"
                         formControlName="phone" [textMask]="{mask: mask12}"  />
                         <div class="mt-2 text-danger" id="phoneErr"></div>
                     </div>
@@ -160,7 +160,7 @@
                     <ng-select
                         id="gridDate"
                         name="gridDate"
-      
+
                         [items]="dateKeys"
                         [searchable]="true"
                         [clearable]="false"
@@ -191,10 +191,10 @@
                     <div class="mt-2 text-danger" id="startDateErr"></div>
                 </div>
 
-    
+
                 <div class="mb-5" *ngIf="params.value.id != null">
                     <label for="gridDateHourStart">De: </label>
-                    <input id="gridDateHourStart" 
+                    <input id="gridDateHourStart"
                     type="text"
                     name="start"
                     class="form-input"
@@ -206,7 +206,7 @@
                 </div>
                 <div class="mb-5" *ngIf="params.value.id != null">
                     <label for="gridDateHourEnd">Até: </label>
-                    <input id="gridDateHourEnd" 
+                    <input id="gridDateHourEnd"
                     type="text"
                     name="end"
                     class="form-input"
@@ -227,7 +227,7 @@
                         formControlName="description"
                     ></textarea>
                 </div>
- 
+
                 <div class="mt-8 flex items-center justify-end">
                     <button type="button" class="btn btn-success" *ngIf="params.value.id" (click)="notifyEvent()"><icon-send /></button>
                     <button type="button" class="btn btn-danger  ltr:ml-4 rtl:mr-4" *ngIf="isNewEvent" (click)="deleteEvent()"><icon-trash /></button>
@@ -235,41 +235,41 @@
                     <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">Salvar</button>
                 </div>
             </form>
-          
 
-   
+
+
         </ng-template>
     </ngx-custom-modal>
- 
+
     <!-- add Config modal -->
     <ngx-custom-modal #isAddConfigModal class="no-footer">
         <ng-template #modalHeader>
             <div class="!font-medium">Configurações</div>
         </ng-template>
-        <ng-template #modalBody> 
+        <ng-template #modalBody>
             <form [formGroup]="paramsConfig" class="text-sm" (submit)="saveConfig()" ngNativeValidate>
                 <div class="mb-5">
                     <label for="emailCalendar">Email Google :</label>
-                    <input id="emailCalendar" type="text" 
+                    <input id="emailCalendar" type="text"
                     name="emailCalendar" class="form-input"
-                    placeholder="Entre com seu email google" 
+                    placeholder="Entre com seu email google"
                     formControlName="emailCalendar" required />
                     <div class="mt-2 text-danger" id="titleErr"></div>
                 </div>
- 
+
                 <div class="mb-5">
                     <label for="clientId">Cliente id :</label>
-                    <input id="clientId" type="text" 
+                    <input id="clientId" type="text"
                     name="clientId" class="form-input"
-                    placeholder="Entre com seu client id" 
+                    placeholder="Entre com seu client id"
                     formControlName="googleClientId" required />
                     <div class="mt-2 text-danger" id="titleErr"></div>
                 </div>
                 <div class="mb-5">
                     <label for="clientSecret">Cliente secret :</label>
-                    <input id="clientSecret" type="text" 
+                    <input id="clientSecret" type="text"
                     name="clientSecret" class="form-input"
-                    placeholder="Entre com seu client secret" 
+                    placeholder="Entre com seu client secret"
                     formControlName="googleClientSecret" required />
                     <div class="mt-2 text-danger" id="titleErr"></div>
                 </div>
