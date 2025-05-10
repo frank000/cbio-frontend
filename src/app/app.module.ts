@@ -51,6 +51,7 @@ import { CalendarComponent } from './modules/agendai/calendar';
 import { ContactsComponent } from './modules/apps/contacts/contacts';
 import { BtnSalvaVoltaComponent } from "./modules/common/btn-salva-volta/btn-salva-volta.component";
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { EmojiPickerModule } from '@chit-chat/ngx-emoji-picker/lib/providers';
 
 @NgModule({
     imports: [
@@ -58,6 +59,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
+    EmojiPickerModule,
     FormsModule,
     TranslateModule.forRoot({
         loader: {

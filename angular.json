@@ -24,6 +24,7 @@
                         "tsConfig": "tsconfig.app.json",
                         "assets": ["src/assets", "src/demo-prepare.html"],
                         "styles": [
+                            "node_modules/@chit-chat/ngx-emoji-picker/styles/core.css",
                           "@angular/material/prebuilt-themes/azure-blue.css",
                           "src/assets/css/app.css"
                         ],

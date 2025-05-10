@@ -42,9 +42,10 @@ import { MatInputModule } from '@angular/material/input';
 
 // input mask
 import { TextMaskModule } from '@matheo/text-mask';
+import { EmojiPickerModule } from '@chit-chat/ngx-emoji-picker/lib/providers';
 
 @NgModule({
-    imports: [CommonModule,MatFormFieldModule,     MatInputModule, MatAutocompleteModule, TextMaskModule, FlatpickrModule.forRoot(), FullCalendarModule,NgApexchartsModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
+    imports: [CommonModule,MatFormFieldModule,      EmojiPickerModule,   MatInputModule, MatAutocompleteModule, TextMaskModule, FlatpickrModule.forRoot(), FullCalendarModule,NgApexchartsModule, NgxCustomModalComponent, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule.forChild(), DataTableModule, NgScrollbarModule, MenuModule, IconModule, NgSelectModule],
     declarations: [],
     exports: [
         // modules

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, inject, model } from '@angular/core';
 import { toggleAnimation } from 'src/app/shared/animations';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { Store } from '@ngrx/store';
@@ -62,7 +62,11 @@ export class ChatComponent implements OnInit, OnDestroy{
 
     bindScreen:number = 1;    
     iaTipText!:string;
-    
+    inputValue = model<string>('');
+
+    handleEmojiSelected = (evt: any) => {
+        this.inputValue.update((previous) => (previous += evt.emoji.value));
+    };
     constructor(public storeData: Store<any>) {
         this.userLocal = this.authService.getObjectUserLogged();
 

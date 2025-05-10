@@ -5,6 +5,6 @@
 export const environment = {
     production: false,
     urlBackend:"http://localhost:8081",
-    urlExternal:"https://pleasing-elf-instantly.ngrok-free.app"
+    urlExternal:"http://localhost:8081"
 
 };

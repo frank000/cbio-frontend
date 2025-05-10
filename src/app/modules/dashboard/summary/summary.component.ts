@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { SummaryService } from 'src/app/service/summary.service';
@@ -34,7 +34,11 @@ export class SummaryComponent implements OnInit{
         
     
     }
+    inputValue = model<string>('');
 
+    handleEmojiSelected = (evt: any) => {
+        this.inputValue.update((previous) => (previous += evt.emoji.value));
+    };
     ngOnInit(): void {
         this.initStore();
         this.isLoading = false;
