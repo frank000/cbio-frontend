@@ -6,11 +6,10 @@ import { SummaryService } from 'src/app/service/summary.service';
 import { SharedModule } from 'src/shared.module';
 
 @Component({
-  selector: 'app-summary',
-  standalone: true,
-  imports: [CommonModule, SharedModule],
-  templateUrl: './summary.component.html',
-  styleUrl: './summary.component.css'
+    selector: 'app-summary',
+    imports: [CommonModule, SharedModule],
+    templateUrl: './summary.component.html',
+    styleUrl: './summary.component.css'
 })
 export class SummaryComponent implements OnInit{
   revenueChart: any;

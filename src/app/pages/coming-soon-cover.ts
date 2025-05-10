@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 @Component({
     templateUrl: './coming-soon-cover.html',
+    standalone: false
 })
 export class ComingSoonCoverComponent {
     constructor(public router: Router) {}

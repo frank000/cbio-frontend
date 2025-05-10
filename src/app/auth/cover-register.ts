@@ -8,6 +8,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
     templateUrl: './cover-register.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class CoverRegisterComponent {
     store: any;

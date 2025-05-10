@@ -8,6 +8,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
     templateUrl: './boxed-password-reset.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class BoxedPasswordResetComponent {
     store: any;

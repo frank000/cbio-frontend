@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 @Component({
     templateUrl: './error404.html',
+    standalone: false
 })
 export class Error404Component {
     store: any;

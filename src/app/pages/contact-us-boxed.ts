@@ -8,6 +8,7 @@ import { AppService } from 'src/app/service/app.service';
 @Component({
     templateUrl: './contact-us-boxed.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class ContactUsBoxedComponent {
     store: any;

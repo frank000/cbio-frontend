@@ -4,6 +4,7 @@ import { AuthService } from './service/auth.service';
 
 @Component({
     templateUrl: './index.html',
+    standalone: false
 })
 export class IndexComponent implements OnInit{
 

@@ -9,6 +9,7 @@ import { Component, Input, ViewChild, ViewContainerRef } from '@angular/core';
 
         </ng-template>
     `,
+    standalone: false
 })
 export class IconRayzaIa {
     @Input() class: any = '';

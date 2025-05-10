@@ -24,7 +24,8 @@ const FILTER_RESOURCE = "filter_resource";
 @Component({
     templateUrl: './calendar.html',
     animations: [toggleAnimation],
-    styleUrl: './calendar.css'
+    styleUrl: './calendar.css',
+    standalone: false
 })
 export class CalendarComponent implements OnInit {
     store: any;
@@ -239,7 +240,9 @@ export class CalendarComponent implements OnInit {
             description: [''],
             dairyName:['' ],
             type: ['primary'],
+ 
             appCreated:[false],
+ 
             contactId:[null]
         });
         this.paramsConfig = this.fb.group({
@@ -579,8 +582,9 @@ export class CalendarComponent implements OnInit {
         const formattedDateEnd = this.params.value.end + ":00" + offset; // formato ISO com fuso horário
 
         if(this.params.value.name == null || this.params.value.name == ''){
+ 
             console.log(this.myControl.value);
-
+ 
             this.params.controls['name'].setValue(this.myControl.value);
         }
 

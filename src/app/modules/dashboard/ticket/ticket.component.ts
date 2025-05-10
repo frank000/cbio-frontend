@@ -13,10 +13,9 @@ import Swal from 'sweetalert2';
 import { showMessage } from '../../base/showMessage';
 
 @Component({
-  selector: 'app-ticket',
-  standalone: true,
-  imports: [CommonModule, SharedModule, RouterLink],
-  templateUrl: './ticket.component.html'
+    selector: 'app-ticket',
+    imports: [CommonModule, SharedModule, RouterLink],
+    templateUrl: './ticket.component.html'
 })
 export class TicketComponent  implements OnInit{
 

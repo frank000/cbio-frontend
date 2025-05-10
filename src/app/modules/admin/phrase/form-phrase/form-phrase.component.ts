@@ -9,11 +9,10 @@ import { CrudInterface } from 'src/app/shared/models/crud.interface';
 import { SharedModule } from 'src/shared.module';
 
 @Component({
-  selector: 'app-form-phrase',
-  standalone: true,
-  imports: [BtnSalvaVoltaComponent, CommonModule, SharedModule],
-  templateUrl: './form-phrase.component.html',
-  styleUrl: './form-phrase.component.css'
+    selector: 'app-form-phrase',
+    imports: [BtnSalvaVoltaComponent, CommonModule, SharedModule],
+    templateUrl: './form-phrase.component.html',
+    styleUrl: './form-phrase.component.css'
 })
 export class FormPhraseComponent {
   _fb = inject(FormBuilder);

@@ -10,6 +10,7 @@ import { AuthService } from '../service/auth.service';
     selector: 'sidebar',
     templateUrl: './sidebar.html',
     animations: [slideDownUp],
+    standalone: false
 })
 export class SidebarComponent {
     active = false;

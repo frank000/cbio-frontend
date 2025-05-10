@@ -9,6 +9,7 @@ import { MessageService } from './service/message.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent implements OnInit {
     swalWithBootstrapButtons:any;

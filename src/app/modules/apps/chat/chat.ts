@@ -27,7 +27,8 @@ import { IaService } from 'src/app/service/ia.service';
 @Component({
     templateUrl: './chat.html',
     styleUrl: 'chat.css',
-    animations: [toggleAnimation]
+    animations: [toggleAnimation],
+    standalone: false
 })
 export class ChatComponent implements OnInit, OnDestroy{
 

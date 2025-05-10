@@ -15,11 +15,10 @@ import Swal from 'sweetalert2';
 const CLOSED_TICKET = "FECHADO";
 const IN_PROGRESS = "EM_ATENDIMENTO";
 @Component({
-  selector: 'app-form-ticket',
-  standalone: true,
-  imports: [BtnSalvaVoltaComponent, CommonModule, SharedModule, ItemTimelineComponent],
-  templateUrl: './form-ticket.component.html',
-  styleUrl: './form-ticket.component.css'
+    selector: 'app-form-ticket',
+    imports: [BtnSalvaVoltaComponent, CommonModule, SharedModule, ItemTimelineComponent],
+    templateUrl: './form-ticket.component.html',
+    styleUrl: './form-ticket.component.css'
 })
 export class FormTicketComponent {
 

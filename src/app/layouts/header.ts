@@ -16,6 +16,7 @@ import { WebSocketService } from '../modules/base/websocket/websocket-service.se
     selector: 'header',
     templateUrl: './header.html',
     animations: [toggleAnimation],
+    standalone: false
 })
 export class HeaderComponent {
     store: any;
