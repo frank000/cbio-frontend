@@ -7,11 +7,12 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CompanyService } from 'src/app/service/company.service';
 import { showMessage } from '../../base/showMessage';
 import { TemplateService } from 'src/app/service/template.service';
+import { WhatsappLoginComponent } from '../../base/whatsapp-login/whatsapp-login.component';
 
 @Component({
   selector: 'app-preferences',
   standalone: true,
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, SharedModule, WhatsappLoginComponent],
   templateUrl: './preferences.component.html',
   styleUrl: './preferences.component.css'
 })
