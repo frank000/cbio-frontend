@@ -84,7 +84,20 @@ export class InstagramComponent implements OnDestroy,OnInit {
     
     if( this.companyId != null &&  this.companyId != ""){
       this.popupWindow = window.open(
-        `https://www.instagram.com/oauth/authorize?enable_fb_login=0&force_authentication=1&client_id=596197303054369&redirect_uri=${url}/v1/public/meta/webhook/instagram/callback&response_type=code&state=${ this.companyId}&scope=instagram_business_basic%2Cinstagram_business_manage_messages%2Cinstagram_business_manage_comments%2Cinstagram_business_content_publish`,
+        `https://www.instagram.com/oauth/authorize?` +
+        `enable_fb_login=0` +
+        `&force_authentication=1` +
+        `&client_id=596197303054369` +
+        `&redirect_uri=${encodeURIComponent(url + '/v1/public/meta/webhook/instagram/callback')}` +
+        `&response_type=code` +
+        `&state=${this.companyId}` +
+        `&scope=` + encodeURIComponent([
+          'instagram_business_basic',                   // Substitui instagram_business_basic (nome atualizado)
+          'instagram_business_content_publish',         // Permite enviar/receber DMs
+          'instagram_business_manage_messages',         // Gerenciar comentários
+          'instagram_business_manage_comments',
+                  // Publicar conteúdo
+        ].join(',')),
         'Instagram Login',
         `width=${width},height=${height},left=${left},top=${top},popup=yes,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes`
       );

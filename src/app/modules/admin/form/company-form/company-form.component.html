@@ -252,7 +252,7 @@
         
                                             </div>
                                             <div [ngClass]="isSubmitFormConfig ? paramsConfig.controls['cliente'].errors ? 'has-error' : 'has-success' : ''">
-                                                <label for="gridNomeClient">Nome de Client **</label>
+                                                <label for="gridNomeClient">Nome de Cliente(Telegram) ou Telefone (whatsapp)</label>
                                                 <input
                                                     formControlName="cliente"
                                                     id="gridNomeClient"
@@ -262,7 +262,7 @@
                                             </div>
                                         </div>
                                         <div [ngClass]="isSubmitFormConfig ? paramsConfig.controls['apiKey'].errors ? 'has-error' : 'has-success' : ''">
-                                            <label for="gridApiKey">Api Key</label>
+                                            <label for="gridApiKey">Api Key ou Token(whatsapp)</label>
                                             <input
                                                 formControlName="apiKey"
                                                 id="gridApiKey"
