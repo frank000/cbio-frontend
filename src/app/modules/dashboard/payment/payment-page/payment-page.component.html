@@ -1,0 +1,89 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Painel</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Pagamento</span>
+        </li>
+    </ul>
+    <div class="panel mt-5 ">
+        <div class="mb-5">
+            <div class="grid grid-cols-1 ">
+
+                <div class="p-8 mt-8 rounded-lg border-2 border-slate-200">
+
+
+
+
+                    <div class="pricing-container">
+                        <!-- Basic Plan -->
+                        <div class="pricing-plan">
+                            <div class="plan-content">
+                                <div class="plan-name">BASIC</div>
+                                <div class="plan-price">R$ 129,00</div>
+                                <ul class="plan-features">
+                                    
+                                    <li>5 Atendentes</li>
+                                    <li>Integração Whatsapp e Instagram</li>
+                                    <li>Suporte por Email</li>
+                                    <li>Atualizações Mensais</li>
+                                </ul>
+                            </div>
+                            <div class="button-wrapper">
+                           <button (click)="subscribe()"
+                           class="select-button" data-plan="BASIC" data-plan-id="plbasic">Escolher Plano</button>
+                            </div>
+                        </div>
+                
+                        <!-- Intermediate Plan -->
+                        <div class="pricing-plan intermediate">
+                            <div class="popular-badge">POPULAR</div>
+                            <div class="plan-content">
+                                <div class="plan-name">INTERMEDIATE</div>
+                                <div class="plan-price">R$ 179,90</div>
+                                <ul class="plan-features">
+                                    <li>12 Atendentes<li>
+                                    <li>Integração Whatsapp-Instagram-Telegram-Facebook</li>                    
+                                    <li>Atualizações Semanais</li>  
+                                    <li>Integração e customização de API's</li>
+                                </ul>
+                            </div>
+                            <div class="button-wrapper">
+                                   <button 
+                                   (click)="subscribe()"
+                                   class="select-button" data-plan="INTERMEDIATE" data-plan-id="plintermediate">Escolher Plano</button>
+                            </div>
+                        </div>
+                
+                        <!-- Master Plan -->
+                        <div class="pricing-plan">
+                            <div class="plan-content">
+                                <div class="plan-name">MASTER</div>
+                                <div class="plan-price">R$ 229,90</div>
+                                <ul class="plan-features">
+                                    <li>Atendentes Ilimitados</li>
+                                    <li>Integração Whatsapp-Instagram-Telegram-Facebook</li>                    
+                                    <li>Suporte Prioritário</li>
+                                    <li>Suporte 24/7</li>  
+                                    <li>Integração e customização de API's</li>
+                                </ul>
+                            </div>
+                            <div class="button-wrapper">
+                                            <button class="select-button" data-plan="MASTER" data-plan-id="plmaster">Escolher Plano</button>
+                            </div>
+                        </div>
+                    </div>
+               
+
+
+
+ 
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

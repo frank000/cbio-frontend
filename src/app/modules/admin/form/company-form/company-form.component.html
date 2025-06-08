@@ -199,6 +199,20 @@
                         <div class="p-8 mb-8 mt-8 rounded-lg border-2 border-slate-200">
                             <form class="space-y-5" [formGroup]="paramsUser" (ngSubmit)="submitUser()">
 
+
+                                <div
+                                    [ngClass]="isSubmitFormUser ? paramsUser.controls['name'].errors ? 'has-error' : 'has-success' : ''">
+                                    <label for="gridname">Nome Completo</label>
+                                    <input
+                                        id="gridname"
+                                        type="text"
+                                        formControlName="name"
+                                        placeholder="Informe Nome completo"
+                                        class="form-input"/>
+                                        <!-- [attr.readonly]="this.id != undefined"
+                                        /> -->
+                                </div>
+
                                 <div
                                     [ngClass]="isSubmitFormUser ? paramsUser.controls['email'].errors ? 'has-error' : 'has-success' : ''">
                                     <label for="gridUsername">Username</label>

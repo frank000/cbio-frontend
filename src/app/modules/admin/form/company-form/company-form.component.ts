@@ -128,6 +128,7 @@ export class CompanyFormComponent {
     this.paramsUser = this._fb.group({
         id: [undefined],
         email: ['', Validators.compose([Validators.required, Validators.email])],
+        name: ['', Validators.required], 
         password: ['', Validators.required], 
     });
     this.paramsCompany = this._fb.group({

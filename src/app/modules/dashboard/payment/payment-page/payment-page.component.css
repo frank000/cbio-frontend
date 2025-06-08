@@ -1,0 +1,189 @@
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.pricing-plan {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    min-height: 600px;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eaeaea;
+}
+
+.pricing-plan:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plan-content {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.plan-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.plan-price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1a365d;
+    margin: 1.5rem 0;
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    color: #4a5568;
+    text-align: left;
+}
+
+.plan-features li {
+    margin: 0.8rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.plan-features li::before {
+    content: "✓";
+    color: #48bb78;
+    position: absolute;
+    left: 0;
+}
+
+.button-wrapper {
+    margin-top: auto;
+    padding-top: 2rem;
+}
+
+.select-button {
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.select-button:hover {
+    background: #3182ce;
+}
+
+.intermediate {
+    background: #ebf8ff;
+    border: 2px solid #4299e1;
+    position: relative;
+    overflow: hidden;
+}
+
+.popular-badge {
+    position: absolute;
+    top: 1rem;
+    right: -2rem;
+    background: #4299e1;
+    color: white;
+    padding: 0.5rem 3rem;
+    transform: rotate(45deg);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Novo estilo para o formulário */
+.form-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-container.active {
+    display: block;
+}
+
+.form-header {
+    font-size: 1.5rem;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #eaeaea;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #eaeaea;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #4299e1;
+}
+
+.advance-button {
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.advance-button:hover {
+    background: #38a169;
+}
+
+@media (max-width: 768px) {
+    .pricing-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .pricing-plan {
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 2rem;
+        min-height: auto;
+    }
+}

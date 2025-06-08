@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { showMessage } from './modules/base/showMessage';
 import { MessageService } from './service/message.service';
+import { AppService } from './service/app.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private messageService: MessageService,
         private titleService: Title,
+        private appSetting: AppService
     ) {
         this.router.events
             .pipe(
@@ -42,7 +44,7 @@ export class AppComponent implements OnInit {
                 }),
             )
             .subscribe();
-                  
+            this.appSetting.toggleLanguage({ code: 'pt', name: 'Portuguese' });
  
     }
     ngOnInit(): void {

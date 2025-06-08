@@ -23,6 +23,7 @@ import { TicketComponent } from './modules/dashboard/ticket/ticket.component';
 import { FormTicketComponent } from './modules/dashboard/ticket/form-ticket/form-ticket.component';
 import { ProfileComponent } from './modules/admin/profile/profile.component';
 import { InstagramComponent } from './modules/dashboard/instagram/instagram.component';
+import { PaymentPageComponent } from './modules/dashboard/payment/payment-page/payment-page.component';
 
 export const routes: Routes = [
     {
@@ -53,6 +54,7 @@ export const routes: Routes = [
 
             { path: 'dashboard/summary', component: SummaryComponent, data: { title: 'Atendimentos' } },
             { path: 'dashboard/preferences', component: PreferencesComponent, data: { title: 'Preferências' } },
+            { path: 'dashboard/payment', component: PaymentPageComponent, data: { title: 'Pagamento' } },
             { path: 'dashboard/tickets', component: TicketComponent, data: { title: 'Tickets' } },
             { path: 'dashboard/tickets/form', component: FormTicketComponent, data: { title: 'Tickets' } },
             { path: 'dashboard/tickets/form/:id', component: FormTicketComponent, data: { title: 'Tickets' } },
