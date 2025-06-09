@@ -6,6 +6,8 @@ import { AuthService } from './auth.service';
 import { Company } from '../shared/models/company.interface';
 import { User } from '../shared/models/user.interface';
 import { CrudAbstractService } from './crud.service';
+import { CrudInterface } from '../shared/models/crud.interface';
+import { profile } from 'console';
 
  
 
@@ -19,6 +21,10 @@ export class UserService extends CrudAbstractService{
         super()
     }
     
+    override save(company: CrudInterface): Observable<any> {
+        return this._http.post(`${this.url}/v1/${this.getControllerName()}/profile`, company);
+    }
+
     updatePassword(user:any):Observable<any>{
         return this._http.put(`${this.url}/v1/${this.getControllerName()}/password`, user);
     }

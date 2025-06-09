@@ -24,6 +24,7 @@ import { FormTicketComponent } from './modules/dashboard/ticket/form-ticket/form
 import { ProfileComponent } from './modules/admin/profile/profile.component';
 import { InstagramComponent } from './modules/dashboard/instagram/instagram.component';
 import { PaymentPageComponent } from './modules/dashboard/payment/payment-page/payment-page.component';
+import { CancelationComponent } from './modules/dashboard/payment/cancelation/cancelation.component';
 
 export const routes: Routes = [
     {
@@ -58,6 +59,8 @@ export const routes: Routes = [
             { path: 'dashboard/tickets', component: TicketComponent, data: { title: 'Tickets' } },
             { path: 'dashboard/tickets/form', component: FormTicketComponent, data: { title: 'Tickets' } },
             { path: 'dashboard/tickets/form/:id', component: FormTicketComponent, data: { title: 'Tickets' } },
+
+            { path: 'dashboard/payment/cancelation-subscription/:id', component: CancelationComponent, data: { title: 'Cancelamento' } },
 
 
             { path: 'dashboard/instagram', component: InstagramComponent, data: { title: 'Instagram' } },

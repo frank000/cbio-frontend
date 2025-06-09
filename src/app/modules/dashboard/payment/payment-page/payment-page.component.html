@@ -13,9 +13,6 @@
 
                 <div class="p-8 mt-8 rounded-lg border-2 border-slate-200">
 
-
-
-
                     <div class="pricing-container">
                         <!-- Basic Plan -->
                         <div class="pricing-plan">
@@ -80,6 +77,42 @@
 
  
 
+                </div>
+
+                <div class="mt-8 mb-8">
+              
+                    <ng-datatable
+                        skin="whitespace-nowrap bh-table-hover"
+                        [rows]="gridRowsUser"
+                        [columns]="cols"
+                        [totalRows]="totalRowsUser"
+                        [isServerMode]="true"
+                        (changeServer)="changeServer($event)"
+                        >
+                        
+                        <ng-template slot="id" let-value="data">
+                            <strong class="text-info">#{{ value.id }}</strong>
+                        </ng-template>
+                        <ng-template slot="name" let-value="data">
+                            <span class="text-info">{{ value.name }}</span>
+                        </ng-template>
+                        <ng-template slot="perfil" let-value="data">
+                            <span class="text-info">{{ value.perfil }}</span>
+                        </ng-template> 
+                        <ng-template slot="acoes" let-value="data">
+                            <div class="flex items-center justify-center gap-4">
+
+                                <button type="button" class="btn btn-sm btn-outline-primary" (click)="loadToEdit(value)" >
+                                    <icon-edit/>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteRow(value)">
+                                    <icon-trash/>
+                                </button>
+                            </div>
+                            
+                        
+                        </ng-template>
+                    </ng-datatable>
                 </div>
             </div>
 

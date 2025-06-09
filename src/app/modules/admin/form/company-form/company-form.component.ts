@@ -256,6 +256,8 @@ export class CompanyFormComponent {
           (resp: any) => {
 
             this.showMessage('Cadastro realizado com sucesso.');
+ 
+     
           }
         );
     }

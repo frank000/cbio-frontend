@@ -1,0 +1,214 @@
+
+
+
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Painel</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Cancelamento</span>
+        </li>
+    </ul>
+    <div class="panel mt-5 ">
+        <div class="mb-5"> 
+                <div class="grid grid-cols-1 ">
+                    <div class="min-h-screen   py-8 px-4">
+                        <div class="max-w-2xl mx-auto">
+                          <!-- Header -->
+                          <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                              Cancelar Assinatura
+                            </h1>
+                            <p class="text-gray-600">
+                              Gerencie sua assinatura e realize o cancelamento se necessário
+                            </p>
+                          </div>
+                    
+                          <!-- Informações da Assinatura -->
+                          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                            <h2 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                              <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                              </svg>
+                              Detalhes da Assinatura
+                            </h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                <span class="font-medium">Cliente:</span>
+                                <span class="ml-2">{{subscriptionData.name}}</span>
+                              </div>
+                              
+                              <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                                <span class="font-medium">Email:</span>
+                                <span class="ml-2">{{subscriptionData.email}}</span>
+                              </div>
+                              
+                              <div class="flex items-center">
+                                <span class="font-medium">Status:</span>
+                                <span [ngClass]="getStatusClass()" class="ml-2 px-2 py-1 rounded-full text-xs font-medium">
+                                  {{getStatusText()}}
+                                </span>
+                              </div>
+                              
+                              <div class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V6a2 2 0 012-2h4a2 2 0 012 2v1M8 7h8m-9 4v8a2 2 0 002 2h8a2 2 0 002-2v-8M9 11h6"></path>
+                                </svg>
+                                <span class="font-medium">Criada em:</span>
+                                <span class="ml-2">{{formatDate(subscriptionData.createdAt)}}</span>
+                              </div>
+                              
+                              <div class="flex items-center">
+                                <span class="font-medium">Último pagamento:</span>
+                                <span class="ml-2">{{formatDate(subscriptionData.paidAt)}}</span>
+                              </div>
+                              
+                              <div class="flex items-center">
+                                <span class="font-medium">ID da Assinatura:</span>
+                                <span class="ml-2 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+                                  {{subscriptionData.subscriptionId}}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                    
+                          <!-- Formulário de Cancelamento -->
+                          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <div class="flex items-center mb-4">
+                              <svg class="w-6 h-6 text-amber-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                              </svg>
+                              <h2 class="text-xl font-semibold text-gray-900">
+                                Cancelamento de Assinatura
+                              </h2>
+                            </div>
+                            
+                            <div class="mb-6">
+                              <p class="text-gray-600 mb-4">
+                                Sentimos muito em vê-lo partir! Antes de cancelar, nos ajude a entender o motivo:
+                              </p>
+                              
+                              <div class="space-y-2">
+                                <div *ngFor="let reasonOption of reasons" class="flex items-center">
+                                  <input
+                                    type="radio"
+                                    [id]="'reason-' + reasonOption"
+                                    name="reason"
+                                    [value]="reasonOption"
+                                    [(ngModel)]="selectedReason"
+                                    class="mr-3 text-blue-600"
+                                  />
+                                  <label [for]="'reason-' + reasonOption" class="text-gray-700 cursor-pointer">
+                                    {{reasonOption}}
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                    
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                              <div class="flex items-start">
+                                <svg class="w-5 h-5 text-red-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                <div>
+                                  <h3 class="font-medium text-red-800 mb-1">
+                                    Atenção! Esta ação não pode ser desfeita
+                                  </h3>
+                                  <p class="text-red-700 text-sm">
+                                    Ao cancelar sua assinatura, você perderá acesso imediato a todos os recursos premium. 
+                                    Seus dados serão mantidos por 30 dias caso deseje reativar.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                    
+                            <div class="flex flex-col sm:flex-row gap-3">
+                              <button
+                                (click)="openConfirmationModal()"
+                                [disabled]="!selectedReason"
+                                class="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                              >
+                                Cancelar Assinatura
+                              </button>
+                              
+                              <button
+                                (click)="goBack()"
+                                class="flex-1 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                              >
+                                Manter Assinatura
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                    
+                        <!-- Modal de Confirmação -->
+                        <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                          <div class="bg-white rounded-lg max-w-md w-full p-6">
+                            <div class="flex items-center justify-between mb-4">
+                              <h3 class="text-lg font-semibold text-gray-900">
+                                Confirmar Cancelamento
+                              </h3>
+                              <button
+                                (click)="closeModal()"
+                                class="text-gray-400 hover:text-gray-600"
+                              >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                              </button>
+                            </div>
+                            
+                            <div class="mb-6">
+                              <div class="flex items-center mb-4">
+                                <svg class="w-8 h-8 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                </svg>
+                                <div>
+                                  <p class="font-medium text-gray-900">
+                                    Tem certeza que deseja cancelar?
+                                  </p>
+                                  <p class="text-sm text-gray-600">
+                                    Esta ação é irreversível
+                                  </p>
+                                </div>
+                              </div>
+                              
+                              <div class="bg-gray-50 rounded-lg p-3 text-sm">
+                                <p><strong>Cliente:</strong> {{subscriptionData.name}}</p>
+                                <p><strong>Email:</strong> {{subscriptionData.email}}</p>
+                                <p><strong>Motivo:</strong> {{selectedReason}}</p>
+                              </div>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                              <button
+                                (click)="confirmCancellation()"
+                                [disabled]="isLoading"
+                                class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors disabled:bg-red-400"
+                              >
+                                {{isLoading ? 'Cancelando...' : 'Sim, Cancelar'}}
+                              </button>
+                              
+                              <button
+                                (click)="closeModal()"
+                                [disabled]="isLoading"
+                                class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                              >
+                                Não, Manter
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+        </div>
+    </div>
+</div>

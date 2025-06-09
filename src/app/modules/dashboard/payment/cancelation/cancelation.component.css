@@ -1,0 +1,23 @@
+.transition-colors {
+    transition: background-color 0.15s ease-in-out;
+  }
+  
+  .disabled\\:bg-gray-300:disabled {
+    background-color: #d1d5db;
+  }
+  
+  .disabled\\:cursor-not-allowed:disabled {
+    cursor: not-allowed;
+  }
+  
+  .hover\\:bg-red-700:hover {
+    background-color: #b91c1c;
+  }
+  
+  .hover\\:bg-gray-300:hover {
+    background-color: #d1d5db;
+  }
+  
+  .hover\\:text-gray-600:hover {
+    color: #4b5563;
+  }

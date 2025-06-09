@@ -70,6 +70,6 @@ export class CompanyService {
         return this._http.delete(`${this.url}/v1/company/${id}`);
 
     }
-
+ 
  
 }
