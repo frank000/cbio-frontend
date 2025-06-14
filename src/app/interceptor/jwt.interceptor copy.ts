@@ -48,6 +48,10 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
                   console.log(err);
                   
                   showMessage(err.error.message, 'error')
+                }else if(err.status === 402){
+                  console.log(err);
+                  
+                  showMessage(err.error.message, 'warning')
                 }else{
                   // Handle other HTTP error codes
                   console.error('HTTP error:', err);
