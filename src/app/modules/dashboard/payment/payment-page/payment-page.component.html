@@ -12,8 +12,8 @@
             <div class="grid grid-cols-1 ">
 
                 <div class="p-8 mt-8 rounded-lg border-2 border-slate-200">
-
-                    <div class="pricing-container">
+                      
+                    <div *ngIf="this.statusPayment == 'TRIAL' || this.statusPayment == 'DOIS_DIAS'"  class="pricing-container">
                         <!-- Basic Plan -->
                         <div class="pricing-plan">
                             <div class="plan-content">
@@ -72,51 +72,137 @@
                         </div>
                     </div>
                
-
+                    <div *ngIf="this.statusPayment != 'TRIAL' && this.statusPayment != 'DOIS_DIAS'" class="mt-8 mb-8">
+              
+                        <ng-datatable
+                            skin="whitespace-nowrap bh-table-hover"
+                            [rows]="gridRowsUser"
+                            [columns]="cols"
+                            [totalRows]="totalRowsUser"
+                            [isServerMode]="true"
+                            (changeServer)="changeServer($event)"
+                            >
+                            
+                            <ng-template slot="subscriptionId" let-value="data">
+                                <strong class="text-info">#{{ value.subscriptionId }}</strong>
+                            </ng-template>
+                            <ng-template slot="status	" let-value="data">
+                                <span class="badge bg-{{getStatusColor(value.status)}}">
+                                    {{ value.status | uppercase }}
+                                </span>
+                            </ng-template>
+                            <ng-template slot="createdAt" let-value="data">
+                                <span class="text-info">{{ value.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+                            </ng-template>
+                            <ng-template slot="perfil" let-value="data">
+                                <span class="text-info">{{ value.perfil }}</span>
+                            </ng-template> 
+                            <ng-template slot="acoes" let-value="data">
+                                <div class="flex items-center justify-center gap-4">
+                                    <button  type="button" class="btn btn-sm btn-outline-info" (click)="openInvoiceModal(value, modalInvoiceDetails)">
+                                        <icon-file/>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="loadToEdit(value)" >
+                                        <icon-edit/>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteRow(value)">
+                                        <icon-trash/>
+                                    </button>
+                                </div>
+                                
+                            
+                            </ng-template>
+                        </ng-datatable>
+                    </div>
 
 
  
 
                 </div>
 
-                <div class="mt-8 mb-8">
-              
-                    <ng-datatable
-                        skin="whitespace-nowrap bh-table-hover"
-                        [rows]="gridRowsUser"
-                        [columns]="cols"
-                        [totalRows]="totalRowsUser"
-                        [isServerMode]="true"
-                        (changeServer)="changeServer($event)"
-                        >
-                        
-                        <ng-template slot="id" let-value="data">
-                            <strong class="text-info">#{{ value.id }}</strong>
-                        </ng-template>
-                        <ng-template slot="name" let-value="data">
-                            <span class="text-info">{{ value.name }}</span>
-                        </ng-template>
-                        <ng-template slot="perfil" let-value="data">
-                            <span class="text-info">{{ value.perfil }}</span>
-                        </ng-template> 
-                        <ng-template slot="acoes" let-value="data">
-                            <div class="flex items-center justify-center gap-4">
-
-                                <button type="button" class="btn btn-sm btn-outline-primary" (click)="loadToEdit(value)" >
-                                    <icon-edit/>
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteRow(value)">
-                                    <icon-trash/>
-                                </button>
-                            </div>
-                            
-                        
-                        </ng-template>
-                    </ng-datatable>
-                </div>
+          
             </div>
 
 
         </div>
     </div>
 </div>
+
+<!-- Modal de Detalhes da Invoice -->
+<ngx-custom-modal #modalInvoiceDetails class="modal-top auth-modal invoice-details-modal">
+    <ng-template #modalHeader>
+        <div class="!py-5">Detalhes da Invoice #{{selectedInvoice?.subscriptionId}}</div>
+    </ng-template>
+    
+    <ng-template #modalBody>
+        <div *ngIf="selectedInvoice" class="space-y-6">
+            <!-- Informações principais -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded">
+                <div>
+                    <p><strong>Status:</strong> 
+                        <span class="badge bg-{{getStatusColor(selectedInvoice.status)}} ml-2">
+                            {{selectedInvoice.status | uppercase}}
+                        </span>
+                    </p>
+                    <p><strong>Criado em:</strong> {{selectedInvoice.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+                </div>
+                <div>
+                    <p><strong>Perfil:</strong> {{selectedInvoice.perfil}}</p>
+                </div>
+            </div>
+
+            <!-- Grid de Invoices -->
+            <div *ngIf="selectedInvoice.invoice && selectedInvoice.invoice.length > 0">
+                <h4 class="font-semibold mb-3 text-lg">Documentos Fiscais</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+                        <thead class="bg-gray-100 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-4 py-3 text-left">Invoice ID</th>
+                                <th class="px-4 py-3 text-left">Data</th>
+                                <th class="px-4 py-3 text-left">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let inv of selectedInvoice.invoice" class="border-b border-gray-200 dark:border-gray-700">
+                                <td class="px-4 py-3">
+                                    <span class="font-mono text-sm">{{inv.invoiceId | slice:0:8}}...</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    {{inv.date | date:'dd/MM/yyyy HH:mm'}}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex space-x-2">
+                                        <a [href]="inv.urlHostedInvoice" target="_blank" 
+                                           class="btn btn-sm btn-outline-primary flex items-center">
+                                            <icon-notes class="mr-1"/> Visualizar
+                                        </a>
+                                        <a [href]="inv.urlInvoicePdf" target="_blank" 
+                                           class="btn btn-sm btn-outline-info flex items-center"
+                                           download="invoice-{{inv.invoiceId}}.pdf">
+                                            <icon-download class="mr-1"/> PDF
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Mensagem caso não tenha invoices -->
+            <div *ngIf="!selectedInvoice.invoice || selectedInvoice.invoice.length === 0" 
+                 class="p-4 bg-yellow-50 dark:bg-yellow-900 rounded text-center">
+                Nenhum documento fiscal disponível
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #modalFooter>
+        <div class="flex justify-end">
+            <button type="button" class="btn btn-outline-secondary" (click)="modalInvoiceDetails.close()">
+                Fechar
+            </button>
+        </div>
+    </ng-template>
+</ngx-custom-modal>

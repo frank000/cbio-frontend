@@ -24,7 +24,16 @@
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
+.invoice-details-modal   {
+    max-width: 900px; /* ajuste conforme necessário */
+    width: 90%;
+    margin: 1.75rem auto;
+}
 
+/* Se precisar ajustar o conteúdo interno */
+.invoice-details-modal .modal-content {
+    min-height: 300px; /* opcional */
+}
 .plan-content {
     flex-grow: 1;
     text-align: center;

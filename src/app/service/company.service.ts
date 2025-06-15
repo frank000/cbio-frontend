@@ -32,6 +32,14 @@ export class CompanyService {
         return this._http.get(`${this.url}/v1/company/grid`);
     }
 
+    statusPayment():Observable<any>{
+        return this._http.get(`${this.url}/v1/company/status-payment`);
+    }
+
+    statusPaymentList():Observable<any>{
+        return this._http.get(`${this.url}/v1/company/status-payment/list`);
+    }
+
     obtemCompany(id:string):Observable<any>{
         return this._http.get(`${this.url}/v1/company/${id}`);
     }

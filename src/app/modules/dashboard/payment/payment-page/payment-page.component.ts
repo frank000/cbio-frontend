@@ -10,18 +10,28 @@ import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'app-payment-page',
   standalone: true,
-  imports: [CommonModule, SharedModule, SubscriptionComponent],
+  imports: [CommonModule, SharedModule, SubscriptionComponent,],
   templateUrl: './payment-page.component.html',
   styleUrl: './payment-page.component.css'
 })
 export class PaymentPageComponent implements OnInit{
 
   private priceId = 'price_1RWPoLLcZMm6EvIPPHP4bj6E'; // Substitua pelo seu price_id
+ 
+  statusPayment: string = "";
 
-  companyService:CompanyService = Inject(CompanyService);
-
-  constructor(private paymentService: PaymentService) {
+  constructor(
+    private paymentService: PaymentService,
+    private companyService: CompanyService 
+  ) {
     this.carregaGrid();
+    this.companyService.statusPayment()
+    .subscribe(
+      (resp : any)=>{
+        this.statusPayment = resp; 
+          
+      }
+    );
   }
  
   cols: Array<colDef> = [];
@@ -62,8 +72,14 @@ export class PaymentPageComponent implements OnInit{
       );
   }
   ngOnInit(): void {
-    // this.companyService.
-    //TODO carregar a compania para saber se esta no mod trial ou não 
+    this.cols = [
+      { field: "subscriptionId", title: "N° Inscrição", filter: false, sort: false },
+      { field: "status	", title: "Status" },
+      { field: "createdAt", title: "Criado em" },
+
+      { field: "acoes", title: "Ações" }
+
+  ];
   }
 
   loadToEdit(row:any){
@@ -76,7 +92,71 @@ export class PaymentPageComponent implements OnInit{
       console.error('Erro no checkout:', error);
     })
   }
+  getStatusColor(status: string): string {
+    switch (status.toLowerCase()) {
+        case 'ativo':
+        case 'active':
+        case 'pago':
+        case 'paid':
+            return 'success';
+        case 'pendente':
+        case 'pending':
+            return 'warning';
+        case 'cancelado':
+        case 'canceled':
+            return 'danger';
+        default:
+            return 'primary';
+    }
+}
 
+// MODAL
+// Adicione estas propriedades na sua classe
+showInvoiceModal: boolean = false;
+selectedInvoice: any = null;
 
+// Método para abrir a modal
+openInvoiceModal(invoiceData: any, modalInvoiceDetails: any) {
+    modalInvoiceDetails.open();
+    this.selectedInvoice = invoiceData;
+    this.showInvoiceModal = true;
+    
+    // Se precisar carregar dados adicionais da invoice:
+    // this.loadInvoiceDetails(invoiceData.id);
+}
+
+// Método para fechar a modal
+closeInvoiceModal() {
+    this.showInvoiceModal = false;
+    this.selectedInvoice = null;
+}
+
+// Método para download da invoice (opcional)
+downloadInvoice() {
+    if (!this.selectedInvoice) return;
+    
+    // Implemente a lógica de download aqui
+    console.log('Downloading invoice:', this.selectedInvoice.subscriptionId);
+    
+    // Exemplo de chamada a um serviço:
+    // this.invoiceService.downloadInvoice(this.selectedInvoice.id).subscribe(
+    //     (data) => { /* tratar download */ },
+    //     (error) => { /* tratar erro */ }
+    // );
+}
+
+// Se precisar carregar detalhes adicionais (opcional)
+/*
+loadInvoiceDetails(invoiceId: string) {
+    this.invoiceService.getInvoiceDetails(invoiceId).subscribe(
+        (details) => {
+            this.selectedInvoice = {...this.selectedInvoice, ...details};
+        },
+        (error) => {
+            console.error('Erro ao carregar detalhes da invoice:', error);
+        }
+    );
+}
+*/
   
 }

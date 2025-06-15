@@ -65,6 +65,8 @@ export class CompanyFormComponent {
   tiers:any[] = [];
   tier:any;
 
+  listStatusPayment: any[] = [];
+
   constructor() {
     
     this.initData();
@@ -141,6 +143,7 @@ export class CompanyFormComponent {
         cidade: ['', Validators.required], 
         tier: ['', Validators.required], 
         cep: [''], 
+        statusPayment: [''], 
         porta:['', Validators.required], 
     });    
     this.paramsConfig = this._fb.group({
@@ -155,8 +158,13 @@ export class CompanyFormComponent {
     });
   }
 
-  initData(){ 
 
+  initData(){ 
+    this._companyService.statusPaymentList()
+    .subscribe(
+      (resp:any) => this.listStatusPayment = resp
+    );
+ 
     this.cols = [
       { field: "id", title: "ID", filter: false, sort: false },
       { field: "nome", title: "Nome" },

@@ -162,12 +162,12 @@
                                                 class="form-input"/>
                                         </div>
                                     </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                         <div
                                             class="md:col-span-1"
                                             [ngClass]="isSubmitForm ? paramsCompany.controls['porta'].errors ? 'has-error' : 'has-success' : ''">
     
-                                            <label for="gridPort">Porta do Assitente</label>
+                                            <label for="gridPort">Porta do Assistente</label>
                                             <div class="flex gap-2">
                                                 <div>
                                                     <input
@@ -185,6 +185,32 @@
                                    
                                       
                                         </div>
+
+                                        <div  >
+
+                                        <label for="gridPort">Status de pagamento</label>
+                                        <div  >
+                                            <div>
+                                                <ng-select
+                                                id="statusPayment"
+                                                name="statusPayment"
+                                                bindLabel="label"
+                                                bindValue="id"
+                                                formControlName="statusPayment"
+                                                [items]="listStatusPayment"
+                                                [searchable]="false"
+                                                [clearable]="false" ></ng-select> 
+                                            </div>
+                                            <div *ngIf="this.id == undefined">
+                                                <a style="cursor: pointer; text-decoration: underline;" (click)="getFreePort()">Recuperar porta livre</a>
+                                            </div>
+
+                                        </div>
+                               
+                                  
+                                     </div>
+
+
                                     </div>
                                     <app-btn-salva-volta 
                                     [isDisabled]="this.id == undefined && this.companySaved.id != undefined"
