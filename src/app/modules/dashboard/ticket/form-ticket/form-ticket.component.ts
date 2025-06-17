@@ -8,6 +8,7 @@ import { ItemTimelineComponent } from 'src/app/modules/base/timeline/item-timeli
 import { BtnSalvaVoltaComponent } from 'src/app/modules/common/btn-salva-volta/btn-salva-volta.component';
 import { AuthService } from 'src/app/service/auth.service';
 import { TicketService } from 'src/app/service/ticket.service';
+import { environment } from 'src/environments/environment';
 import { SharedModule } from 'src/shared.module';
 import { text } from 'stream/consumers';
 import Swal from 'sweetalert2';
@@ -104,63 +105,113 @@ export class FormTicketComponent {
   }
 
 
-  submit(){
+  submit() {
     this.isSubmitForm = true;
  
-      if (this.paramsTicket.valid) {
-
-        if(this.id != null && this.ticketSaved.status == CLOSED_TICKET){
-          this.swalWithBootstrapButtons
-          .fire({
-              title: 'Ticket fechado',
-              text: 'O ticket está fechado, ao alterar ele vai reabrir. Deseja continuar?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Sim',
-              cancelButtonText: 'Não',
-              reverseButtons: true,
-              padding: '2em',
-          })
-          .then((result:any) => {
-              if (result.value) {
-                let ticket = this.paramsTicket.getRawValue();
-                ticket.status = IN_PROGRESS;
-                this.processSubmit(ticket);
-              }  
-          }); 
-        }else{
-          let ticket = this.paramsTicket.getRawValue();
-          this.processSubmit(ticket);
-
+    if (this.paramsTicket.valid) {
+        const ticket = this.paramsTicket.getRawValue();
+        
+        if (this.id != null && this.ticketSaved.status == CLOSED_TICKET) {
+            this.swalWithBootstrapButtons.fire({
+                title: 'Ticket fechado',
+                text: 'O ticket está fechado, ao alterar ele vai reabrir. Deseja continuar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim',
+                cancelButtonText: 'Não',
+                reverseButtons: true,
+                padding: '2em',
+            }).then((result: any) => {
+                if (result.value) {
+                    ticket.status = IN_PROGRESS;
+                    this.processSubmit(ticket, this.selectedImage);
+                }  
+            }); 
+        } else {
+            this.processSubmit(ticket, this.selectedImage);
         } 
     }
+}
+
+  selectedImage: File | null = null;
+selectedImagePreview: string | ArrayBuffer | null = null;
+
+onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+        this.selectedImage = file;
+        
+        // Criar pré-visualização
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.selectedImagePreview = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+removeImage() {
+    this.selectedImage = null;
+    this.selectedImagePreview = null;
+    // Limpar o input de arquivo
+    const fileInput = document.getElementById('image') as HTMLInputElement;
+    if (fileInput) {
+        fileInput.value = '';
+    }
+}
+
+private processSubmit(ticketData: any, imageFile?: File | null) {
+  const formData = new FormData();
+  
+  // Adiciona os dados do ticket como JSON
+  formData.append('ticket', new Blob([JSON.stringify({
+      ...ticketData,
+      fromCompany: !this.authService.hasRole(this.authService.SUPERADMIN_ROLE)
+  })], { type: 'application/json' }));
+  
+  // Adiciona a imagem se existir
+  if (imageFile) {
+      formData.append('image', imageFile);
   }
 
-
-  private processSubmit(ticket:any) {
-    
-    ticket.fromCompany = !this.authService.hasRole(this.authService.SUPERADMIN_ROLE);
-
-
-    let action = (this.id) ? this._ticketService.update(ticket) : this._ticketService.save(ticket);
-    action
-      .subscribe(
-        (resp: any) => {
+  const action = this.id 
+      ? this._ticketService.updateFile(formData) 
+      : this._ticketService.saveFile(formData);
+  
+  action.subscribe(
+      (resp: any) => {
           this.ticketSaved = resp;
-          let initMsg = (this.id) ? "Alteração" : "Cadastro";
+          const initMsg = this.id ? "Alteração" : "Cadastro";
           this.router.navigate(['dashboard/tickets']);
           showMessage(initMsg + ' realizado com sucesso.');
-        }
-      );
-  }
+      },
+      (error) => {
+          // Tratamento de erro
+          console.error('Erro ao enviar ticket:', error);
+      }
+  );
+}
 
   getListTickets() {
+    const lista = this.ticketSaved.ticketMessages
+      .map((ticket:any) => {
+        if (ticket.imagem && ticket.imagem.id) {
+          // Adiciona a URL da imagem ao ticket
+          return {
+            ...ticket,
+            imagemUrl: `${environment.urlBackend}/v1/media/images/ticket/${this.ticketSaved.id}/${ticket.imagem.id}`
+          };
+        }
+        return ticket;
+      })
+      .sort((a: any, b: any) => {
+        const dateA: any = new Date(a.createdAt.split(' ')[0].split('/').reverse().join('-') + 'T' + a.createdAt.split(' ')[1]);
+        const dateB: any = new Date(b.createdAt.split(' ')[0].split('/').reverse().join('-') + 'T' + b.createdAt.split(' ')[1]);
+        return dateB - dateA;
+      });
+ 
+      
     // Ordena as mensagens com base na data de criação, de forma decrescente (do mais recente para o mais antigo)
-    return this.ticketSaved.ticketMessages
-    .sort((a:any, b:any) => {
-      const dateA:any = new Date(a.createdAt.split(' ')[0].split('/').reverse().join('-') + 'T' + a.createdAt.split(' ')[1]);
-      const dateB:any = new Date(b.createdAt.split(' ')[0].split('/').reverse().join('-') + 'T' + b.createdAt.split(' ')[1]);
-      return dateB - dateA;  // Retorna negativo para b vir primeiro, ou positivo para a vir primeiro
-    });
+    return lista;;
   }
 }

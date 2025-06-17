@@ -7,5 +7,12 @@
     <div class="self-center p-2.5 ltr:ml-2.5 rtl:ml-2.5 rtl:ltr:mr-2.5">
         <p *ngIf="fromCompany" class="text-[13px] font-semibold text-[#008a0e] dark:text-white-light">{{message}}</p>
         <p *ngIf="!fromCompany" class="text-[13px] font-semibold text-[#2196f3] dark:text-white-light">{{message}}</p>
+        
+        <!-- Adicione esta parte para exibir a imagem -->
+        <div *ngIf="imagem?.id" class="mt-2">
+            <img [src]="imagemUrl" 
+                 [alt]="imagem.caption || 'Imagem do ticket'" 
+                 class="max-w-full h-auto rounded border border-gray-200 dark:border-gray-600">
+        </div>
     </div>
 </div>

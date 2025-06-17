@@ -18,6 +18,19 @@ export class TicketService extends CrudAbstractService{
   
     }
 
+    
+    updateFile(ticket:FormData):Observable<any>{
+ 
+        return this._http.put(`${this.url}/v1/${this.getControllerName()}`, ticket);
+    }
+
+
+    saveFile(ticket:FormData):Observable<any>{
+ 
+        return this._http.post(`${this.url}/v1/${this.getControllerName()}`, ticket);
+    }
+
+ 
 
     obtemTiposTicket():Observable<any>{
         return this._http.get(`${this.url}/v1/${this.getControllerName()}/tipos`);

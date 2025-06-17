@@ -32,6 +32,25 @@ export class MediaService extends CrudAbstractService{
             })
         ); 
     }
+
+    getMediTicket(name:string):Observable<any>{
+        return this._http.get(`${this.url}/v1/${this.getControllerName()}/images/ticket/${name}`, { responseType: 'blob' }).pipe(
+            map((blob: Blob) => {
+                if(blob.size != 0){
+                    // Criar um URL para o blob
+                    return URL.createObjectURL(blob);
+                }else{
+                    return null;
+                }
+      
+            }),
+            catchError((error: any) => {
+                console.error('Erro ao buscar a mídia:', error);
+                return of(null); // Retornar valor padrão ou mensagem de erro
+            })
+        ); 
+    }
+
     download(dialogId:string):Observable<any>{
         return this._http.get(`${this.url}/v1/${this.getControllerName()}/download-media-by-dialog/${dialogId}`, 
         { responseType: 'blob', observe: 'response' }).pipe(

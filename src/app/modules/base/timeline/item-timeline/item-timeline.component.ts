@@ -19,5 +19,13 @@ export class ItemTimelineComponent {
 
   @Input()
   fromCompany!:boolean;
+
+  @Input() 
+  imagem: any; // Objeto com informações da imagem
+  
+  @Input() 
+  imagemUrl: any; // URL completa da imagem
+ 
+ 
  
 }
