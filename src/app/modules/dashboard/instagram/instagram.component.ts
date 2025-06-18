@@ -53,7 +53,8 @@ export class InstagramComponent implements OnDestroy,OnInit {
     const allowedOrigins = [
       'https://bot.rayzatec.com.br',
       'https://pleasing-elf-instantly.ngrok-free.app',
-      'http://localhost:4200'
+      'http://localhost:4200',
+      'https://js.stripe.com'
     ];
 
     console.log("origin", event.origin);
