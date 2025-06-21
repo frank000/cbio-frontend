@@ -17,7 +17,7 @@ import { SessionService } from 'src/app/service/session.service';
 import Swal from 'sweetalert2';
 import { AvatarUtil } from '../../base/avatar-util';
 import { MediaService } from 'src/app/service/media.service';
-import { catchError, map, Observable, of } from 'rxjs'; 
+import { catchError, debounceTime, distinctUntilChanged, filter, map, Observable, of, Subject } from 'rxjs'; 
 import { PrivateChannelService } from 'src/app/service/private-channel.service';
 import { FileValidationException } from '../../base/FileValidationException';
 import { ContactService } from 'src/app/service/contact.service';
@@ -63,6 +63,13 @@ export class ChatComponent implements OnInit, OnDestroy{
     bindScreen:number = 1;    
     iaTipText!:string;
     
+        //pagination
+    currentPage = 1;
+    pageSize = 10;
+    hasMoreMessages = true;
+    isLoadingMessages = false;
+    scrollPositionBeforeLoad = 0;
+
     constructor(public storeData: Store<any>) {
         this.userLocal = this.authService.getObjectUserLogged();
 
@@ -84,7 +91,70 @@ export class ChatComponent implements OnInit, OnDestroy{
         });
     }
 
+
+    async loadMoreMessages() {
+        if (this.isLoadingMessages) {
+            return;
+        }
+        
+        this.isLoadingMessages = true;
+        
+        try {
+            console.log("Iniciando carregamento de mensagens...");
+            
+            // Pegar o elemento de scroll
+            const scrollElement = this.scrollable?.nativeElement;
+            
+            if (!scrollElement) {
+                console.error("Elemento de scroll não encontrado");
+                return;
+            }
+            
+            // Salvar altura atual
+            const oldScrollHeight = scrollElement.scrollHeight;
+            const oldScrollTop = scrollElement.scrollTop;
+            
+            // Chamar sua função de carregamento
+            await this.listAllMessagesBySender();
+            
+            // Aguardar o DOM atualizar e ajustar o scroll
+            setTimeout(() => {
+                const newScrollHeight = scrollElement.scrollHeight;
+                const heightDifference = newScrollHeight - oldScrollHeight;
+                
+                // Manter a posição relativa das mensagens + um offset para sair da zona de trigger
+                scrollElement.scrollTop = oldScrollTop + heightDifference + 50;
+                
+                console.log("Scroll ajustado:", {
+                    oldHeight: oldScrollHeight,
+                    newHeight: newScrollHeight,
+                    difference: heightDifference,
+                    newScrollTop: scrollElement.scrollTop
+                });
+                
+            }, 150); // Aumentar o timeout se necessário
+            
+        } catch (error) {
+            console.error("Erro ao carregar mensagens:", error);
+        } finally {
+            // Aguardar um pouco antes de permitir novo carregamento
+            setTimeout(() => {
+                this.isLoadingMessages = false;
+            }, 500);
+        }
+    }
+
     ngOnInit(): void {
+
+        // Configurar o observable do scroll com debounce
+        this.scrollSubject.pipe(
+            debounceTime(300), // Aguarda 300ms após o último scroll
+            distinctUntilChanged(), // Só emite se o valor mudou
+            filter(scrollTop => scrollTop < 100), // Só processa se nearTop
+            filter(() => this.hasMoreMessages && !this.isLoadingMessages) // Filtros adicionais
+        ).subscribe(() => {
+            this.loadMoreMessages();
+        });
         this.userLocal = this.authService.getObjectUserLogged();
         // Conectamos ao WebSocket usando o Observable
         // Definindo um timeout para conectar ao WebSocket após 2 segundos
@@ -388,7 +458,10 @@ export class ChatComponent implements OnInit, OnDestroy{
 
 
     selectUser(user: any) { 
-        
+        this.currentPage = 1;
+        this.hasMoreMessages = true;
+        this.selectedUser = user;
+
         this.selectedUser = user;
         this.isShowUserChat = [];
         this.isShowUserChat[user.channelId] = true;
@@ -418,31 +491,164 @@ export class ChatComponent implements OnInit, OnDestroy{
     }
 
 
-    private listAllMessagesBySender() {
-        this.diologService.getAllBySender(this.selectedUser.userId, this.selectedUser.channelId)
-            .subscribe(
-                (resp: any) => {
-                    this.selectedUser.messages = resp;
-                    this.selectedUser.messages
-                        .filter((msg: any) => msg.media != null)
-                        .forEach( (msg: any) => {
-                            this.getMediaByDialog(msg)
-                                .subscribe(
-                                    (item)=>{
-                                        msg = item;
-                                        console.log(" ** " , msg);
-                                    } 
-                                ); // Certifique-se de se inscrever para que a requisição seja feita
-                        });
-
-                    this.scrollToBottom();
-
-                },
-                (error: any) => {
-                    console.error('Erro ao buscar mensagens:', error);
-                }
-            );
+    trackByMessageId(index: number, message: any): string {
+        return message.id;
     }
+
+    
+
+    private listAllMessagesBySender() {
+        // Verificações iniciais
+        if (this.isLoadingMessages || !this.hasMoreMessages) {
+            console.log("Carregamento bloqueado:", { isLoading: this.isLoadingMessages, hasMore: this.hasMoreMessages });
+            return;
+        }
+
+        this.isLoadingMessages = true;
+        console.log("Iniciando carregamento - Página:", this.currentPage);
+
+        // Verifica se scrollable está disponível
+        // if (!this.scrollable?.viewport?.nativeElement) {
+        //     console.warn('Scrollable element not available');
+        //     this.isLoadingMessages = false;
+        //     return;
+        // }
+
+        // Guarda a posição do scroll de forma segura
+        try {
+            this.scrollPositionBeforeLoad = this.scrollable.viewport.nativeElement.scrollHeight;
+            // console.log("Posição salva:", this.scrollPositionBeforeLoad);
+        } catch (error) {
+            // console.error('Error accessing scroll position:', error);
+            this.scrollPositionBeforeLoad = 0;
+        }
+
+        this.diologService.getAllBySender(
+            this.selectedUser.userId,
+            this.selectedUser.channelId,
+            this.currentPage,
+            this.pageSize
+        ).subscribe(
+            (resp: any) => {
+                const newMessages = resp.content || resp;
+                console.log("Mensagens recebidas:", newMessages.length);
+
+                if (this.currentPage === 1) {
+                    this.selectedUser.messages = newMessages;
+                } else {
+                    // Adicionar novas mensagens no início (mensagens mais antigas)
+                    this.selectedUser.messages = [...newMessages, ...this.selectedUser.messages];
+                }
+
+                // Verificar se há mais mensagens
+                this.hasMoreMessages = newMessages.length === this.pageSize;
+                console.log("Há mais mensagens:", this.hasMoreMessages);
+
+                // Incrementar página para próxima chamada
+                this.currentPage++;
+
+                // Processar mídias
+                newMessages
+                    .filter((msg: any) => msg.media != null)
+                    .forEach((msg: any) => {
+                        this.getMediaByDialog(msg).subscribe();
+                    });
+
+                // Ajustar scroll após carregar - com delay para garantir DOM update
+                setTimeout(() => {
+                    this.safeAdjustScrollAfterLoad();
+                    
+                    // Aguardar um pouco mais antes de permitir novo carregamento
+                    setTimeout(() => {
+                        this.isLoadingMessages = false;
+                        console.log("Carregamento finalizado");
+                    }, 300);
+                }, 150);
+            },
+            (error: any) => {
+                console.error('Error loading messages:', error);
+                this.isLoadingMessages = false;
+            }
+        );
+    }
+
+    private safeAdjustScrollAfterLoad() {
+        if (!this.scrollable?.viewport?.nativeElement) {
+            console.warn('Scrollable not available for adjustment');
+            return;
+        }
+
+        try {
+            const scrollElement = this.scrollable.viewport.nativeElement;
+            
+            if (this.currentPage > 2) { // Mudança: > 2 porque currentPage já foi incrementado
+                const newScrollHeight = scrollElement.scrollHeight;
+                const scrollDifference = newScrollHeight - this.scrollPositionBeforeLoad;
+                
+                // Ajustar scroll mantendo posição + offset para sair da zona de trigger
+                const newScrollTop = scrollDifference + 120; // Offset maior para evitar trigger imediato
+                scrollElement.scrollTop = newScrollTop;
+                
+                console.log("Scroll ajustado:", {
+                    oldHeight: this.scrollPositionBeforeLoad,
+                    newHeight: newScrollHeight,
+                    difference: scrollDifference,
+                    newScrollTop: newScrollTop
+                });
+            } else {
+                // Primeira carga - rolar para o final
+                this.scrollToBottom();
+            }
+        } catch (error) {
+            console.error('Error adjusting scroll:', error);
+        }
+    }
+
+    private scrollToBottom() {
+        try {
+            if (this.scrollable?.viewport?.nativeElement) {
+                const scrollElement = this.scrollable.viewport.nativeElement;
+                setTimeout(() => {
+                    scrollElement.scrollTop = scrollElement.scrollHeight;
+                }, 100);
+            }
+        } catch (error) {
+            console.error('Error scrolling to bottom:', error);
+        }
+    }
+ 
+    private scrollSubject = new Subject<number>();
+    private lastScrollTop = 0;
+    private isScrollingUp = false;
+// Solução 1: Cast para HTMLElement
+
+handleScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    
+    if (!element) {
+        return;
+    }
+    
+    const currentScrollTop = element.scrollTop;
+    
+    // Verificar direção do scroll
+    this.isScrollingUp = currentScrollTop < this.lastScrollTop;
+    this.lastScrollTop = currentScrollTop;
+    
+    // Só processa se estiver scrollando para cima
+    if (!this.isScrollingUp) {
+        return;
+    }
+    
+    const nearTop = currentScrollTop < 100;
+    
+    console.log("Scroll - nearTop:", nearTop, "isLoading:", this.isLoadingMessages, "hasMore:", this.hasMoreMessages);
+    
+    if (nearTop && this.hasMoreMessages && !this.isLoadingMessages) {
+        this.listAllMessagesBySender();
+    }
+}
+ 
 
     private getMediaByDialog(msg: any) :Observable<any>{ 
 
@@ -497,13 +703,7 @@ export class ChatComponent implements OnInit, OnDestroy{
     }
 
 
-    scrollToBottom() {
-        if (this.isShowUserChat[this.selectedUser.channelId]) {
-            setTimeout(() => {
-                this.scrollable.scrollTo({ bottom: 0 });
-            });
-        }
-    }
+ 
     isShowUserChatFunc(){
         if(this.selectedUser != null && this.selectedUser.channelId != null){
             return this.isShowUserChat[this.selectedUser.channelId]
@@ -875,5 +1075,14 @@ export class ChatComponent implements OnInit, OnDestroy{
         );
         
   
+    }
+
+    resetChat() {
+        this.currentPage = 1;
+        this.hasMoreMessages = true;
+        this.isLoadingMessages = false;
+        this.lastScrollTop = 0;
+        this.scrollPositionBeforeLoad = 0;
+        this.selectedUser.messages = [];
     }
 }

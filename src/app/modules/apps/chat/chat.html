@@ -389,19 +389,27 @@
                             </div>
                         </div>
                     </div>
+
                     <ng-scrollbar
                         #scrollable
                         class="chat-conversation-box relative !h-[calc(100vh_-_389px)] min-h-[300px] sm:!h-[calc(100vh_-_300px)]"
                         visibility="native"
+                        (scroll)="handleScroll($event)" 
                     >
-                        <div class="space-y-5 p-8">
+                        <div class="space-y-5 p-8" >
+                            <!-- Indicador de carregamento -->
+                            <div *ngIf="isLoadingMessages" class="text-center py-4">
+                                <icon-loading class="animate-spin inline-block" /> Carregando...
+                            </div>
+                            
                             <div class="m-6 mt-0 block">
                                 <h4 class="relative border-b border-[#f4f4f4] text-center text-xs dark:border-gray-800">
                                     <span class="relative top-2 bg-white px-3 dark:bg-[#0e1726]">{{ 'Today, ' + selectedUser.time }}</span>
                                 </h4>
                             </div>
-                            <ng-container *ngIf="selectedUser.messages && selectedUser.messages.length" style="margin-bottom: 5rem;">
-                                <div *ngFor="let message of searchMessages()">
+                            
+                            <ng-container *ngIf="selectedUser.messages && selectedUser.messages.length">
+                                <div *ngFor="let message of searchMessages(); trackBy: trackByMessageId">
                                     <div class="flex items-start gap-3" [ngClass]="{ 'justify-end': selectedUser.userId === message.fromUserId }">
                                         <div class="flex-none" [ngClass]="{ 'order-2': selectedUser.userId === message.fromUserId }">
                                             <ng-container *ngIf="selectedUser.userId === message.fromUserId">
@@ -442,16 +450,20 @@
                             </ng-container>
                         </div>
                     </ng-scrollbar>
+
+
+                
+            
                     <div class="absolute bottom-0 left-0 w-full p-4" [ngStyle]="{'pointer-events': !selectedUser.active? 'none' : '' }">
                         <div class="overlay" *ngIf="!selectedUser.active">Atendimento fechado.</div>
                         <div class="w-full items-center space-x-3 rtl:space-x-reverse sm:flex">
                             <div class="relative flex-1">
                                 <input
+                                    id="msgUsuario"
                                     class="form-input rounded-full border-0 bg-[#f4f4f4] px-12 py-4 focus:outline-none"
                                     placeholder="Digite uma mensagem"
                                     [(ngModel)]="textMessage"
                                     name="textMessage"
-                                    (keyup.enter)="sendMessage(selectedUser.channelId)"
                                 />
                                 <button type="button" class="absolute top-1/2 -translate-y-1/2 hover:text-primary ltr:left-4 rtl:right-4">
                                     <icon-mood-smile />

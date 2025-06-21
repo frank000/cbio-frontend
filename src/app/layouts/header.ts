@@ -10,6 +10,7 @@ import { AuthService } from '../service/auth.service';
  
 import { AvatarUtil } from '../modules/base/avatar-util';
 import { WebSocketService } from '../modules/base/websocket/websocket-service.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
     moduleId: module.id,
@@ -80,6 +81,7 @@ export class HeaderComponent {
     ) {
         this.initStore();
         this.initDataAsUser();
+        this.carregarPreferencias();
     }
 
 
@@ -99,6 +101,10 @@ export class HeaderComponent {
                 this.store = d;
             });
     }
+    private sinalSonoroSubject = new BehaviorSubject<boolean>(false);
+    sinalSonoro$ = this.sinalSonoroSubject.asObservable();
+    sinalSonoroLocal: boolean = false;
+    private subscriptionLocal: Subscription | undefined;
 
     ngOnInit() {
         this.webSocketService.clearNotificationSubject
@@ -120,8 +126,35 @@ export class HeaderComponent {
               console.log('Conexão estabelecida, agora vamos assinar os canais.');
             }
           );
+
+          this.subscriptionLocal = this.sinalSonoro$.subscribe(
+            valor => this.sinalSonoro = valor
+          );
+
     }
 
+    salvarPreferenciaSonoro() {
+        this.setSinalSonoro(this.sinalSonoro);
+      }
+    
+      ngOnDestroy() {
+        if(this.subscriptionLocal != undefined){
+
+            this.subscriptionLocal.unsubscribe();
+        }
+      }
+
+
+    private carregarPreferencias() {
+        const preferencia = localStorage.getItem('sinalSonoro');
+        const valor = preferencia === 'true';
+        this.sinalSonoroSubject.next(valor);
+      }
+    
+      setSinalSonoro(valor: boolean) {
+        localStorage.setItem('sinalSonoro', valor.toString());
+        this.sinalSonoroSubject.next(valor);
+      }
         /**
      * Função para garantir a inscrição no tópico individual do usuário.
      */
