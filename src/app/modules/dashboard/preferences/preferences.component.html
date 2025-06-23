@@ -15,6 +15,64 @@
                             <form [formGroup]="params" (submit)="submit()" class="space-y-5" >
                                 <div class="grid grid-rows-2 grid-cols-1 sm:grid-cols-1 gap-4">
                                     <div >
+                                        <label for="gridScheduling">Agendamento automatizado: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['isScheduler'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+
+                                            <div class="p-4 mt-8">
+                                                <label class="w-12 h-6 relative">
+                                                    <input type="checkbox"
+
+                                                    [checked]="isScheduler"
+                                                    formControlName="isScheduler"
+                                                    class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" />
+                                                    <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                </label>
+                                            </div>
+                                            <div class="w-56 p-4 text-sm italic">
+                                                Se ativado, o seu cliente conseguirá agendar um atendimento via bot de forma automatica. Para isso, é necessário ter um configuração de agenda sincronizado com email do google, bem como os recursos previamente configurados. 
+                                                Se necessário, consulte um de nossos consultores.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div >
+                                        <label for="gridMsgScheduling">Agendamento automatizado: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['isScheduler'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+
+                                            <div class="p-4 mt-8">
+                                                <label class="w-12 h-6 relative">
+                                                    <input type="checkbox"
+
+                                                    [checked]="isScheduler"
+                                                    formControlName="isScheduler"
+                                                    class="custom_switch absolute w-full h-full opacity-0 z-10 cursor-pointer peer" id="custom_switch_checkbox4" />
+                                                    <span for="custom_switch_checkbox4" class="bg-[#ebedf2] dark:bg-dark block h-full rounded-full before:absolute before:left-1 before:bg-white dark:before:bg-white-dark dark:peer-checked:before:bg-white before:bottom-1 before:w-4 before:h-4 before:rounded-full peer-checked:before:left-7 peer-checked:bg-primary before:transition-all before:duration-300"></span>
+                                                </label>
+                                            </div>
+                                            <div class="w-56 p-4 text-sm italic">
+                                                Se ativado, o seu cliente conseguirá agendar um atendimento via bot de forma automatica. Para isso, é necessário ter um configuração de agenda sincronizado com email do google, bem como os recursos previamente configurados. 
+                                                Se necessário, consulte um de nossos consultores.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="params.controls['isScheduler'].value" >
+                                        <label for="gridMsgScheduling">Mensagem para agendamento automatizado: </label>
+                                        <div [ngClass]="isSubmitForm ? params.controls['msgNotScheduler'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
+
+                                            <div class="p-4 mt-8" style="width: 50%;">
+                                                <label class="h-6 relative">
+                                                    <input type="text"
+                                                    placeholder="Insira aqui a mensagem"
+                                                    class="form-input ps-10 placeholder:text-white-dark" 
+                                                    formControlName="msgNotScheduler"
+                                                     id="custom_switch_text" />
+                                                 </label>
+                                            </div>
+                                            <div class="w-56 p-4 text-sm italic">
+                                                Insira a mensagem a ser apresentada caso o agendamento automatizado esteja desativado.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div >
                                         <label for="gridName">Manter atendimentos por atendente: </label>
                                         <div [ngClass]="isSubmitForm ? params.controls['keepSameAttendant'].errors ? 'has-error' : 'has-success' : ''" class="flex gap-4 p-4 rounded-lg border-2 border-slate-200">
 

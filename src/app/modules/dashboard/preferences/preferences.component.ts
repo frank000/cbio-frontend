@@ -26,6 +26,7 @@ export class PreferencesComponent implements OnInit{
   params!: FormGroup;
   constructor(){}
   keepSameAttendant = false;
+  isScheduler = false;
   autoSend = false;
   optionsModel:any[] = [];
 
@@ -56,7 +57,9 @@ export class PreferencesComponent implements OnInit{
       companyId:[null],
       model:[null],
       keepSameAttendant: [false, Validators.required],
+      isScheduler: [false, Validators.required],
       autoSend: [false, Validators.required],
+      msgNotScheduler: [""],
       rag:[null],
     });
   }
