@@ -116,6 +116,21 @@
                                     </div>
                                 </a>
                             </li>
+                            <li *ngIf="authService.hasRole(authService.SUPERADMIN_ROLE)"
+                            class="nav-item">
+                           <a
+                               routerLink="/admin/app-manager"
+                               class="group"
+                               routerLinkActive="active"
+                               (click)="toggleMobileMenu()">
+                               <div class="flex items-center">
+                                   <!-- <icon-menu-chat class="shrink-0 group-hover:!text-primary"/> -->
+                                   <icon-menu-components class="h-6 w-6" />
+                                   <span
+                                       class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{ 'app-manager' | translate }}</span >
+                               </div>
+                           </a>
+                       </li>
                             <li *ngIf="authService.hasRole(authService.SUPERADMIN_ROLE) || authService.hasRole(authService.ADMIN_ROLE)"
                              class="nav-item">
                                 <a
@@ -139,7 +154,7 @@
                                     (click)="toggleMobileMenu()">
                                     <div class="flex items-center">
                                         <!-- <icon-menu-chat class="shrink-0 group-hover:!text-primary"/> -->
-                                        <icon-menu-users class="h-6 w-6" />
+                                        <icon-menu-forms class="h-6 w-6" />
                                         <span
                                             class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{ 'phrase' | translate }}</span >
                                     </div>
@@ -154,7 +169,7 @@
                                     (click)="toggleMobileMenu()">
                                     <div class="flex items-center">
                                         <!-- <icon-menu-chat class="shrink-0 group-hover:!text-primary"/> -->
-                                        <icon-menu-users class="h-6 w-6" />
+                                        <icon-menu-notes class="h-6 w-6" />
                                         <span
                                             class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{ 'template' | translate }}</span >
                                     </div>

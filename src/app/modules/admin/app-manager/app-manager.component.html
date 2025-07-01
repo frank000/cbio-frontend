@@ -1,0 +1,66 @@
+<div>
+    <ul class="flex space-x-2 rtl:space-x-reverse">
+        <li>
+            <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+        </li>
+        <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+            <span>Gerenciador de Aplicações</span>
+        </li>
+    </ul>
+
+    <div class="panel mt-5">
+        <div class="container mx-auto px-4">
+            <div class="mt-8 mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold">Containers em Execução</h3>
+                    <button 
+                        (click)="loadContainers()" 
+                        type="button" 
+                        class="btn btn-outline-primary">
+                        <icon-refresh class="mr-1"/> Atualizar
+                    </button>
+                </div>
+
+                <ng-datatable
+                    skin="whitespace-nowrap bh-table-hover"
+                    [rows]="gridRows"
+                    [columns]="cols"
+                    [totalRows]="totalRows"
+                    [isServerMode]="false">
+
+                    <ng-template slot="id" let-value="data">
+                        <span class="font-mono text-xs">{{ value.id | slice:0:12 }}</span>
+                    </ng-template>
+
+                    <ng-template slot="ports" let-value="data">
+                        <div *ngIf="value.ports.length > 0">
+                            <span *ngFor="let port of value.ports" class="badge badge-outline-primary mr-1">
+                                {{ port.hostPort }}:{{ port.containerPort }}
+                            </span>
+                        </div>
+                        <span *ngIf="value.ports.length === 0" class="text-gray-400">Nenhuma</span>
+                    </ng-template>
+
+                    <ng-template slot="actions" let-value="data">
+                        <div class="flex items-center justify-center gap-2">
+                            <button 
+                                type="button" 
+                                class="btn btn-sm btn-outline-info" 
+                                (click)="restartContainer(value.id)"
+                                title="Reiniciar">
+                                <icon-refresh/>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-sm btn-outline-warning" 
+                                (click)="rebuildContainer(value)"
+                                title="Recriar">
+                                <icon-settings/>
+                            </button>
+                        </div>
+                    </ng-template>
+                </ng-datatable>
+            </div>
+        </div>
+    </div>
+</div>

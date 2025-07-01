@@ -25,6 +25,7 @@ import { ProfileComponent } from './modules/admin/profile/profile.component';
 import { InstagramComponent } from './modules/dashboard/instagram/instagram.component';
 import { PaymentPageComponent } from './modules/dashboard/payment/payment-page/payment-page.component';
 import { CancelationComponent } from './modules/dashboard/payment/cancelation/cancelation.component';
+import { AppManagerComponent } from './modules/admin/app-manager/app-manager.component';
 
 export const routes: Routes = [
     {
@@ -51,6 +52,8 @@ export const routes: Routes = [
             { path: 'admin/template', component: TemplatesComponent, data: { title: 'Modelos' } },
             { path: 'admin/template/form', component: FormTemplateComponent, data: { title: 'Modelos' } },
             { path: 'admin/template/form/:id', component: FormTemplateComponent, data: { title: 'Modelos' } },
+
+            { path: 'admin/app-manager', component: AppManagerComponent, data: { title: 'Gerencimento de aplicações' } },
 
 
             { path: 'dashboard/summary', component: SummaryComponent, data: { title: 'Atendimentos' } },
