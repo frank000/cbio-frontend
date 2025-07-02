@@ -464,8 +464,11 @@
                                     placeholder="Digite uma mensagem"
                                     [(ngModel)]="textMessage"
                                     name="textMessage"
+                                    (focus)="showEmojiPicker = false" 
                                 />
-                                <button type="button" class="absolute top-1/2 -translate-y-1/2 hover:text-primary ltr:left-4 rtl:right-4">
+                                <button type="button" 
+                                (click)="toggleEmojiPicker()"
+                                class="absolute top-1/2 -translate-y-1/2 hover:text-primary ltr:left-4 rtl:right-4">
                                     <icon-mood-smile />
                                 </button>
                                 <button
@@ -475,6 +478,25 @@
                                 >
                                     <icon-send />
                                 </button>
+                                
+                                <div *ngIf="showEmojiPicker" class="emoji-picker-container">
+                                        <div class="emoji-categories">
+                                            <button *ngFor="let category of emojiCategories" 
+                                                    (click)="activeCategory = category"
+                                                    [class.active]="activeCategory === category">
+                                            {{ category }}
+                                            </button>
+                                        </div>
+
+                                        <div class="emoji-grid">
+                                            <button *ngFor="let emoji of emojis[activeCategory]" 
+                                                    (click)="addEmoji(emoji)"
+                                                    class="emoji-btn">
+                                            {{ emoji }}
+                                            </button>
+                                        </div>
+                                </div>
+                                
                             </div>
                             <div class="hidden items-center space-x-3 py-3 rtl:space-x-reverse sm:block sm:py-0">
                                 <button type="button" 

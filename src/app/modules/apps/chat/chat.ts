@@ -22,12 +22,25 @@ import { PrivateChannelService } from 'src/app/service/private-channel.service';
 import { FileValidationException } from '../../base/FileValidationException';
 import { ContactService } from 'src/app/service/contact.service';
 import { IaService } from 'src/app/service/ia.service';
-
+ 
+ 
+ 
+interface EmojiCategories {
+    faces: string[];
+    gestures: string[];
+    // hearts: string[];
+    objects: string[];
+    // symbols: string[];
+    // nature: string[];
+    foods: string[];
+    // flags: string[];
+  }
 
 @Component({
     templateUrl: './chat.html',
     styleUrl: 'chat.css',
     animations: [toggleAnimation]
+    
 })
 export class ChatComponent implements OnInit, OnDestroy{
 
@@ -69,7 +82,22 @@ export class ChatComponent implements OnInit, OnDestroy{
     hasMoreMessages = true;
     isLoadingMessages = false;
     scrollPositionBeforeLoad = 0;
-
+    
+    emojis:EmojiCategories = {
+        // Expressões faciais
+        faces: ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🥸', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '☹️', '😣', '😖', '😫', '😩', '🥺', '😢', '😭', '😤', '😠', '😡', '🤬', '🤯', '😳', '🥵', '🥶', '😱', '😨', '😰', '😥', '😓', '🤗', '🤔', '🤭', '🤫', '🤥', '😶', '😐', '😑', '😬', '🙄', '😯', '😦', '😧', '😮', '😲', '🥱', '😴', '🤤', '😪', '😵', '🤐', '🥴', '🤢', '🤮', '🤧', '😷', '🤒', '🤕', '🤑', '🤠'],
+        
+        // Gestos
+        gestures: ['👍', '👎', '👌', '✌️', '🤞', '🤟', '🤘', '🤙', '👋', '🤚', '🖐️', '✋', '🖖', '👐', '🙌', '👏', '🤲', '🙏', '✍️', '💅', '🤳', '💪', '🦾', '🦿', '🦵', '🦶', '👂', '🦻', '👃', '🧠', '🦷', '🦴', '👀', '👁️', '👅', '👄'],
+ 
+        // Objetos
+        objects: ['⌚', '📱', '📲', '💻', '⌨️', '🖥️', '🖨️', '🖱️', '🖲️', '🕹️', '🗜️', '💽', '💾', '💿', '📀', '📼', '📷', '🎥', '📹', '🎞️', '📞', '☎️', '📟', '📠', '📺', '📻', '🎙️', '🎚️', '🎛️', '🧭', '⏱️', '⏲️', '⏰', '🕰️', '⌛', '⏳', '📡', '🔋', '🔌', '💡', '🔦', '🕯️', '🧯', '🛢️', '💸', '💵', '💴', '💶', '💷', '💰', '💳', '💎'],
+        
+ 
+        // Comidas
+        foods: ['🍏', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🫑', '🌽', '🥕', '🫒', '🧄', '🧅', '🥔', '🍠', '🫚', '🫛', '🥐', '🥯', '🍞', '🥖', '🥨', '🧀', '🥚', '🍳', '🧈', '🥞', '🧇', '🥓', '🥩', '🍗', '🍖', '🦴', '🌭', '🍔', '🍟', '🍕', '🫓', '🥪', '🥙', '🧆', '🌮', '🌯', '🫔', '🥗', '🥘', '🫕', '🥫', '🍝', '🍜', '🍲', '🍛', '🍣', '🍱', '🥟', '🦪', '🍤', '🍙', '🍚', '🍘', '🍥', '🥠', '🥮', '🍢', '🍡', '🍧', '🍨', '🍦', '🥧', '🧁', '🍰', '🎂', '🍮', '🍭', '🍬', '🍫', '🍿', '🍩', '🍪', '🌰', '🥜', '🫘', '🍯', '🥛', '🍼', '🫖', '☕', '🍵', '🧃', '🥤', '🍶', '🍺', '🍻', '🥂', '🍷', '🥃', '🍸', '🍹', '🍾', '🧊', '🥄', '🍴', '🍽️', '🥣', '🥡', '🥢', '🧂'],
+        
+              } as EmojiCategories;
     constructor(public storeData: Store<any>) {
         this.userLocal = this.authService.getObjectUserLogged();
 
@@ -1085,4 +1113,27 @@ handleScroll(event: Event) {
         this.scrollPositionBeforeLoad = 0;
         this.selectedUser.messages = [];
     }
+ 
+    showEmojiPicker = false; 
+    emojiPickerLoaded = false;
+    emojiCategories: (keyof EmojiCategories)[] = Object.keys(this.emojis) as (keyof EmojiCategories)[];
+    activeCategory: keyof EmojiCategories = 'faces';
+   
+    toggleEmojiPicker() {
+        this.showEmojiPicker = !this.showEmojiPicker;
+        
+        // Carrega o picker apenas na primeira vez
+        if (this.showEmojiPicker && !this.emojiPickerLoaded) {
+          setTimeout(() => {
+            this.emojiPickerLoaded = true;
+          }, 100);
+        }
+      }
+    
+      addEmoji(event: any) {
+        this.textMessage += event;
+        this.showEmojiPicker = false;
+      }
+    
+ 
 }
