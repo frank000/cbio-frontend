@@ -1,0 +1,18 @@
+<div class="emoji-picker-container">
+    <div class="emoji-categories">
+      <button *ngFor="let category of emojiCategories" 
+      type="button"
+      (click)="setActiveCategory($event, category)"
+              [class.active]="activeCategory === category">
+        {{ category }}
+      </button>
+    </div>
+  
+    <div class="emoji-grid">
+      <button *ngFor="let emoji of emojis[activeCategory]" 
+              (click)="selectEmoji(emoji)"
+              class="emoji-btn">
+        {{ emoji }}
+      </button>
+    </div>
+  </div>

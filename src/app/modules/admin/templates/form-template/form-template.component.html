@@ -58,6 +58,16 @@
                                         [(ngModel)]="model!.body!.label"
                                         (input)="changeTextarea($event)" 
                                     ></textarea>
+                                      <button type="button" 
+                                                (click)="toggleEmojiPicker()"
+                                                class="absolute top-1/2 -translate-y-1/2 hover:text-primary ">
+                                            <icon-mood-smile />
+                                        </button>
+                                    <app-emoji-picker 
+                                    *ngIf="showEmojiPicker"
+                                    (emojiSelected)="addEmoji($event)"
+                                    class=" bottom-full left-0 mb-2">
+                                  </app-emoji-picker>
                                 </div>
                                 <div class="md:col-span-2" ></div>
                                 <div class="md:col-span-4" *ngIf="matches != null && matches.length > 0" >

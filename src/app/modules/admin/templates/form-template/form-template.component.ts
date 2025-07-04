@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { EmojiPickerComponent } from 'src/app/modules/apps/chat/emoji-picker/emoji-picker.component';
 import { BtnSalvaVoltaComponent } from 'src/app/modules/common/btn-salva-volta/btn-salva-volta.component';
 import { MessageService } from 'src/app/service/message.service';
 import { TemplateService } from 'src/app/service/template.service';
@@ -12,7 +13,7 @@ import { SharedModule } from 'src/shared.module';
 @Component({
   selector: 'app-form-template',
   standalone: true,
-  imports: [CommonModule, SharedModule , RouterLink, BtnSalvaVoltaComponent],
+  imports: [CommonModule, SharedModule , RouterLink, BtnSalvaVoltaComponent, EmojiPickerComponent],
   templateUrl: './form-template.component.html',
   styleUrl: './form-template.component.css'
 })
@@ -202,4 +203,18 @@ export class FormTemplateComponent {
     }
     this.hasChangeInParameter = true;
   }
+
+  showEmojiPicker = false;
+
+toggleEmojiPicker() {
+  this.showEmojiPicker = !this.showEmojiPicker;
+}
+
+addEmoji(emoji: string) {
+  if( this.model!.body!.label == undefined){
+    this.model!.body!.label  = ""
+  }
+  this.model!.body!.label += emoji;
+  this.showEmojiPicker = false;
+}
 }
