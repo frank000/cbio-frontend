@@ -1,0 +1,138 @@
+<div>
+  <ul class="flex space-x-2 rtl:space-x-reverse">
+      <li>
+          <a href="javascript:;" class="text-primary hover:underline">Dashboard</a>
+      </li>
+      <li class="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+          <span>Detalhamento</span>
+      </li>
+  </ul>
+
+  <div class="panel mt-5 ">
+      <div class="mb-5">
+          <div class="container mx-auto px-4">
+            <div class="container-fluid py-4">
+              <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                  <h4 class="mb-0">
+                    <i class="fas fa-credit-card me-2"></i>Detalhes do Pagamento
+                  </h4>
+                </div>
+            
+                <div class="card-body">
+                  <!-- Seção: Dados do Cliente -->
+                  <div class="mb-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                      <i class="fas fa-user me-2"></i>Dados do Cliente
+                    </h5>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Nome:</strong> {{ checkoutSession?.name }}</p>
+                        <p><strong>Email:</strong> {{ checkoutSession?.email }}</p>
+                        <p><strong>Customer ID (Stripe):</strong> {{ checkoutSession?.customerId }}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Status:</strong> 
+                          <span [ngClass]="{
+                            'badge bg-success': checkoutSession?.status === 'active',
+                            'badge bg-danger': checkoutSession?.status === 'canceled',
+                            'badge bg-warning': checkoutSession?.status === 'incomplete'
+                          }">
+                            {{ checkoutSession?.status | uppercase }}
+                          </span>
+                        </p>
+                        <p><strong>Assinatura Ativa:</strong> 
+                          <span class="badge" [ngClass]="checkoutSession?.active ? 'bg-success' : 'bg-secondary'">
+                            {{ checkoutSession?.active ? 'SIM' : 'NÃO' }}
+                          </span>
+                        </p>
+                        <p><strong>Data de Criação:</strong> {{ checkoutSession?.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+                      </div>
+                    </div>
+                  </div>
+            
+                  <!-- Seção: Faturas -->
+                  <div class="mb-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                      <i class="fas fa-file-invoice-dollar me-2"></i>Faturas
+                    </h5>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead class="table-light">
+                          <tr>
+                            <th>ID da Fatura</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let invoice of checkoutSession?.invoice">
+                            <td>{{ invoice.invoiceId | truncate: 15 }}</td>
+                            <td>{{ invoice.totalAmount | currency:'BRL' }}</td>
+                            <td>{{ invoice.date | date:'dd/MM/yyyy' }}</td>
+                            <td>
+                              <a [href]="invoice.urlHostedInvoice" target="_blank" class="btn btn-sm btn-outline-primary me-2">
+                                <i class="fas fa-external-link-alt"></i> Ver Fatura
+                              </a>
+                              <a [href]="invoice.urlInvoicePdf" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-file-pdf"></i> PDF
+                              </a>
+                            </td>
+                          </tr>
+                          <tr *ngIf="!checkoutSession?.invoice?.length">
+                            <td colspan="4" class="text-center text-muted">Nenhuma fatura disponível</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+            
+                  <!-- Seção: Eventos do Stripe -->
+                  <div class="mb-4">
+                    <h5 class="fw-bold text-primary mb-3">
+                      <i class="fas fa-history me-2"></i>Histórico de Eventos
+                    </h5>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead class="table-light">
+                          <tr>
+                            <th>ID do Evento</th>
+                            <th>Número</th>
+                            <th>Assinatura</th>
+                            <th>Data</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let event of checkoutSession?.event">
+                            <td>{{ event.eventId | truncate : 15 }}</td>
+                            <td>{{ event.number }}</td>
+                            <td>{{ event.subscription | truncate : 15 }}</td>
+                            <td>{{ event.date | date:'dd/MM/yyyy HH:mm' }}</td>
+                          </tr>
+                          <tr *ngIf="!checkoutSession?.event?.length">
+                            <td colspan="4" class="text-center text-muted">Nenhum evento registrado</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+            
+                  <!-- Botões de Ação -->
+                  <div class="d-flex justify-content-end">
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4"> 
+                      <button type="button" class="btn btn-outline-primary  !mt-6" [routerLink]="['/admin/payment']"  >Voltar</button>
+                      <button *ngIf="checkoutSession?.active" class="btn btn-danger" (click)="cancelSubscription()">
+                        <i class="fas fa-ban me-1"></i> Cancelar Assinatura
+                      </button>
+                    </div>
+                
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>          
+            
+            

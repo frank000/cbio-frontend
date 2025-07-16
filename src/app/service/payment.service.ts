@@ -50,7 +50,20 @@ export class PaymentService extends CrudAbstractService{
       }
     });
   }
- 
+  
+  
+  getCheckoutSession(sessionId : string):Observable<any>{
+    return this.http.get(`${this.apiUrl}/v1/payment/subscriptions/${sessionId}` );
+  }
+  
+  
+  cancelSubscription(subscriptionIdid : string):Observable<any>{
+    const params = new HttpParams()
+    .set('subscriptionId', subscriptionIdid) 
+
+    return this.http.post(`${this.apiUrl}/v1/payment/subscriptions/cancel`, null, {params});
+  }
+
 
   async cancel(subscriptionIdid:any, reason:string){
     const params = new HttpParams()

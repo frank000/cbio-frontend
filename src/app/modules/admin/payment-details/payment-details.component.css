@@ -1,0 +1,31 @@
+.container-fluid {
+    padding: 20px;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .card-header {
+    padding: 1rem 1.5rem;
+  }
+  
+  .badge {
+    font-size: 0.85em;
+    padding: 0.35em 0.65em;
+  }
+  
+  .table {
+    font-size: 0.9rem;
+  }
+  
+  .btn {
+    font-size: 0.85rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }

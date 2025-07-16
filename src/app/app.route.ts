@@ -26,6 +26,8 @@ import { InstagramComponent } from './modules/dashboard/instagram/instagram.comp
 import { PaymentPageComponent } from './modules/dashboard/payment/payment-page/payment-page.component';
 import { CancelationComponent } from './modules/dashboard/payment/cancelation/cancelation.component';
 import { AppManagerComponent } from './modules/admin/app-manager/app-manager.component';
+import { PaymentDetailsComponent } from './modules/admin/payment-details/payment-details.component';
+import { PaymentComponent } from './modules/admin/payment/payment.component';
 
 export const routes: Routes = [
     {
@@ -52,6 +54,11 @@ export const routes: Routes = [
             { path: 'admin/template', component: TemplatesComponent, data: { title: 'Modelos' } },
             { path: 'admin/template/form', component: FormTemplateComponent, data: { title: 'Modelos' } },
             { path: 'admin/template/form/:id', component: FormTemplateComponent, data: { title: 'Modelos' } },
+
+            { path: 'admin/payment', component: PaymentComponent, data: { title: 'Pagamentos' } },
+            { path: 'admin/payment-details/:id', component: PaymentDetailsComponent, data: { title: 'Pagamentos' } },
+
+
 
             { path: 'admin/app-manager', component: AppManagerComponent, data: { title: 'Gerencimento de aplicações' } },
 
